@@ -12,7 +12,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-            <Button Content="Add New" Width="75" Margin="5"/>
+            <Button Content="Add New" Width="75" Margin="5" Click="AddNewButton_Click"/>
         </StackPanel>
         <DataGrid Grid.Row="1"
             ColumnWidth="*"

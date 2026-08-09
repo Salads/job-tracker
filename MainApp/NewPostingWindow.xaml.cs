@@ -20,6 +20,14 @@ namespace MainApp
         public NewPostingWindow()
         {
             InitializeComponent();
+
+            jobTypeCombo.ItemsSource = Enum.GetValues<JobType>();
+            jobArrangementCombo.ItemsSource = Enum.GetValues<JobArrangement>();
+            jobStatusCombo.ItemsSource = Enum.GetValues<JobStatus>();
+
+            jobTypeCombo.SelectedIndex = 0;
+            jobArrangementCombo.SelectedIndex = 0;
+            jobStatusCombo.SelectedIndex = 0;
         }
     }
 }

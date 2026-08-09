@@ -8,7 +8,7 @@
         Title="Add New Job Posting" Height="auto" Width="auto">
     <StackPanel Orientation="Vertical">
         <Border BorderBrush="Black" BorderThickness="1">
-            <Grid Width="auto"  ShowGridLines="True">
+            <Grid Width="auto" ShowGridLines="True">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
@@ -35,10 +35,10 @@
                 <TextBox Grid.Row="2" Grid.Column="1" Width="auto" Height="25"/>
 
                 <TextBlock FontSize="12" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Job Type</TextBlock>
-                <ComboBox Grid.Row="3" Grid.Column="1" Width="auto" Height="25"/>
+                <ComboBox Name="jobTypeCombo" Grid.Row="3" Grid.Column="1" Width="auto" Height="25"/>
 
                 <TextBlock FontSize="12" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Job Arrangement</TextBlock>
-                <ComboBox Grid.Row="4" Grid.Column="1" Width="auto" Height="25"/>
+                <ComboBox Name="jobArrangementCombo" Grid.Row="4" Grid.Column="1" Width="auto" Height="25"/>
 
                 <TextBlock FontSize="12" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Location</TextBlock>
                 <TextBox Grid.Row="5" Grid.Column="1" Width="auto" Height="25"/>
@@ -46,11 +46,11 @@
                 <TextBlock FontSize="12" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Description</TextBlock>
                 <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="1">
                     <Button Content="Edit Description" Width="150" Margin="5"/>
-                    <TextBlock Name="descButton" Text="(0 chars set)" VerticalAlignment="Center"/>
+                    <TextBlock Name="descButton" Text="(0 chars set)" VerticalAlignment="Center" Padding="5"/>
                 </StackPanel>
 
                 <TextBlock FontSize="12" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Status</TextBlock>
-                <ComboBox Grid.Row="7" Grid.Column="1" Width="auto" Height="25"/>
+                <ComboBox Name="jobStatusCombo" Grid.Row="7" Grid.Column="1" Width="auto" Height="25"/>
             </Grid>
         </Border>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
