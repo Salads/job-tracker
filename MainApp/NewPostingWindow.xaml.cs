@@ -18,6 +18,8 @@ namespace MainApp
     /// </summary>
     public partial class NewPostingWindow : Window
     {
+        JobPosting m_jobPosting = new JobPosting();
+
         public NewPostingWindow()
         {
             InitializeComponent();
@@ -31,10 +33,21 @@ namespace MainApp
 
         private void descButton_Click(object sender, RoutedEventArgs e)
         {
+            EditDescriptionWindow editDescWindow = new EditDescriptionWindow(m_jobPosting.JobDescription)
+            {
+                Owner = this
+            };
+            editDescWindow.ShowDialog();
 
+            int newCharCount = 0;
+            if(editDescWindow.DialogResult == true)
+            {
+                newCharCount = editDescWindow.descTextBox.Text.Length;
+                m_jobPosting.JobDescription = editDescWindow.descTextBox.Text;
+            }
+
+            descTextBlock.Text = $"({newCharCount} chars)";
         }
-
-        JobPosting m_jobPosting = new JobPosting();
 
         private void saveButton_Click(object sender, RoutedEventArgs e)
         {

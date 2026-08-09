@@ -1,0 +1,34 @@
+﻿<Window x:Class="MainApp.EditDescriptionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MainApp"
+        mc:Ignorable="d"
+        Title="Edit Description" 
+        Height="auto" Width="auto" 
+        SizeToContent="WidthAndHeight" 
+        WindowStartupLocation="CenterOwner"
+        DataContext="this">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" FontSize="11" Text="*Links will show as clickable in the main UI, but not here." Padding="5"/>
+        <TextBox Name="descTextBox" Grid.Row="1" MinHeight="200" Padding="5" 
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 VerticalScrollBarVisibility="Auto"
+                 Text="{Binding Description}"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
+            <Button Name="descSaveButton" Content="Save" Width="75" Margin="5" Click="descSaveButton_Click"/>
+            <Button Name="descCancelButton" Content="Cancel" Width="72" Margin="5" Click="descCancelButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
