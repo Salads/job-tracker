@@ -22,9 +22,9 @@
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <Button Content="View"
-                    Command="{Binding DataContext.ShowDescriptionCommand,
-                              RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                    CommandParameter="{Binding}"/>
+                                Command="{Binding DataContext.ShowDescriptionCommand,
+                                          RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                CommandParameter="{Binding}"/>
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>

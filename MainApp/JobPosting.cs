@@ -20,6 +20,9 @@ namespace MainApp
         JobType jobType;
 
         [ObservableProperty]
+        JobArrangement jobArrangement;
+
+        [ObservableProperty]
         string location;
 
         [ObservableProperty]
