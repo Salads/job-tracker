@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MainApp"
         mc:Ignorable="d"
-        Title="Add New Job Posting" Height="auto" Width="auto">
+        Title="Add New Job Posting" Height="auto" Width="auto" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
     <StackPanel Orientation="Vertical">
         <Border BorderBrush="Black" BorderThickness="1">
             <Grid Width="auto" ShowGridLines="True">
