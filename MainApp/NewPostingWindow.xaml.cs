@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Diagnostics;
 
 namespace MainApp
 {
@@ -21,13 +22,23 @@ namespace MainApp
         {
             InitializeComponent();
 
+            DataContext = m_jobPosting;
+
             jobTypeCombo.ItemsSource = Enum.GetValues<JobType>();
             jobArrangementCombo.ItemsSource = Enum.GetValues<JobArrangement>();
             jobStatusCombo.ItemsSource = Enum.GetValues<JobStatus>();
+        }
 
-            jobTypeCombo.SelectedIndex = 0;
-            jobArrangementCombo.SelectedIndex = 0;
-            jobStatusCombo.SelectedIndex = 0;
+        private void descButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        JobPosting m_jobPosting = new JobPosting();
+
+        private void saveButton_Click(object sender, RoutedEventArgs e)
+        {
+            Trace.WriteLine(m_jobPosting.ToString());
         }
     }
 }

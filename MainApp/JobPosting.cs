@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MainApp
 {
@@ -33,5 +35,19 @@ namespace MainApp
 
         [ObservableProperty]
         JobStatus jobStatus;
+
+        public override string ToString()
+        {
+            return $@"
+                jobTitle:{jobTitle}
+                companyName:{companyName}
+                postingURL:{postingURL}
+                jobType:{jobType}
+                jobArrangement:{jobArrangement}
+                location:{location}
+                distance:{distance}
+                jobDescription:{jobDescription}
+                jobStatus:{jobStatus}";
+        }
     }
 }
