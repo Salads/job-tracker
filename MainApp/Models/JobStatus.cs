@@ -1,6 +1,6 @@
 ﻿namespace MainApp.Models
 {
-    enum JobStatus
+    public enum JobStatus
     {
         Applied,
         Interviewing,

@@ -1,6 +1,6 @@
 ﻿namespace MainApp.Models
 {
-    enum JobType
+    public enum JobType
     {
         FullTime,
         PartTime,

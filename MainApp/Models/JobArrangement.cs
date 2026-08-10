@@ -1,6 +1,6 @@
 ﻿namespace MainApp.Models
 {
-    enum JobArrangement
+    public enum JobArrangement
     {
         OnSite,
         Remote,
