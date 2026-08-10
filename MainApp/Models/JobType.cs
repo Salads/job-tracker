@@ -1,5 +1,4 @@
-﻿
-namespace MainApp
+﻿namespace MainApp.Models
 {
     enum JobType
     {

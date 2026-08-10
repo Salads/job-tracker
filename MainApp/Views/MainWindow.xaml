@@ -4,15 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MainApp"
+        xmlns:viewModels="clr-namespace:MainApp.ViewModels"
         mc:Ignorable="d"
         Title="Job Tracker" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <viewModels:MainWindowViewModel x:Name="ViewModel"/>
+    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-            <Button Content="Add New" Width="75" Margin="5" Click="AddNewButton_Click"/>
+            <Button Content="Add New" Width="75" Margin="5" 
+                    Command="{Binding AddNewPostingCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
         </StackPanel>
         <DataGrid Grid.Row="1"
             ColumnWidth="*"

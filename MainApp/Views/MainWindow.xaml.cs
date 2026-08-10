@@ -20,12 +20,5 @@ namespace MainApp
         {
             InitializeComponent();
         }
-
-        private void AddNewButton_Click(object sender, RoutedEventArgs e)
-        {
-            NewPostingWindow addnewWindow = new NewPostingWindow();
-            addnewWindow.Owner = this;
-            addnewWindow.ShowDialog();
-        }
     }
 }
