@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -15,7 +16,10 @@ namespace MainApp.ViewModels
         public MainWindowViewModel() 
         {
             AddNewPostingCommand = new RelayCommand<Window>(OpenNewPostingWindow);
+            databaseService.RefreshJobPostings(JobPostings);
         }
+
+        public ObservableCollection<JobPosting> JobPostings { get; } = new ObservableCollection<JobPosting>();
 
         private DatabaseService databaseService = new DatabaseService();
 
@@ -32,7 +36,7 @@ namespace MainApp.ViewModels
             if(addnewWindow.DialogResult == true)
             {
                 databaseService.AddNewJob(((NewPostingWindowViewModel)addnewWindow.DataContext).GetJobPosting());
-                databaseService.GetAllJobs();
+                databaseService.RefreshJobPostings(JobPostings);
             }
         }
     }

@@ -23,16 +23,8 @@
         <DataGrid Grid.Row="1"
             ColumnWidth="*"
             EnableRowVirtualization="True"
-            HeadersVisibility="None">
-            <DataGridTemplateColumn Header="Description">
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <Button Content="View"
-                                Command="{Binding ShowDescriptionCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                CommandParameter="{Binding}"/>
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
+            HeadersVisibility="Column"
+            ItemsSource="{Binding JobPostings}">
         </DataGrid>
     </Grid>
 </Window>

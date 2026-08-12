@@ -2,7 +2,9 @@
 using MainApp.Models;
 using Microsoft.Data.Sqlite;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
 
@@ -86,7 +88,7 @@ namespace MainApp.Services
             Trace.WriteLine($"AddNewJob Result: (#Rows Modified): {executeResult}");
         }
 
-        public void GetAllJobs()
+        public void RefreshJobPostings(ObservableCollection<JobPosting> jobPostings)
         {
             using SqliteConnection connection = new SqliteConnection($"Data Source={DEFAULT_DATABASE_FILENAME}");
             connection.Open();
@@ -99,24 +101,64 @@ namespace MainApp.Services
 
             using SqliteDataReader reader = command.ExecuteReader();
 
-            // TODO(Salads): Get all o' this and slam it in an ObservableCollection<JobPosting> for a Model.
+            jobPostings.Clear();
 
-            // Print column headers
+            // Get header indices
+            Hashtable columnNames = new Hashtable();
             for (int i = 0; i < reader.FieldCount; i++)
             {
-                Trace.Write($"{reader.GetName(i)}\t");
+                string columnName = reader.GetName(i);
+                columnNames[i] = columnName;
+                columnNames[columnName] = i;
             }
-            Trace.WriteLine("");
 
             // Print each row
             while (reader.Read())
             {
+                JobPosting jobPosting = new JobPosting();
                 for (int i = 0; i < reader.FieldCount; i++)
                 {
-                    // Use type-specific getters (e.g., GetString, GetInt32) for better performance
-                    Trace.Write($"{reader.GetValue(i)}\t");
+                    string columnName = (string)columnNames[i]!;
+                    object value = reader.GetValue(i);
+                    switch (columnName)
+                    {
+                        case "Title":
+                            jobPosting.JobTitle = (string)value;
+                            break;
+                        case "CompanyName":
+                            jobPosting.JobCompanyName = (string)value;
+                            break;
+                        case "PostingURL":
+                            jobPosting.JobPostingURL = (string)value;
+                            break;
+                        case "Type":
+                            jobPosting.JobType = (JobType)Convert.ToInt32(value);
+                            break;
+                        case "Arrangement":
+                            jobPosting.JobArrangement = (JobArrangement)Convert.ToInt32(value);
+                            break;
+                        case "Location":
+                            jobPosting.JobLocation = (string)value;
+                            break;
+                        case "Distance":
+                            jobPosting.JobDistance = Convert.ToSingle(value);
+                            break;
+                        case "Description":
+                            jobPosting.JobDescription = (string)value;
+                            break;
+                        case "Status":
+                            jobPosting.JobStatus = (JobStatus)Convert.ToInt32(value);
+                            break;
+                        default:
+                            Trace.WriteLine($"Unknown ColumnName: {columnName}");
+                            break;
+
+                    }
+
                 }
-                Trace.WriteLine("");
+
+                // Posting construction complete
+                jobPostings.Add(jobPosting);
             }
         }
     }
