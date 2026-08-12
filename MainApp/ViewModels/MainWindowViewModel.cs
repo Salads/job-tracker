@@ -6,6 +6,7 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MainApp.Services;
 
 namespace MainApp.ViewModels
 {
@@ -15,6 +16,8 @@ namespace MainApp.ViewModels
         {
             AddNewPostingCommand = new RelayCommand<Window>(OpenNewPostingWindow);
         }
+
+        private DatabaseService databaseService = new DatabaseService();
 
         public ICommand AddNewPostingCommand { get; }
 
