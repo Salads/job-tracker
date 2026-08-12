@@ -4,12 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MainApp"
+        xmlns:viewModels="clr-namespace:MainApp.ViewModels"
         mc:Ignorable="d"
         Title="Edit Description" 
         Height="auto" Width="auto" 
         SizeToContent="WidthAndHeight" 
-        WindowStartupLocation="CenterOwner"
-        DataContext="this">
+        WindowStartupLocation="CenterOwner">
+    <Window.DataContext>
+        <viewModels:EditDescriptionViewModel/>
+    </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -25,10 +28,12 @@
                  TextWrapping="Wrap"
                  AcceptsReturn="True"
                  VerticalScrollBarVisibility="Auto"
-                 Text="{Binding Description}"/>
+                 Text="{Binding JobDescription, UpdateSourceTrigger=PropertyChanged}"/>
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
-            <Button Name="descSaveButton" Content="Save" Width="75" Margin="5" Click="descSaveButton_Click"/>
-            <Button Name="descCancelButton" Content="Cancel" Width="72" Margin="5" Click="descCancelButton_Click"/>
+            <Button Name="descSaveButton" Content="Save" Width="75" Margin="5" 
+                    Command="{Binding SaveCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <Button Name="descCancelButton" Content="Cancel" Width="72" Margin="5"
+                    Command="{Binding CancelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
         </StackPanel>
     </Grid>
 </Window>

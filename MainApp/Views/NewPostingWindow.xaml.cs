@@ -28,10 +28,5 @@ namespace MainApp
             jobArrangementCombo.ItemsSource = Enum.GetValues<JobArrangement>();
             jobStatusCombo.ItemsSource = Enum.GetValues<JobStatus>();
         }
-
-        private void saveButton_Click(object sender, RoutedEventArgs e)
-        {
-            //Trace.WriteLine(m_jobPosting.ToString());
-        }
     }
 }

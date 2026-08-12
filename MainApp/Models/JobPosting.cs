@@ -4,51 +4,53 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MainApp
 {
-    internal partial class JobPosting : ObservableObject
+    public partial class JobPosting
     {
-        [ObservableProperty]
-        string jobTitle;
+        public JobPosting() 
+        {
+            JobTitle = string.Empty;
+            JobCompanyName = string.Empty;
+            // JobPostingURL;
+            JobType = JobType.FullTime;
+            JobArrangement = JobArrangement.OnSite;
+            JobLocation = string.Empty;
+            JobDistance = 0.0f;
+            JobDescription = string.Empty;
+            JobStatus = JobStatus.Applied;
+        }
 
-        [ObservableProperty]
-        string companyName;
+        public string JobTitle {  get; set; }
 
-        [ObservableProperty]
-        Uri postingURL;
+        public string JobCompanyName { get; set; }
 
-        [ObservableProperty]
-        JobType jobType;
+        public Uri? JobPostingURL { get; set; }
 
-        [ObservableProperty]
-        JobArrangement jobArrangement;
+        public JobType JobType { get; set; }
 
-        [ObservableProperty]
-        string location;
+        public JobArrangement JobArrangement { get; set; }
 
-        [ObservableProperty]
-        float distance;
+        public string JobLocation { get; set; }
 
-        [ObservableProperty]
-        string jobDescription;
+        public float JobDistance { get; set; }
 
-        [ObservableProperty]
-        JobStatus jobStatus;
+        public string JobDescription { get; set; }
+
+        public JobStatus JobStatus { get; set; }
 
         public override string ToString()
         {
-            return $@"
-                jobTitle:{jobTitle}
-                companyName:{companyName}
-                postingURL:{postingURL}
-                jobType:{jobType}
-                jobArrangement:{jobArrangement}
-                location:{location}
-                distance:{distance}
-                jobDescription:{jobDescription}
-                jobStatus:{jobStatus}";
+            return $"Job Title: {JobTitle}\n" +
+                   $"Job Company Name: {JobCompanyName}\n" +
+                   $"Job Posting URL: {JobPostingURL}\n" +
+                   $"Job Type: {JobType}\n" +
+                   $"Job Arrangement: {JobArrangement}\n" +
+                   $"Job Location: {JobLocation}\n" +
+                   $"Job Distance: {JobDistance}\n" +
+                   $"Job Description: {JobDescription}\n" +
+                   $"Job Status: {JobStatus}";
         }
     }
 }

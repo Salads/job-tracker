@@ -30,13 +30,13 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock FontSize="12" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Job Title</TextBlock>
-                <TextBox Grid.Row="0" Grid.Column="1" Width="auto" Height="25" Text="{Binding JobTitle}"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Width="auto" Height="25" Text="{Binding JobTitle, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <TextBlock FontSize="12" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Company Name</TextBlock>
-                <TextBox Grid.Row="1" Grid.Column="1" Width="auto" Height="25" Text="{Binding CompanyName}"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Width="auto" Height="25" Text="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <TextBlock FontSize="12" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Posting URL</TextBlock>
-                <TextBox Grid.Row="2" Grid.Column="1" Width="auto" Height="25" Text="{Binding PostingURL}"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Width="auto" Height="25" Text="{Binding PostingURL, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <TextBlock FontSize="12" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Job Type</TextBlock>
                 <ComboBox Name="jobTypeCombo" Grid.Row="3" Grid.Column="1" Width="auto" Height="25" SelectedItem="{Binding JobType}"/>
@@ -45,7 +45,7 @@
                 <ComboBox Name="jobArrangementCombo" Grid.Row="4" Grid.Column="1" Width="auto" Height="25" SelectedItem="{Binding JobArrangement}"/>
 
                 <TextBlock FontSize="12" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Location</TextBlock>
-                <TextBox Grid.Row="5" Grid.Column="1" Width="auto" Height="25" Text="{Binding Location}"/>
+                <TextBox Grid.Row="5" Grid.Column="1" Width="auto" Height="25" Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <TextBlock FontSize="12" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Description</TextBlock>
                 <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="1">
@@ -58,8 +58,10 @@
             </Grid>
         </Border>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-            <Button Name="saveButton" Content="Save" Width="75" Margin="5" Click="saveButton_Click"/>
-            <Button Name="cancelButton" Content="Cancel" Width="75" Margin="5"/>
+            <Button Name="saveButton" Content="Save" Width="75" Margin="5"
+                    Command="{Binding SaveCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <Button Name="cancelButton" Content="Cancel" Width="75" Margin="5"
+                    Command="{Binding CancelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
         </StackPanel>
     </StackPanel>
 </Window>
