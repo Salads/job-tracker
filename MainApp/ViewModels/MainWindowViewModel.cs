@@ -28,6 +28,11 @@ namespace MainApp.ViewModels
                 Owner = owner
             };
             addnewWindow.ShowDialog();
+
+            if(addnewWindow.DialogResult == true)
+            {
+                databaseService.AddNewJob(((NewPostingWindowViewModel)addnewWindow.DataContext).GetJobPosting());
+            }
         }
     }
 }

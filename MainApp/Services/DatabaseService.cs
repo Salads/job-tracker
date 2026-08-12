@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm;
+using MainApp.Models;
 using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
@@ -53,10 +54,36 @@ namespace MainApp.Services
                     Description TEXT,
                     Status INTEGER
                 );
-             """;
+                """;
 
             int executeResult = command.ExecuteNonQuery();
-            Trace.WriteLine($"EnsureTableExists Result (#Rows Modified): {executeResult}");
+            Trace.WriteLine($"EnsureTableExists Result: (#Rows Modified): {executeResult}");
+        }
+
+        public void AddNewJob(JobPosting newJobPosting)
+        {
+            using SqliteConnection connection = new SqliteConnection($"Data Source={DEFAULT_DATABASE_FILENAME}");
+            connection.Open();
+
+            using SqliteCommand command = connection.CreateCommand();
+            command.CommandText = $"""
+                INSERT INTO {DEFAULT_TABLE_NAME}
+                VALUES
+                    (
+                        '{newJobPosting.JobTitle}', 
+                        '{newJobPosting.JobCompanyName}', 
+                        '{newJobPosting.JobPostingURL}',
+                        {(int)newJobPosting.JobType}, 
+                        {(int)newJobPosting.JobArrangement},
+                        '{newJobPosting.JobLocation}',
+                        {newJobPosting.JobDistance},
+                        '{newJobPosting.JobDescription}',
+                        {(int)newJobPosting.JobStatus}
+                    );
+                """;
+
+            int executeResult = command.ExecuteNonQuery();
+            Trace.WriteLine($"AddNewJob Result: (#Rows Modified): {executeResult}");
         }
     }
 }
