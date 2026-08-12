@@ -32,6 +32,7 @@ namespace MainApp.ViewModels
             if(addnewWindow.DialogResult == true)
             {
                 databaseService.AddNewJob(((NewPostingWindowViewModel)addnewWindow.DataContext).GetJobPosting());
+                databaseService.GetAllJobs();
             }
         }
     }

@@ -31,7 +31,7 @@ namespace MainApp.Services
                 WHERE type='table' AND name='{tableName}';
             """;
 
-            SqliteDataReader reader =  command.ExecuteReader();
+            SqliteDataReader reader = command.ExecuteReader();
             return reader.HasRows;
         }
 
@@ -84,6 +84,40 @@ namespace MainApp.Services
 
             int executeResult = command.ExecuteNonQuery();
             Trace.WriteLine($"AddNewJob Result: (#Rows Modified): {executeResult}");
+        }
+
+        public void GetAllJobs()
+        {
+            using SqliteConnection connection = new SqliteConnection($"Data Source={DEFAULT_DATABASE_FILENAME}");
+            connection.Open();
+
+            using SqliteCommand command = connection.CreateCommand();
+            command.CommandText = $"""
+                SELECT *
+                FROM {DEFAULT_TABLE_NAME};
+            """;
+
+            using SqliteDataReader reader = command.ExecuteReader();
+
+            // TODO(Salads): Get all o' this and slam it in an ObservableCollection<JobPosting> for a Model.
+
+            // Print column headers
+            for (int i = 0; i < reader.FieldCount; i++)
+            {
+                Trace.Write($"{reader.GetName(i)}\t");
+            }
+            Trace.WriteLine("");
+
+            // Print each row
+            while (reader.Read())
+            {
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    // Use type-specific getters (e.g., GetString, GetInt32) for better performance
+                    Trace.Write($"{reader.GetValue(i)}\t");
+                }
+                Trace.WriteLine("");
+            }
         }
     }
 }
