@@ -13,7 +13,7 @@ namespace MainApp
         {
             JobTitle = string.Empty;
             JobCompanyName = string.Empty;
-            // JobPostingURL;
+            JobPostingURL = string.Empty;
             JobType = JobType.FullTime;
             JobArrangement = JobArrangement.OnSite;
             JobLocation = string.Empty;
@@ -26,7 +26,7 @@ namespace MainApp
 
         public string JobCompanyName { get; set; }
 
-        public Uri? JobPostingURL { get; set; }
+        public string JobPostingURL { get; set; }
 
         public JobType JobType { get; set; }
 

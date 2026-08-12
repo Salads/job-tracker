@@ -80,7 +80,7 @@ namespace MainApp.ViewModels
             {
                 JobTitle = JobTitle,
                 JobCompanyName = CompanyName,
-                JobPostingURL = new Uri(PostingURL),
+                JobPostingURL = PostingURL,
                 JobType = JobType,
                 JobArrangement = JobArrangement,
                 JobLocation = Location,
