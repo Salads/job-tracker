@@ -140,7 +140,7 @@ namespace MainApp.ViewModels
 
             if (result)
             {
-                return ValidationResult.Success;
+                return ValidationResult.Success!;
             }
             else
             {
