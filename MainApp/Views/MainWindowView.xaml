@@ -24,6 +24,7 @@
             ColumnWidth="*"
             EnableRowVirtualization="True"
             HeadersVisibility="Column"
+            CanUserAddRows="False"
             ItemsSource="{Binding JobPostings}">
         </DataGrid>
     </Grid>
