@@ -3,13 +3,35 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         xmlns:local="clr-namespace:MainApp"
         xmlns:viewModels="clr-namespace:MainApp.ViewModels"
+        xmlns:models="clr-namespace:MainApp.Models"
         mc:Ignorable="d"
         Title="Job Tracker" Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <viewModels:MainWindowViewModel x:Name="ViewModel"/>
     </Window.DataContext>
+    <Window.Resources>
+        <ObjectDataProvider x:Key="JobTypeValues" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="models:JobType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="JobArrangementValues" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="models:JobArrangement"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="JobStatusValues" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="models:JobStatus"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <Style x:Key="CenterGridHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -21,11 +43,46 @@
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
         </StackPanel>
         <DataGrid Grid.Row="1"
-            ColumnWidth="*"
-            EnableRowVirtualization="True"
-            HeadersVisibility="Column"
-            CanUserAddRows="False"
-            ItemsSource="{Binding JobPostings}">
+                  ColumnWidth="*"
+                  EnableRowVirtualization="True"
+                  HeadersVisibility="Column"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  AutoGenerateColumns="False"
+                  SelectedItem="{Binding SelectedPosting}"
+                  ItemsSource="{Binding JobPostings}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Title"
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}"
+                                    Binding="{Binding JobTitle}"/>
+                <DataGridTextColumn Header="Company"
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}"
+                                    Binding="{Binding JobCompanyName}"/>
+                <DataGridTextColumn Header="URL"
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}"
+                                    Binding="{Binding JobPostingURL}"/>
+                <DataGridComboBoxColumn Header="Type"
+                                        HeaderStyle="{StaticResource CenterGridHeaderStyle}"
+                                        SelectedItemBinding="{Binding JobType}"
+                                        ItemsSource="{Binding Source={StaticResource JobTypeValues}}"/>
+                <DataGridComboBoxColumn Header="Arrangement"
+                                        HeaderStyle="{StaticResource CenterGridHeaderStyle}"
+                                        SelectedItemBinding="{Binding JobArrangement}"
+                                        ItemsSource="{Binding Source={StaticResource JobArrangementValues}}"/>
+                <DataGridTextColumn Header="Location"
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}"
+                                    Binding="{Binding JobLocation}"/>
+                <DataGridTextColumn Header="Distance"
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}"
+                                    Binding="{Binding JobDistance}"/>
+                <DataGridTextColumn Header="Description"
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}"
+                                    Binding="{Binding JobDescription}"/>
+                <DataGridComboBoxColumn Header="Status"
+                                        HeaderStyle="{StaticResource CenterGridHeaderStyle}"
+                                        SelectedItemBinding="{Binding JobStatus}"
+                                        ItemsSource="{Binding Source={StaticResource JobStatusValues}}"/>
+            </DataGrid.Columns>
         </DataGrid>
     </Grid>
 </Window>

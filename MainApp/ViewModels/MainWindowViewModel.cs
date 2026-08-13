@@ -11,7 +11,7 @@ using MainApp.Services;
 
 namespace MainApp.ViewModels
 {
-    public class MainWindowViewModel : ObservableObject
+    public partial class MainWindowViewModel : ObservableObject
     {
         public MainWindowViewModel() 
         {
@@ -20,6 +20,9 @@ namespace MainApp.ViewModels
         }
 
         public ObservableCollection<JobPosting> JobPostings { get; } = new ObservableCollection<JobPosting>();
+
+        [ObservableProperty]
+        public partial JobPosting SelectedPosting { get; set; } = new JobPosting();
 
         private DatabaseService databaseService = new DatabaseService();
 
