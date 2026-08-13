@@ -100,10 +100,17 @@
                                     IsReadOnly="True"
                                     HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                     Binding="{Binding JobDistance}"/>
-                <DataGridTextColumn Header="Description"
-                                    ElementStyle="{StaticResource CenterTextElementStyle}"
-                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}"
-                                    Binding="{Binding JobDescription}"/>
+                <DataGridTemplateColumn Header="Description"
+                        HeaderStyle="{StaticResource CenterGridHeaderStyle}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="View / Edit" 
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding DataContext.OpenRichDescriptionCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridComboBoxColumn Header="Status"
                                         ElementStyle="{StaticResource CenterComboBoxStyle}"
                                         HeaderStyle="{StaticResource CenterGridHeaderStyle}"

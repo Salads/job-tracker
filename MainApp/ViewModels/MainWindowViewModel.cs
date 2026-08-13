@@ -16,6 +16,7 @@ namespace MainApp.ViewModels
         public MainWindowViewModel() 
         {
             AddNewPostingCommand = new RelayCommand<Window>(OpenNewPostingWindow);
+            OpenRichDescriptionCommand = new RelayCommand<Window>(OnRichDescription);
             databaseService.RefreshJobPostings(JobPostings);
         }
 
@@ -27,6 +28,12 @@ namespace MainApp.ViewModels
         private DatabaseService databaseService = new DatabaseService();
 
         public ICommand AddNewPostingCommand { get; }
+        public ICommand OpenRichDescriptionCommand { get; }
+
+        private void OnRichDescription(Window? owner)
+        {
+            
+        }
 
         private void OpenNewPostingWindow(Window? owner)
         {
