@@ -8,7 +8,10 @@
         xmlns:viewModels="clr-namespace:MainApp.ViewModels"
         xmlns:models="clr-namespace:MainApp.Models"
         mc:Ignorable="d"
-        Title="Job Tracker" Height="450" Width="auto" WindowStartupLocation="CenterScreen">
+        Title="Job Tracker"
+        Height="450" Width="720"
+        MinWidth="720"
+        WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <viewModels:MainWindowViewModel x:Name="ViewModel"/>
     </Window.DataContext>
@@ -31,6 +34,10 @@
         <Style x:Key="CenterGridHeaderStyle" TargetType="DataGridColumnHeader">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
+        <Style x:Key="CenterGridCellStyle" TargetType="DataGridCell">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <local:URLConverter x:Key="URLConverter" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -58,9 +65,18 @@
                 <DataGridTextColumn Header="Company"
                                     HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                     Binding="{Binding JobCompanyName}"/>
-                <DataGridTextColumn Header="URL"
-                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}"
-                                    Binding="{Binding JobPostingURL}"/>
+                <DataGridHyperlinkColumn Header="URL"
+                                         IsReadOnly="True"
+                                         ContentBinding="{Binding JobPostingURL, Converter={StaticResource URLConverter}}"
+                                         HeaderStyle="{StaticResource CenterGridHeaderStyle}"
+                                         CellStyle="{StaticResource CenterGridCellStyle}"
+                                         Binding="{Binding JobPostingURL}">
+                    <DataGridHyperlinkColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <EventSetter Event="Hyperlink.Click" Handler="URL_Click"/>
+                        </Style>
+                    </DataGridHyperlinkColumn.ElementStyle>
+                </DataGridHyperlinkColumn>
                 <DataGridComboBoxColumn Header="Type"
                                         HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                         SelectedItemBinding="{Binding JobType}"
@@ -73,6 +89,7 @@
                                     HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                     Binding="{Binding JobLocation}"/>
                 <DataGridTextColumn Header="Distance"
+                                    IsReadOnly="True"
                                     HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                     Binding="{Binding JobDistance}"/>
                 <DataGridTextColumn Header="Description"
