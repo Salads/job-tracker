@@ -34,7 +34,10 @@
         <Style x:Key="CenterGridHeaderStyle" TargetType="DataGridColumnHeader">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
-        <Style x:Key="CenterGridCellStyle" TargetType="DataGridCell">
+        <Style x:Key="CenterTextElementStyle" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="CenterComboBoxStyle" TargetType="ComboBox">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
         <local:URLConverter x:Key="URLConverter" />
@@ -60,42 +63,49 @@
                   ItemsSource="{Binding JobPostings}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Title"
+                                    ElementStyle="{StaticResource CenterTextElementStyle}"
                                     HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                     Binding="{Binding JobTitle}"/>
                 <DataGridTextColumn Header="Company"
+                                    ElementStyle="{StaticResource CenterTextElementStyle}"
                                     HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                     Binding="{Binding JobCompanyName}"/>
                 <DataGridHyperlinkColumn Header="URL"
                                          IsReadOnly="True"
                                          ContentBinding="{Binding JobPostingURL, Converter={StaticResource URLConverter}}"
                                          HeaderStyle="{StaticResource CenterGridHeaderStyle}"
-                                         CellStyle="{StaticResource CenterGridCellStyle}"
                                          Binding="{Binding JobPostingURL}">
                     <DataGridHyperlinkColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource CenterTextElementStyle}">
                             <EventSetter Event="Hyperlink.Click" Handler="URL_Click"/>
                         </Style>
                     </DataGridHyperlinkColumn.ElementStyle>
                 </DataGridHyperlinkColumn>
                 <DataGridComboBoxColumn Header="Type"
+                                        ElementStyle="{StaticResource CenterComboBoxStyle}"
                                         HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                         SelectedItemBinding="{Binding JobType}"
                                         ItemsSource="{Binding Source={StaticResource JobTypeValues}}"/>
                 <DataGridComboBoxColumn Header="Arrangement"
+                                        ElementStyle="{StaticResource CenterComboBoxStyle}"
                                         HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                         SelectedItemBinding="{Binding JobArrangement}"
                                         ItemsSource="{Binding Source={StaticResource JobArrangementValues}}"/>
                 <DataGridTextColumn Header="Location"
+                                    ElementStyle="{StaticResource CenterTextElementStyle}"
                                     HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                     Binding="{Binding JobLocation}"/>
                 <DataGridTextColumn Header="Distance"
+                                    ElementStyle="{StaticResource CenterTextElementStyle}"
                                     IsReadOnly="True"
                                     HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                     Binding="{Binding JobDistance}"/>
                 <DataGridTextColumn Header="Description"
+                                    ElementStyle="{StaticResource CenterTextElementStyle}"
                                     HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                     Binding="{Binding JobDescription}"/>
                 <DataGridComboBoxColumn Header="Status"
+                                        ElementStyle="{StaticResource CenterComboBoxStyle}"
                                         HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                         SelectedItemBinding="{Binding JobStatus}"
                                         ItemsSource="{Binding Source={StaticResource JobStatusValues}}"/>
