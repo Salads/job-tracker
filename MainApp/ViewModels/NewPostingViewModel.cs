@@ -65,7 +65,7 @@ namespace MainApp.ViewModels
         [Required]
         [NotifyDataErrorInfo]
         [ObservableProperty]
-        public partial JobStatus JobStatus { get; set; }
+        public partial JobStatus JobStatus { get; set; } = JobStatus.Applied;
         #endregion
 
         public ICommand EditDescription { get; }

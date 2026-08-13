@@ -2,9 +2,12 @@
 {
     public enum JobStatus
     {
-        Applied,
-        Interviewing,
         Rejected,
-        Accepted
+
+        Applied,
+
+        Interviewing,
+
+        Accepted,
     }
 }

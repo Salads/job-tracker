@@ -8,7 +8,7 @@
         xmlns:viewModels="clr-namespace:MainApp.ViewModels"
         xmlns:models="clr-namespace:MainApp.Models"
         mc:Ignorable="d"
-        Title="Job Tracker" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+        Title="Job Tracker" Height="450" Width="auto" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <viewModels:MainWindowViewModel x:Name="ViewModel"/>
     </Window.DataContext>
