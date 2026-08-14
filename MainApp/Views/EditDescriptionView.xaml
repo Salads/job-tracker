@@ -2,7 +2,6 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:e="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MainApp"
         xmlns:viewModels="clr-namespace:MainApp.ViewModels"
@@ -22,11 +21,11 @@
             <RowDefinition />
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <e:TextBox Name="descTextBox" Grid.Row="0" MinHeight="200" Padding="5" 
+        <TextBox Name="descTextBox" Grid.Row="0" MinHeight="200" Padding="5" 
                    TextWrapping="Wrap"
                    AcceptsReturn="True"
                    VerticalScrollBarVisibility="Auto"
-                   Text="{Binding JobDescription, UpdateSourceTrigger=PropertyChanged}"/>
+                   Text="{Binding JobDescription, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
             <Button Name="descSaveButton" Content="Save" Width="75" Margin="5" 
                     Command="{Binding SaveCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>

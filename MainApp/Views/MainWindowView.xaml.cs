@@ -44,6 +44,11 @@ namespace MainApp
             editDescriptionViewModel.JobDescription = jobPosting.JobDescription;
 
             descView.ShowDialog();
+
+            if (descView.DialogResult == true)
+            {
+                jobPosting.JobDescription = editDescriptionViewModel.JobDescription;
+            }
         }
     }
 }
