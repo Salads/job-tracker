@@ -19,15 +19,15 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition />
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <e:TextBox Name="descTextBox" Grid.Row="1" MinHeight="200" Padding="5" 
+        <e:TextBox Name="descTextBox" Grid.Row="0" MinHeight="200" Padding="5" 
                    TextWrapping="Wrap"
                    AcceptsReturn="True"
                    VerticalScrollBarVisibility="Auto"
                    Text="{Binding JobDescription, UpdateSourceTrigger=PropertyChanged}"/>
-        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
             <Button Name="descSaveButton" Content="Save" Width="75" Margin="5" 
                     Command="{Binding SaveCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
             <Button Name="descCancelButton" Content="Cancel" Width="72" Margin="5"
