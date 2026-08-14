@@ -22,10 +22,10 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <TextBox Name="descTextBox" Grid.Row="0" MinHeight="200" Padding="5" 
-                   TextWrapping="Wrap"
-                   AcceptsReturn="True"
-                   VerticalScrollBarVisibility="Auto"
-                   Text="{Binding JobDescription, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 VerticalScrollBarVisibility="Auto"
+                 Text="{Binding JobDescription, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
             <Button Name="descSaveButton" Content="Save" Width="75" Margin="5" 
                     Command="{Binding SaveCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
