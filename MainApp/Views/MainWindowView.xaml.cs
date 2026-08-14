@@ -18,9 +18,9 @@ namespace MainApp
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindowView : Window
     {
-        public MainWindow()
+        public MainWindowView()
         {
             InitializeComponent();
         }
@@ -36,7 +36,7 @@ namespace MainApp
         {
             Button senderButton = (Button)sender;
             JobPosting jobPosting = (JobPosting)senderButton.DataContext;
-            EditDescriptionWindow descView = new EditDescriptionWindow()
+            EditDescriptionView descView = new EditDescriptionView()
             {
                 Owner = this
             };
@@ -54,7 +54,7 @@ namespace MainApp
 
         private void addNewButton_Click(object sender, RoutedEventArgs e)
         {
-            NewPostingWindow addnewWindow = new NewPostingWindow()
+            NewPostingView addnewWindow = new NewPostingView()
             {
                 Owner = this
             };

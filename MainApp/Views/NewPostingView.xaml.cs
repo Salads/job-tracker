@@ -18,10 +18,10 @@ namespace MainApp
     /// <summary>
     /// Interaction logic for NewPostingWindow.xaml
     /// </summary>
-    public partial class NewPostingWindow : Window
+    public partial class NewPostingView : Window
     {
 
-        public NewPostingWindow()
+        public NewPostingView()
         {
             InitializeComponent();
 
@@ -33,7 +33,7 @@ namespace MainApp
         private void descButton_Click(object sender, RoutedEventArgs e)
         {
             NewPostingWindowViewModel thisVM = (NewPostingWindowViewModel)DataContext;
-            EditDescriptionWindow editDescWindow = new EditDescriptionWindow()
+            EditDescriptionView editDescWindow = new EditDescriptionView()
             {
                 Owner = this
             };

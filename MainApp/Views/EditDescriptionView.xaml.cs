@@ -16,9 +16,9 @@ namespace MainApp
     /// <summary>
     /// Interaction logic for EditDescriptionWindow.xaml
     /// </summary>
-    public partial class EditDescriptionWindow : Window
+    public partial class EditDescriptionView : Window
     {
-        public EditDescriptionWindow()
+        public EditDescriptionView()
         {
             InitializeComponent();
         }
