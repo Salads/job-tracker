@@ -18,10 +18,7 @@ namespace MainApp.ViewModels
     {
         public MainWindowViewModel() 
         {
-            AddNewPostingCommand = new RelayCommand<Window>(OpenNewPostingWindow);
-
             JobPostings.PropertyChangedEx += HandleJobPostingPropertyChangedEx;
-
             databaseService.RefreshJobPostings(JobPostings);
         }
 
@@ -32,28 +29,16 @@ namespace MainApp.ViewModels
 
         private DatabaseService databaseService = new DatabaseService();
 
-        public ICommand AddNewPostingCommand { get; }
-
-        private void OpenNewPostingWindow(Window? owner)
-        {
-            NewPostingWindow addnewWindow = new NewPostingWindow()
-            {
-                Owner = owner
-            };
-            addnewWindow.ShowDialog();
-
-            if(addnewWindow.DialogResult == true)
-            {
-                JobPosting newPosting = ((NewPostingWindowViewModel)addnewWindow.DataContext).GetJobPosting();
-                newPosting.RowID = databaseService.AddNewJob(newPosting);
-                JobPostings.Add(newPosting);
-            }
-        }
-
         private void HandleJobPostingPropertyChangedEx(object? sender, PropertyChangedEventArgs e)
         {
             JobPosting posting = (JobPosting)sender!;
             databaseService.UpdateJobPosting(posting);
+        }
+
+        public void AddNewJob(JobPosting posting)
+        {
+            posting.RowID = databaseService.AddNewJob(posting);
+            JobPostings.Add(posting);
         }
     }
 }

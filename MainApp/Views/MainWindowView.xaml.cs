@@ -1,4 +1,5 @@
-﻿using MainApp.ViewModels;
+﻿using MainApp.Services;
+using MainApp.ViewModels;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
@@ -48,6 +49,22 @@ namespace MainApp
             if (descView.DialogResult == true)
             {
                 jobPosting.JobDescription = editDescriptionViewModel.JobDescription;
+            }
+        }
+
+        private void addNewButton_Click(object sender, RoutedEventArgs e)
+        {
+            NewPostingWindow addnewWindow = new NewPostingWindow()
+            {
+                Owner = this
+            };
+            addnewWindow.ShowDialog();
+
+            if (addnewWindow.DialogResult == true)
+            {
+                MainWindowViewModel vm = (MainWindowViewModel)DataContext;
+                JobPosting newPosting = ((NewPostingWindowViewModel)addnewWindow.DataContext).GetJobPosting();
+                vm.AddNewJob(newPosting);
             }
         }
     }
