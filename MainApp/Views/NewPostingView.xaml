@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MainApp"
         xmlns:viewModels="clr-namespace:MainApp.ViewModels"
         mc:Ignorable="d"
-        Title="Add New Job Posting" Height="auto" Width="auto" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
+        Title="New Job Posting" Height="auto" Width="auto" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
     <Window.DataContext>
         <viewModels:NewPostingWindowViewModel x:Name="ViewModel"/>
     </Window.DataContext>
@@ -49,7 +49,7 @@
 
                 <TextBlock FontSize="12" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Description</TextBlock>
                 <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="1">
-                    <Button Name="descButton" Content="Edit Description" Width="150" Margin="5" Command="{Binding EditDescription}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                    <Button Name="descButton" Content="Edit Description" Width="150" Margin="5" Click="descButton_Click"/>
                     <TextBlock Name="descTextBlock" VerticalAlignment="Center" Padding="5" Text="{Binding JobDescriptionLabel}"/>
                 </StackPanel>
 

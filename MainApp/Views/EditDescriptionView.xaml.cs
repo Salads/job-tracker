@@ -18,10 +18,9 @@ namespace MainApp
     /// </summary>
     public partial class EditDescriptionWindow : Window
     {
-        public EditDescriptionWindow(string description)
+        public EditDescriptionWindow()
         {
             InitializeComponent();
-            descTextBox.Text = description;
         }
 
         private void descSaveButton_Click(object sender, RoutedEventArgs e)

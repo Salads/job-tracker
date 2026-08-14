@@ -1,5 +1,8 @@
-﻿using System;
+﻿using MainApp.Models;
+using MainApp.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,8 +12,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.Diagnostics;
-using MainApp.Models;
 
 namespace MainApp
 {
@@ -27,6 +28,29 @@ namespace MainApp
             jobTypeCombo.ItemsSource = Enum.GetValues<JobType>();
             jobArrangementCombo.ItemsSource = Enum.GetValues<JobArrangement>();
             jobStatusCombo.ItemsSource = Enum.GetValues<JobStatus>();
+        }
+
+        private void descButton_Click(object sender, RoutedEventArgs e)
+        {
+            NewPostingWindowViewModel thisVM = (NewPostingWindowViewModel)DataContext;
+            EditDescriptionWindow editDescWindow = new EditDescriptionWindow()
+            {
+                Owner = this
+            };
+
+            EditDescriptionViewModel descVM = (EditDescriptionViewModel)editDescWindow.DataContext;
+            descVM.JobDescription = thisVM.JobDescription;
+
+            editDescWindow.ShowDialog();
+
+            int newCharCount = 0;
+            if (editDescWindow.DialogResult == true)
+            {
+                newCharCount = descVM.JobDescription.Length;
+                thisVM.JobDescription = descVM.JobDescription;
+            }
+
+            descTextBlock.Text = $"({newCharCount} chars)";
         }
     }
 }

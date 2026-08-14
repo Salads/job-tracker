@@ -62,19 +62,24 @@
                   SelectedItem="{Binding SelectedPosting}"
                   ItemsSource="{Binding JobPostings}">
             <DataGrid.Columns>
+                <DataGridTextColumn Header="Row ID"
+                                    IsReadOnly="True"
+                                    ElementStyle="{StaticResource CenterTextElementStyle}"
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}"
+                                    Binding="{Binding RowID, Mode=TwoWay}"/>
                 <DataGridTextColumn Header="Title"
                                     ElementStyle="{StaticResource CenterTextElementStyle}"
                                     HeaderStyle="{StaticResource CenterGridHeaderStyle}"
-                                    Binding="{Binding JobTitle}"/>
+                                    Binding="{Binding JobTitle, Mode=TwoWay}"/>
                 <DataGridTextColumn Header="Company"
                                     ElementStyle="{StaticResource CenterTextElementStyle}"
                                     HeaderStyle="{StaticResource CenterGridHeaderStyle}"
-                                    Binding="{Binding JobCompanyName}"/>
+                                    Binding="{Binding JobCompanyName, Mode=TwoWay}"/>
                 <DataGridHyperlinkColumn Header="URL"
                                          IsReadOnly="True"
                                          ContentBinding="{Binding JobPostingURL, Converter={StaticResource URLConverter}}"
                                          HeaderStyle="{StaticResource CenterGridHeaderStyle}"
-                                         Binding="{Binding JobPostingURL}">
+                                         Binding="{Binding JobPostingURL, Mode=TwoWay}">
                     <DataGridHyperlinkColumn.ElementStyle>
                         <Style TargetType="TextBlock" BasedOn="{StaticResource CenterTextElementStyle}">
                             <EventSetter Event="Hyperlink.Click" Handler="URL_Click"/>
@@ -84,37 +89,38 @@
                 <DataGridComboBoxColumn Header="Type"
                                         ElementStyle="{StaticResource CenterComboBoxStyle}"
                                         HeaderStyle="{StaticResource CenterGridHeaderStyle}"
-                                        SelectedItemBinding="{Binding JobType}"
+                                        SelectedItemBinding="{Binding JobType, Mode=TwoWay}"
                                         ItemsSource="{Binding Source={StaticResource JobTypeValues}}"/>
                 <DataGridComboBoxColumn Header="Arrangement"
                                         ElementStyle="{StaticResource CenterComboBoxStyle}"
                                         HeaderStyle="{StaticResource CenterGridHeaderStyle}"
-                                        SelectedItemBinding="{Binding JobArrangement}"
+                                        SelectedItemBinding="{Binding JobArrangement, Mode=TwoWay}"
                                         ItemsSource="{Binding Source={StaticResource JobArrangementValues}}"/>
                 <DataGridTextColumn Header="Location"
                                     ElementStyle="{StaticResource CenterTextElementStyle}"
                                     HeaderStyle="{StaticResource CenterGridHeaderStyle}"
-                                    Binding="{Binding JobLocation}"/>
+                                    Binding="{Binding JobLocation, Mode=TwoWay}"/>
                 <DataGridTextColumn Header="Distance"
                                     ElementStyle="{StaticResource CenterTextElementStyle}"
                                     IsReadOnly="True"
                                     HeaderStyle="{StaticResource CenterGridHeaderStyle}"
-                                    Binding="{Binding JobDistance}"/>
+                                    Binding="{Binding JobDistance, Mode=TwoWay}"/>
                 <DataGridTemplateColumn Header="Description"
                         HeaderStyle="{StaticResource CenterGridHeaderStyle}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="View / Edit" 
+                            <Button Name="descButton"
+                                    Content="View / Edit"
+                                    Width="125"
                                     HorizontalAlignment="Center"
-                                    Command="{Binding DataContext.OpenRichDescriptionCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                    Click="descButton_Click"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridComboBoxColumn Header="Status"
                                         ElementStyle="{StaticResource CenterComboBoxStyle}"
                                         HeaderStyle="{StaticResource CenterGridHeaderStyle}"
-                                        SelectedItemBinding="{Binding JobStatus}"
+                                        SelectedItemBinding="{Binding JobStatus, Mode=TwoWay}"
                                         ItemsSource="{Binding Source={StaticResource JobStatusValues}}"/>
             </DataGrid.Columns>
         </DataGrid>

@@ -19,21 +19,13 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 5 0 ">
-            <CheckBox Name="editableCheckbox" Margin="5 2 0 2" VerticalAlignment="Center"
-                      IsChecked="{Binding Locked}"/>
-            <TextBlock FontSize="13" VerticalAlignment="Center" Text="Editing Locked"/>
-        </StackPanel>
         <e:TextBox Name="descTextBox" Grid.Row="1" MinHeight="200" Padding="5" 
                    TextWrapping="Wrap"
                    AcceptsReturn="True"
                    VerticalScrollBarVisibility="Auto"
-                   IsReadOnly="{Binding Locked}"
                    Text="{Binding JobDescription, UpdateSourceTrigger=PropertyChanged}"/>
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
             <Button Name="descSaveButton" Content="Save" Width="75" Margin="5" 

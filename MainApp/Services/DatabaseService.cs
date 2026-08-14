@@ -88,6 +88,31 @@ namespace MainApp.Services
             Trace.WriteLine($"AddNewJob Result: (#Rows Modified): {executeResult}");
         }
 
+        public void UpdateJobPosting(JobPosting posting)
+        {
+            using SqliteConnection connection = new SqliteConnection($"Data Source={DEFAULT_DATABASE_FILENAME}");
+            connection.Open();
+
+            using SqliteCommand command = connection.CreateCommand();
+            command.CommandText = $"""
+                UPDATE {DEFAULT_TABLE_NAME}
+                    SET
+                        Title       = '{posting.JobTitle}',
+                        CompanyName = '{posting.JobCompanyName}',
+                        PostingURL  = '{posting.JobPostingURL}',
+                        Type        = {(int)posting.JobType},
+                        Arrangement = {(int)posting.JobArrangement},
+                        Location    = '{posting.JobLocation}',
+                        Distance    = '{posting.JobDistance}',
+                        Description = '{posting.JobDescription}',
+                        Status      = {(int)posting.JobStatus}
+                WHERE rowid = {posting.RowID};
+            """;
+
+            int rowsAffected = command.ExecuteNonQuery();
+            Trace.WriteLine($"DB: Posting Updated ({rowsAffected} rows affected)");
+        }
+
         public void RefreshJobPostings(ObservableCollection<JobPosting> jobPostings)
         {
             using SqliteConnection connection = new SqliteConnection($"Data Source={DEFAULT_DATABASE_FILENAME}");
@@ -95,7 +120,7 @@ namespace MainApp.Services
 
             using SqliteCommand command = connection.CreateCommand();
             command.CommandText = $"""
-                SELECT *
+                SELECT rowid, *
                 FROM {DEFAULT_TABLE_NAME};
             """;
 
@@ -122,6 +147,9 @@ namespace MainApp.Services
                     object value = reader.GetValue(i);
                     switch (columnName)
                     {
+                        case "rowid":
+                            jobPosting.RowID = Convert.ToInt64(value); 
+                            break;
                         case "Title":
                             jobPosting.JobTitle = (string)value;
                             break;
@@ -152,7 +180,6 @@ namespace MainApp.Services
                         default:
                             Trace.WriteLine($"Unknown ColumnName: {columnName}");
                             break;
-
                     }
 
                 }

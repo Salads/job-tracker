@@ -12,7 +12,6 @@ namespace MainApp.ViewModels
     {
         public NewPostingWindowViewModel()
         {
-            EditDescription = new RelayCommand<Window>(OpenDescriptionEditor);
             JobDescriptionLabel = "(0 chars)";
 
             SaveCommand = new RelayCommand<Window>(OnSaveCommand, _ => !HasErrors);
@@ -68,8 +67,6 @@ namespace MainApp.ViewModels
         public partial JobStatus JobStatus { get; set; } = JobStatus.Applied;
         #endregion
 
-        public ICommand EditDescription { get; }
-
         public ICommand SaveCommand { get; }
 
         public ICommand CancelCommand { get; }
@@ -107,25 +104,6 @@ namespace MainApp.ViewModels
                 view.DialogResult = false;
                 view.Close();
             }
-        }
-
-        private void OpenDescriptionEditor(Window? owner)
-        {
-            EditDescriptionWindow editDescWindow = new EditDescriptionWindow(JobDescription)
-            {
-                Owner = owner
-            };
-            editDescWindow.ShowDialog();
-
-            int newCharCount = 0;
-            if (editDescWindow.DialogResult == true)
-            {
-                string newJobDescription = ((EditDescriptionViewModel)editDescWindow.DataContext).JobDescription;
-                newCharCount = newJobDescription.Length;
-                JobDescription = newJobDescription;
-            }
-
-            JobDescriptionLabel = $"({newCharCount} chars)";
         }
 
         public static ValidationResult ValidatePostingURL(string postingURL, ValidationContext context)

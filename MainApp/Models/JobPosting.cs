@@ -7,10 +7,11 @@ using System.Xml.Linq;
 
 namespace MainApp
 {
-    public partial class JobPosting
+    public partial class JobPosting : ObservableObject
     {
         public JobPosting() 
         {
+            RowID = -1;
             JobTitle = string.Empty;
             JobCompanyName = string.Empty;
             JobPostingURL = string.Empty;
@@ -22,27 +23,40 @@ namespace MainApp
             JobStatus = JobStatus.Applied;
         }
 
-        public string JobTitle {  get; set; }
+        [ObservableProperty]
+        public partial Int64 RowID { get; set; }
 
-        public string JobCompanyName { get; set; }
+        [ObservableProperty]
+        public partial string JobTitle {  get; set; }
+        
+        [ObservableProperty]
+        public partial string JobCompanyName { get; set; }
 
-        public string JobPostingURL { get; set; }
+        [ObservableProperty]
+        public partial string JobPostingURL { get; set; }
 
-        public JobType JobType { get; set; }
+        [ObservableProperty]
+        public partial JobType JobType { get; set; }
 
-        public JobArrangement JobArrangement { get; set; }
+        [ObservableProperty]
+        public partial JobArrangement JobArrangement { get; set; }
 
-        public string JobLocation { get; set; }
+        [ObservableProperty]
+        public partial string JobLocation { get; set; }
 
-        public float JobDistance { get; set; }
+        [ObservableProperty]
+        public partial float JobDistance { get; set; }
 
-        public string JobDescription { get; set; }
+        [ObservableProperty]
+        public partial string JobDescription { get; set; }
 
-        public JobStatus JobStatus { get; set; }
+        [ObservableProperty]
+        public partial JobStatus JobStatus { get; set; }
 
         public override string ToString()
         {
-            return $"Job Title: {JobTitle}\n" +
+            return $"Row ID: {RowID}\n" +
+                   $"Job Title: {JobTitle}\n" +
                    $"Job Company Name: {JobCompanyName}\n" +
                    $"Job Posting URL: {JobPostingURL}\n" +
                    $"Job Type: {JobType}\n" +

@@ -23,9 +23,6 @@ namespace MainApp.ViewModels
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand {  get; }
 
-        [ObservableProperty]
-        public partial bool Locked { get; set; } = false;
-
         [Required]
         [NotifyDataErrorInfo]
         [ObservableProperty]

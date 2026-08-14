@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using MainApp.ViewModels;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
 using System.Windows;
@@ -28,6 +29,21 @@ namespace MainApp
             Hyperlink link = (Hyperlink)e.OriginalSource;
             Process.Start(new ProcessStartInfo(link.NavigateUri.AbsoluteUri) { UseShellExecute = true });
             e.Handled = true;
+        }
+
+        private void descButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button senderButton = (Button)sender;
+            JobPosting jobPosting = (JobPosting)senderButton.DataContext;
+            EditDescriptionWindow descView = new EditDescriptionWindow()
+            {
+                Owner = this
+            };
+
+            EditDescriptionViewModel editDescriptionViewModel = (descView.DataContext as EditDescriptionViewModel)!;
+            editDescriptionViewModel.JobDescription = jobPosting.JobDescription;
+
+            descView.ShowDialog();
         }
     }
 }
