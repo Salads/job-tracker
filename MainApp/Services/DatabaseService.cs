@@ -62,7 +62,7 @@ namespace MainApp.Services
             Trace.WriteLine($"EnsureTableExists Result: (#Rows Modified): {executeResult}");
         }
 
-        public void AddNewJob(JobPosting newJobPosting)
+        public long AddNewJob(JobPosting newJobPosting)
         {
             using SqliteConnection connection = new SqliteConnection($"Data Source={DEFAULT_DATABASE_FILENAME}");
             connection.Open();
@@ -70,22 +70,38 @@ namespace MainApp.Services
             using SqliteCommand command = connection.CreateCommand();
             command.CommandText = $"""
                 INSERT INTO {DEFAULT_TABLE_NAME}
+                (Title, CompanyName, PostingURL, Type, Arrangement, Location, Distance, Description, Status)
                 VALUES
                     (
-                        '{newJobPosting.JobTitle}', 
-                        '{newJobPosting.JobCompanyName}', 
-                        '{newJobPosting.JobPostingURL}',
-                        {(int)newJobPosting.JobType}, 
-                        {(int)newJobPosting.JobArrangement},
-                        '{newJobPosting.JobLocation}',
-                        {newJobPosting.JobDistance},
-                        '{newJobPosting.JobDescription}',
-                        {(int)newJobPosting.JobStatus}
+                        @title,
+                        @companyName,
+                        @postingUrl,
+                        @type,
+                        @arrangement,
+                        @location,
+                        @distance,
+                        @description,
+                        @status
                     );
                 """;
 
+            command.Parameters.AddWithValue("@title", newJobPosting.JobTitle);
+            command.Parameters.AddWithValue("@companyName", newJobPosting.JobCompanyName);
+            command.Parameters.AddWithValue("@postingUrl", newJobPosting.JobPostingURL);
+            command.Parameters.AddWithValue("@type", (int)newJobPosting.JobType);
+            command.Parameters.AddWithValue("@arrangement", (int)newJobPosting.JobArrangement);
+            command.Parameters.AddWithValue("@location", newJobPosting.JobLocation);
+            command.Parameters.AddWithValue("@distance", (double)newJobPosting.JobDistance);
+            command.Parameters.AddWithValue("@description", newJobPosting.JobDescription);
+            command.Parameters.AddWithValue("@status", (int)newJobPosting.JobStatus);
+
             int executeResult = command.ExecuteNonQuery();
             Trace.WriteLine($"AddNewJob Result: (#Rows Modified): {executeResult}");
+
+            // Get the row id from the newly inserted row.
+            using SqliteCommand rowIdCommand = connection.CreateCommand();
+            rowIdCommand.CommandText = "SELECT last_insert_rowid();";
+            return (long)rowIdCommand.ExecuteScalar()!;
         }
 
         public void UpdateJobPosting(JobPosting posting)
@@ -97,17 +113,28 @@ namespace MainApp.Services
             command.CommandText = $"""
                 UPDATE {DEFAULT_TABLE_NAME}
                     SET
-                        Title       = '{posting.JobTitle}',
-                        CompanyName = '{posting.JobCompanyName}',
-                        PostingURL  = '{posting.JobPostingURL}',
-                        Type        = {(int)posting.JobType},
-                        Arrangement = {(int)posting.JobArrangement},
-                        Location    = '{posting.JobLocation}',
-                        Distance    = '{posting.JobDistance}',
-                        Description = '{posting.JobDescription}',
-                        Status      = {(int)posting.JobStatus}
-                WHERE rowid = {posting.RowID};
-            """;
+                        Title       = @title,
+                        CompanyName = @companyName,
+                        PostingURL  = @postingUrl,
+                        Type        = @type,
+                        Arrangement = @arrangement,
+                        Location    = @location,
+                        Distance    = @distance,
+                        Description = @description,
+                        Status      = @status
+                WHERE rowid = @rowId;
+                """;
+
+            command.Parameters.AddWithValue("@title", posting.JobTitle);
+            command.Parameters.AddWithValue("@companyName", posting.JobCompanyName);
+            command.Parameters.AddWithValue("@postingUrl", posting.JobPostingURL);
+            command.Parameters.AddWithValue("@type", (int)posting.JobType);
+            command.Parameters.AddWithValue("@arrangement", (int)posting.JobArrangement);
+            command.Parameters.AddWithValue("@location", posting.JobLocation);
+            command.Parameters.AddWithValue("@distance", (double)posting.JobDistance);
+            command.Parameters.AddWithValue("@description", posting.JobDescription);
+            command.Parameters.AddWithValue("@status", (int)posting.JobStatus);
+            command.Parameters.AddWithValue("@rowId", posting.RowID);
 
             int rowsAffected = command.ExecuteNonQuery();
             Trace.WriteLine($"DB: Posting Updated ({rowsAffected} rows affected)");

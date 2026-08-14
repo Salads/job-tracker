@@ -45,7 +45,7 @@ namespace MainApp.ViewModels
             if(addnewWindow.DialogResult == true)
             {
                 JobPosting newPosting = ((NewPostingWindowViewModel)addnewWindow.DataContext).GetJobPosting();
-                databaseService.AddNewJob(newPosting);
+                newPosting.RowID = databaseService.AddNewJob(newPosting);
                 JobPostings.Add(newPosting);
             }
         }
