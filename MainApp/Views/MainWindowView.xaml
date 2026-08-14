@@ -49,9 +49,10 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-            <Button Content="Add New" Width="75" Margin="5" 
-                    Command="{Binding AddNewPostingCommand}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <Button Name="addNewButton"
+                    Content="Add New" 
+                    Width="75" Margin="5"
+                    Click="addNewButton_Click"/>
         </StackPanel>
         <DataGrid Grid.Row="1"
                   EnableRowVirtualization="True"
@@ -69,12 +70,12 @@
                                     HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                     Binding="{Binding RowID, Mode=TwoWay}"/>
                 <DataGridTextColumn Header="Title"
-                                    Width="2*"
+                                    Width="*"
                                     ElementStyle="{StaticResource CenterTextElementStyle}"
                                     HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                     Binding="{Binding JobTitle, Mode=TwoWay}"/>
                 <DataGridTextColumn Header="Company"
-                                    Width="*"
+                                    Width="auto"
                                     ElementStyle="{StaticResource CenterTextElementStyle}"
                                     HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                     Binding="{Binding JobCompanyName, Mode=TwoWay}"/>
