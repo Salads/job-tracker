@@ -6,16 +6,19 @@
         xmlns:local="clr-namespace:MainApp"
         xmlns:viewModels="clr-namespace:MainApp.ViewModels"
         mc:Ignorable="d"
-        Title="New Job Posting" Height="auto" Width="auto" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
+        Title="New Job Posting" 
+        Height="auto" MinWidth="425" 
+        SizeToContent="WidthAndHeight" 
+        WindowStartupLocation="CenterOwner">
     <Window.DataContext>
         <viewModels:NewPostingWindowViewModel x:Name="ViewModel"/>
     </Window.DataContext>
     <StackPanel Orientation="Vertical">
         <Border BorderBrush="Black" BorderThickness="1">
-            <Grid Width="auto" ShowGridLines="True">
+            <Grid ShowGridLines="True">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition  Width="*"/>
 
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
