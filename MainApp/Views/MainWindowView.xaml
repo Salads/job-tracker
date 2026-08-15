@@ -9,7 +9,7 @@
         xmlns:models="clr-namespace:MainApp.Models"
         mc:Ignorable="d"
         Title="Job Tracker"
-        Height="450" Width="720"
+        Height="600" Width="900"
         MinWidth="720"
         WindowStartupLocation="CenterScreen">
     <Window.DataContext>
@@ -91,6 +91,7 @@
                 <DataGridHyperlinkColumn Header="URL"
                                          IsReadOnly="True"
                                          Width="auto"
+                                         MinWidth="60"
                                          ContentBinding="{Binding JobPostingURL, Converter={StaticResource URLConverter}}"
                                          HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                          Binding="{Binding JobPostingURL, Mode=TwoWay}">
@@ -102,6 +103,7 @@
                 </DataGridHyperlinkColumn>
                 <DataGridComboBoxColumn Header="Type"
                                         Width="auto"
+                                        MinWidth="80"
                                         ElementStyle="{StaticResource CenterComboBoxStyle}"
                                         HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                         SelectedItemBinding="{Binding JobType, Mode=TwoWay}"
@@ -138,6 +140,7 @@
                 </DataGridTemplateColumn>
                 <DataGridComboBoxColumn Header="Status"
                                         Width="auto"
+                                        MinWidth="100"
                                         ElementStyle="{StaticResource CenterComboBoxStyle}"
                                         HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                         SelectedItemBinding="{Binding JobStatus, Mode=TwoWay}"
