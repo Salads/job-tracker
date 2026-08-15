@@ -42,6 +42,10 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
         <local:URLConverter x:Key="URLConverter" />
+        <local:RowBackgroundConverter x:Key="DynamicBackroundConverter"/>
+        <Style x:Key="DynamicRowBackground" TargetType="DataGridRow">
+            <Setter Property="Background" Value="{Binding JobStatus, Converter={StaticResource DynamicBackroundConverter}}"/>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -65,7 +69,8 @@
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False"
                   SelectedItem="{Binding SelectedPosting}"
-                  ItemsSource="{Binding JobPostings}">
+                  ItemsSource="{Binding JobPostings}"
+                  RowStyle="{StaticResource DynamicRowBackground}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Row ID"
                                     IsReadOnly="True"
