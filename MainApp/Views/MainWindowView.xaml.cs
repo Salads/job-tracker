@@ -1,5 +1,6 @@
 ﻿using MainApp.Services;
 using MainApp.ViewModels;
+using MainApp.Views;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
@@ -65,6 +66,18 @@ namespace MainApp
                 MainWindowViewModel vm = (MainWindowViewModel)DataContext;
                 JobPosting newPosting = ((NewPostingWindowViewModel)addnewWindow.DataContext).GetJobPosting();
                 vm.AddNewJob(newPosting);
+            }
+        }
+
+        private void settingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            SettingsView settingsView = new SettingsView() { Owner = this };
+            settingsView.ShowDialog();
+
+            if (settingsView.DialogResult == true)
+            {
+                MainWindowViewModel vm = (MainWindowViewModel)DataContext;
+                vm.RefreshJobPostings();
             }
         }
     }

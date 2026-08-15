@@ -12,7 +12,6 @@ namespace MainApp.Services
 {
     public class DatabaseService
     {
-        private const string DEFAULT_DATABASE_FILENAME = "save.db";
         private const string DEFAULT_TABLE_NAME = "Jobs";
 
         public DatabaseService()
@@ -22,7 +21,7 @@ namespace MainApp.Services
 
         private bool DoesTableExist(string tableName = DEFAULT_TABLE_NAME)
         {
-            using SqliteConnection connection = new SqliteConnection($"Data Source={DEFAULT_DATABASE_FILENAME}");
+            using SqliteConnection connection = new SqliteConnection($"Data Source={Settings.Default.SaveLocation}");
 
             connection.Open();
 
@@ -39,7 +38,7 @@ namespace MainApp.Services
 
         public void EnsureTableExists()
         {
-            using SqliteConnection connection = new SqliteConnection($"Data Source={DEFAULT_DATABASE_FILENAME}");
+            using SqliteConnection connection = new SqliteConnection($"Data Source={Settings.Default.SaveLocation}");
             connection.Open();
 
             using SqliteCommand command = connection.CreateCommand();
@@ -64,7 +63,7 @@ namespace MainApp.Services
 
         public long AddNewJob(JobPosting newJobPosting)
         {
-            using SqliteConnection connection = new SqliteConnection($"Data Source={DEFAULT_DATABASE_FILENAME}");
+            using SqliteConnection connection = new SqliteConnection($"Data Source={Settings.Default.SaveLocation}");
             connection.Open();
 
             using SqliteCommand command = connection.CreateCommand();
@@ -106,7 +105,7 @@ namespace MainApp.Services
 
         public void UpdateJobPosting(JobPosting posting)
         {
-            using SqliteConnection connection = new SqliteConnection($"Data Source={DEFAULT_DATABASE_FILENAME}");
+            using SqliteConnection connection = new SqliteConnection($"Data Source={Settings.Default.SaveLocation}");
             connection.Open();
 
             using SqliteCommand command = connection.CreateCommand();
@@ -142,7 +141,7 @@ namespace MainApp.Services
 
         public void RefreshJobPostings(ObservableCollection<JobPosting> jobPostings)
         {
-            using SqliteConnection connection = new SqliteConnection($"Data Source={DEFAULT_DATABASE_FILENAME}");
+            using SqliteConnection connection = new SqliteConnection($"Data Source={Settings.Default.SaveLocation}");
             connection.Open();
 
             using SqliteCommand command = connection.CreateCommand();

@@ -53,6 +53,10 @@
                     Content="Add New" 
                     Width="75" Margin="5"
                     Click="addNewButton_Click"/>
+            <Button Name="settingsButton"
+                    Content="Settings"
+                    Width="75" Margin="5"
+                    Click="settingsButton_Click"/>
         </StackPanel>
         <DataGrid Grid.Row="1"
                   EnableRowVirtualization="True"

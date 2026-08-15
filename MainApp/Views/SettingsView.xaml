@@ -1,24 +1,53 @@
-﻿<Window x:Class="MainApp.SetupWindow"
+﻿<Window x:Class="MainApp.Views.SettingsView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MainApp"
+        xmlns:viewModels="clr-namespace:MainApp.ViewModels"
         mc:Ignorable="d"
-        Title="Settings" Height="450" Width="800">
-    <StackPanel Orientation="Vertical">
-        <GroupBox Margin="5 25 5 5">
+        Title="Settings" Height="450" Width="800"
+        WindowStartupLocation="CenterOwner">
+    <Window.DataContext>
+        <viewModels:SettingsViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <GroupBox Grid.Row="0"  VerticalAlignment="Top" Margin="5 25 5 5" Width="auto" Height="auto">
             <GroupBox.Header>
                 <TextBlock Text="Database Settings" FontSize="12"/>
             </GroupBox.Header>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Location:"/>
-                <TextBox Width="450" Margin="5"/>
-                <Button Content="Browse" Width="75" Margin="5"/>
-                <Button Width="25" Margin="5">
+                <TextBlock Text="Location:"
+                           VerticalAlignment="Center"/>
+                <TextBox Name="saveLocationTextbox"
+                         Width="450" Margin="5"
+                         Text="{Binding SaveLocation}"/>
+                <Button Name="browseButton"
+                        Content="Browse" 
+                        Width="75" Margin="5"
+                        Click="browseButton_Click"/>
+                <Button Name="saveLocationResetButton"
+                        Width="25" Margin="5"
+                        Click="saveLocationResetButton_Click">
                     <Image Source="/Restart.png" Width="70" Height="16"/>
                 </Button>
             </StackPanel>
         </GroupBox>
-    </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Name="saveButton"
+                    Content="Save"
+                    Width="75"
+                    Margin="5"
+                    Click="saveButton_Click"/>
+            <Button Name="cancelButton"
+                    Content="Cancel"
+                    Width="75"
+                    Margin="5"
+                    Click="cancelButton_Click"/>
+        </StackPanel>
+    </Grid>
 </Window>

@@ -19,7 +19,7 @@ namespace MainApp.ViewModels
         public MainWindowViewModel() 
         {
             JobPostings.PropertyChangedEx += HandleJobPostingPropertyChangedEx;
-            databaseService.RefreshJobPostings(JobPostings);
+            RefreshJobPostings();
         }
 
         public ObservableCollectionEx<JobPosting> JobPostings { get; } = new ObservableCollectionEx<JobPosting>();
@@ -39,6 +39,12 @@ namespace MainApp.ViewModels
         {
             posting.RowID = databaseService.AddNewJob(posting);
             JobPostings.Add(posting);
+        }
+
+        public void RefreshJobPostings()
+        {
+            databaseService.EnsureTableExists();
+            databaseService.RefreshJobPostings(JobPostings);
         }
     }
 }
