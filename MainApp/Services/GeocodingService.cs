@@ -28,7 +28,18 @@ namespace MainApp.Services
 
         private DateTime lastRequestTime = DateTime.Now;
 
-        GeoCoordinate? IGeocodingService.GetLocationCoordinates(string city, string state)
+        public GeoCodingStatus GetGeoCodingStatus()
+        {
+            using HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri(APIStatusURL);
+            httpClient.DefaultRequestHeaders.Add("User-Agent", "Job Tracker");
+
+            using HttpResponseMessage response = httpClient.GetAsync("?format=text").Result;
+            string responseContent = response.Content.ReadAsStringAsync().Result;
+            return new GeoCodingStatus(response.IsSuccessStatusCode, responseContent);
+        }
+
+        GeoCoordinate? IGeocodingService.GetLocationCoordinates(string query)
         {
             HttpClient httpClient = new()
             {
@@ -36,7 +47,7 @@ namespace MainApp.Services
             };
             httpClient.DefaultRequestHeaders.Add("User-Agent", "Job Tracker");
 
-            using HttpResponseMessage response = httpClient.GetAsync($"?city={city}&state={state}&format=jsonv2").Result;
+            using HttpResponseMessage response = httpClient.GetAsync($"?q={query}&format=jsonv2").Result;
             if (response.IsSuccessStatusCode)
             {
                 string jsonResponse = response.Content.ReadAsStringAsync().Result;

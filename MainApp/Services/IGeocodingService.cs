@@ -8,17 +8,22 @@ using System.Text;
 namespace MainApp.Services
 {
     public interface IGeocodingService
-    {
-        public enum GeoCodingError
+    { 
+        public struct GeoCodingStatus
         {
-            Success,
-            CouldNotConnect,
-            ServerInternal,
-            Params,
-            TooFast,
-            Blocked
+            public GeoCodingStatus(bool ok, string description)
+            {
+                OK = ok;
+                Description = description;
+            }
+
+            public bool OK { get; set; }
+
+            public string Description { get; set; }
         }
 
-        public GeoCoordinate? GetLocationCoordinates(string city, string state);
+        public GeoCoordinate? GetLocationCoordinates(string query);
+
+        public GeoCodingStatus GetGeoCodingStatus();
     }
 }
