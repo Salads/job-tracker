@@ -1,4 +1,6 @@
-﻿using System.Configuration;
+﻿using MainApp.Services;
+using Microsoft.Extensions.DependencyInjection;
+using System.Configuration;
 using System.Data;
 using System.Windows;
 
@@ -9,6 +11,23 @@ namespace MainApp
     /// </summary>
     public partial class App : Application
     {
-    }
+        public App()
+        {
+            Services = ConfigureServices();
+        }
 
+        public new static App Current => (App)Application.Current;
+
+        public IServiceProvider Services { get; }
+
+        private static IServiceProvider ConfigureServices()
+        {
+            var services = new ServiceCollection();
+
+            services.AddSingleton<IDatabaseService, DatabaseService>();
+            services.AddSingleton<IGeocodingService, GeocodingService>();
+
+            return services.BuildServiceProvider();
+        }
+    }
 }

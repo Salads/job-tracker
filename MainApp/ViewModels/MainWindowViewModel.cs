@@ -43,7 +43,7 @@ namespace MainApp.ViewModels
 
         public void RefreshJobPostings()
         {
-            databaseService.EnsureTableExists();
+            databaseService.EnsureTablesExist();
             databaseService.RefreshJobPostings(JobPostings);
         }
     }
