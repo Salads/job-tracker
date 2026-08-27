@@ -9,7 +9,7 @@ namespace MainApp.Services
 {
     public interface IGeocodingService
     { 
-        public struct GeoCodingStatus
+        public class GeoCodingStatus
         {
             public GeoCodingStatus(bool ok, string description)
             {
@@ -22,7 +22,39 @@ namespace MainApp.Services
             public string Description { get; set; }
         }
 
-        public GeoCoordinate? GetLocationCoordinates(string query);
+        public enum ResponseResult
+        {
+            OK,
+            NoResult,
+            ServerError,
+            NetworkError,
+            JSONError
+        }
+
+        public class GeoCodingResponse
+        {
+            public GeoCodingResponse(ResponseResult ok)
+            {
+                Result = ok;
+                Coords = new GeoCoordinate();
+                DisplayName = string.Empty;
+            }
+
+            public GeoCodingResponse(ResponseResult ok, double latitude, double longitude, string displayName)
+            {
+                Result = ok;
+                Coords = new GeoCoordinate(latitude, longitude);
+                DisplayName = displayName;
+            }
+
+            public ResponseResult Result;
+
+            public GeoCoordinate Coords { get; set; }
+
+            public string DisplayName { get; set; }
+        }
+
+        public GeoCodingResponse GetLocationCoordinates(string query);
 
         public GeoCodingStatus GetGeoCodingStatus();
     }

@@ -102,7 +102,7 @@ namespace MainApp.Services
             using (SqliteCommand command = connection.CreateCommand())
             {
                 command.CommandText = $"""
-                CREATE TABLE IF NOT EXISTS {TABLENAME_CACHE_LOCATIONNAMES}
+                CREATE TABLE IF NOT EXISTS {TABLENAME_JOBS_VERSION}
                 (
                     Version INT
                 );
@@ -158,7 +158,12 @@ namespace MainApp.Services
             }
         }
 
-        public string? GetFullNameForInput(string inputLocation)
+        /// <summary>
+        /// Get the full location name from cache if it exists
+        /// </summary>
+        /// <param name="inputLocation">The short or query string for a location.</param>
+        /// <returns>The full location name as returned by Nominatim, otherwise null</returns>
+        public string? GetLocationMappingFromCache(string inputLocation)
         {
             using SqliteConnection connection = new SqliteConnection($"Data Source={DBNAME_CACHE}");
             connection.Open();
@@ -184,9 +189,9 @@ namespace MainApp.Services
             }
         }
 
-        public void AddLocationMappingToCache(string inputLocation, string fullLocation)
+        public void EnsureLocationMappingExists(string inputLocation, string fullLocation)
         {
-            string? existingFullLocation = GetFullNameForInput(inputLocation);
+            string? existingFullLocation = GetLocationMappingFromCache(inputLocation);
             if (existingFullLocation != null)
             {
                 if(fullLocation != existingFullLocation)
@@ -216,7 +221,7 @@ namespace MainApp.Services
             command.ExecuteNonQuery();
         }
 
-        public GeoCoordinate? GetLocationFromCache(string fullName)
+        public GeoCoordinate? GetLocationCoordsFromCache(string fullName)
         {
             using SqliteConnection connection = new SqliteConnection($"Data Source={DBNAME_CACHE}");
             connection.Open();
@@ -249,8 +254,14 @@ namespace MainApp.Services
             return result;
         }
 
-        public void AddLocationToCoordsCache(string fullLocation, GeoCoordinate coords)
+        public void EnsureLocationCoordsExists(string fullLocation, GeoCoordinate coords)
         {
+            GeoCoordinate? result = GetLocationCoordsFromCache(fullLocation);
+            if(result != null)
+            {
+                return;
+            }
+
             using SqliteConnection connection = new SqliteConnection($"Data Source={DBNAME_CACHE}");
             connection.Open();
 

@@ -39,7 +39,7 @@ namespace MainApp.Services
             return new GeoCodingStatus(response.IsSuccessStatusCode, responseContent);
         }
 
-        GeoCoordinate? IGeocodingService.GetLocationCoordinates(string query)
+        public GeoCodingResponse GetLocationCoordinates(string query)
         {
             HttpClient httpClient = new()
             {
@@ -47,35 +47,46 @@ namespace MainApp.Services
             };
             httpClient.DefaultRequestHeaders.Add("User-Agent", "Job Tracker");
 
-            using HttpResponseMessage response = httpClient.GetAsync($"?q={query}&format=jsonv2").Result;
-            if (response.IsSuccessStatusCode)
+            GeoCodingResponse result = new GeoCodingResponse(ResponseResult.NoResult);
+
+            try
             {
-                string jsonResponse = response.Content.ReadAsStringAsync().Result;
-
-                List<JSONGeoCoordinates>? geoCoordinates = JsonSerializer.Deserialize<List<JSONGeoCoordinates>>(jsonResponse);
-                GeoCoordinate? result = new GeoCoordinate();
-
-                if (geoCoordinates != null && geoCoordinates.Count > 0)
+                using HttpResponseMessage response = httpClient.GetAsync($"?q={query}&format=jsonv2").Result;
+                if (response.IsSuccessStatusCode)
                 {
-                    JSONGeoCoordinates coords = geoCoordinates[0];
-                    result.Longitude = coords.lon;
-                    result.Latitude = coords.lat;
-                    Trace.WriteLine($"Latitude: {coords.lat} Longitude: {coords.lon}\n");
+                    string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                    List<JSONGeoCoordinates>? geoCoordinates = JsonSerializer.Deserialize<List<JSONGeoCoordinates>>(jsonResponse);
+
+                    if (geoCoordinates != null && geoCoordinates.Count > 0)
+                    {
+                        JSONGeoCoordinates coords = geoCoordinates[0];
+                        result.Coords.Longitude = coords.lon;
+                        result.Coords.Latitude = coords.lat;
+                        result.DisplayName = coords.display_name;
+                        result.Result = ResponseResult.OK;
+                        Trace.WriteLine($"Latitude: {coords.lat} Longitude: {coords.lon}\n");
+                    }
+                    else
+                    {
+                        result.Result = ResponseResult.JSONError;
+                        Trace.WriteLine("Geocoding JSON Error");
+                    }
+
+                    return result;
                 }
                 else
                 {
-                    result = null;
-                    Trace.WriteLine("Geocoding JSON Error");
+                    Trace.WriteLine($"Request Failed: {response.ReasonPhrase}");
+                    return new GeoCodingResponse(ResponseResult.ServerError);
                 }
-
-                return result;
             }
-            else
+            catch (Exception e)
             {
-                // TODO(Salads): User Feedback
-                Trace.WriteLine($"Request Failed: {response.ReasonPhrase}");
-                return null;
+                Trace.WriteLine($"Request Failed: {e.Message}");
+                result.Result = ResponseResult.NetworkError;
             }
+
+            return result;
         }
     }
 }

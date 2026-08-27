@@ -12,5 +12,7 @@ namespace MainApp.Models
 
         [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
         public double lon { get; set; }
+
+        public string display_name { get; set; }
     }
 }

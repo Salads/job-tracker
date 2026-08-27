@@ -10,13 +10,13 @@ namespace MainApp.Services
     {
         public int? GetJobsDBVersion();
 
-        public string? GetFullNameForInput(string inputLocation);
+        public string? GetLocationMappingFromCache(string inputLocation);
 
-        public void AddLocationMappingToCache(string inputLocation, string fullLocation);
+        public void EnsureLocationMappingExists(string inputLocation, string fullLocation);
 
-        public void AddLocationToCoordsCache(string fullLocation, GeoCoordinate coords);
+        public void EnsureLocationCoordsExists(string fullLocation, GeoCoordinate coords);
 
-        public GeoCoordinate? GetLocationFromCache(string fullName);
+        public GeoCoordinate? GetLocationCoordsFromCache(string fullName);
 
         public long AddNewJob(JobPosting newJobPosting);
 
