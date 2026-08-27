@@ -24,11 +24,11 @@ namespace MainApp.Services
 
         public enum ResponseResult
         {
-            OK,
-            NoResult,
-            ServerError,
-            NetworkError,
-            JSONError
+            OK,            // Has a result!
+            NoResult,      // Query could noot find anything.
+            ServerError,   // Server gave unexpected output
+            NetworkError,  // Internet down, DNS, etc.
+            JSONError      // JSON decoding failed.
         }
 
         public class GeoCodingResponse

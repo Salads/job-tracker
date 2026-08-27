@@ -57,7 +57,15 @@ namespace MainApp.Services
                     string jsonResponse = response.Content.ReadAsStringAsync().Result;
                     List<JSONGeoCoordinates>? geoCoordinates = JsonSerializer.Deserialize<List<JSONGeoCoordinates>>(jsonResponse);
 
-                    if (geoCoordinates != null && geoCoordinates.Count > 0)
+                    if (geoCoordinates == null)
+                    {
+                        result.Result = ResponseResult.ServerError;
+                    }
+                    else if (geoCoordinates.Count <= 0)
+                    {
+                        result.Result = ResponseResult.NoResult;
+                    }
+                    else
                     {
                         JSONGeoCoordinates coords = geoCoordinates[0];
                         result.Coords.Longitude = coords.lon;
@@ -65,11 +73,6 @@ namespace MainApp.Services
                         result.DisplayName = coords.display_name;
                         result.Result = ResponseResult.OK;
                         Trace.WriteLine($"Latitude: {coords.lat} Longitude: {coords.lon}\n");
-                    }
-                    else
-                    {
-                        result.Result = ResponseResult.JSONError;
-                        Trace.WriteLine("Geocoding JSON Error");
                     }
 
                     return result;
@@ -79,6 +82,11 @@ namespace MainApp.Services
                     Trace.WriteLine($"Request Failed: {response.ReasonPhrase}");
                     return new GeoCodingResponse(ResponseResult.ServerError);
                 }
+            }
+            catch (JsonException e)
+            {
+                Trace.WriteLine($"Invalid JSON from Geocoding Service: {e.Message}");
+                result.Result = ResponseResult.JSONError;
             }
             catch (Exception e)
             {
