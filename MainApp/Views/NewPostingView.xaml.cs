@@ -25,6 +25,8 @@ namespace MainApp
         {
             InitializeComponent();
 
+            Loaded += (_, _) => { MaxHeight = MinHeight = ActualHeight; };
+
             jobTypeCombo.ItemsSource = Enum.GetValues<JobType>();
             jobArrangementCombo.ItemsSource = Enum.GetValues<JobArrangement>();
             jobStatusCombo.ItemsSource = Enum.GetValues<JobStatus>();

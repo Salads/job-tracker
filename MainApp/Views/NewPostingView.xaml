@@ -7,10 +7,11 @@
         xmlns:viewModels="clr-namespace:MainApp.ViewModels"
         mc:Ignorable="d"
         Title="New Job Posting"
-        MinWidth="600" MinHeight="500"
-        Width="600" Height="500"
-        MaxHeight="500"
-        WindowStartupLocation="CenterOwner" d:DesignHeight="478.88">
+        MinWidth="600"
+        Width="600"
+        ResizeMode="CanResize"
+        SizeToContent="Height"
+        WindowStartupLocation="CenterOwner">
     <Window.DataContext>
         <viewModels:NewPostingWindowViewModel x:Name="ViewModel"/>
     </Window.DataContext>
@@ -35,9 +36,9 @@
             <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTextBelow}"/>
         </Style>
     </Window.Resources>
-    <StackPanel Orientation="Vertical">
-        <Border BorderBrush="Black" BorderThickness="0">
-            <Grid ShowGridLines="False">
+    <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="auto">
+        <Border BorderBrush="Black" BorderThickness="0" DockPanel.Dock="Top">
+            <Grid ShowGridLines="False" Height="auto">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition  Width="*"/>
@@ -63,7 +64,7 @@
                 <Border Grid.Row="6" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="0,0,0,1" VerticalAlignment="Bottom"/>
                 <Border Grid.Row="7" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="0,0,0,1" VerticalAlignment="Bottom"/>
 
-                <TextBlock FontSize="12" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Job Title</TextBlock>
+                <TextBlock  FontSize="12" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Job Title</TextBlock>
                 <TextBox Grid.Row="0" Grid.Column="1" Width="auto" Height="25" Margin="10" Text="{Binding JobTitle, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <TextBlock FontSize="12" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Company Name</TextBlock>
@@ -85,13 +86,13 @@
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBox Grid.Column="0" Width="auto" Height="25" Margin="10" Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button Grid.Column="1" Content="Verify" Margin="5" Width="75" MaxHeight="25"/>
+                    <Button Grid.Column="1" Content="Verify" Margin="5" Width="75" Height="25"/>
                 </Grid>
-                
+
 
                 <TextBlock FontSize="12" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Description</TextBlock>
                 <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="1">
-                    <Button Name="descButton" Content="Edit Description" Width="150" Margin="10" Click="descButton_Click"/>
+                    <Button Name="descButton" Content="Edit Description" Width="150" Height="25" Margin="10" Click="descButton_Click"/>
                     <TextBlock Name="descTextBlock" VerticalAlignment="Center" Padding="5" Text="{Binding JobDescriptionLabel}"/>
                 </StackPanel>
 
@@ -99,11 +100,11 @@
                 <ComboBox Name="jobStatusCombo" Grid.Row="7" Grid.Column="1" Width="auto" Height="25" Margin="10" SelectedItem="{Binding JobStatus}"/>
             </Grid>
         </Border>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-            <Button Name="saveButton" Content="Save" Width="75" Margin="5"
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" DockPanel.Dock="Top" MinHeight="45">
+            <Button Name="saveButton" Content="Save" MinWidth="75" Width="75" Height="25" Margin="10"
                     Command="{Binding SaveCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
-            <Button Name="cancelButton" Content="Cancel" Width="75" Margin="5"
+            <Button Name="cancelButton" Content="Cancel" Width="75" Height="25" Margin="10"
                     Command="{Binding CancelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
         </StackPanel>
-    </StackPanel>
+    </DockPanel>
 </Window>
