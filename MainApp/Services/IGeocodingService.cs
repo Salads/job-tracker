@@ -24,6 +24,7 @@ namespace MainApp.Services
 
         public enum ResponseResult
         {
+            Uninitialized, // No result yet, just uninitialized.
             OK,            // Has a result!
             NoResult,      // Query could noot find anything.
             ServerError,   // Server gave unexpected output

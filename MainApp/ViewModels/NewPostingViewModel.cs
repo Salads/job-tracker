@@ -1,7 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MainApp.Models;
+using MainApp.Services;
+using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel.DataAnnotations;
+using System.Device.Location;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
@@ -14,12 +17,22 @@ namespace MainApp.ViewModels
         {
             JobDescriptionLabel = "(0 chars)";
 
+            ValidateLocationCommand = new RelayCommand(OnValidateLocationCommand);
             SaveCommand = new RelayCommand<Window>(OnSaveCommand, _ => !HasErrors);
             CancelCommand = new RelayCommand<Window>(OnCancelCommand);
 
             ErrorsChanged += (_, _) => ((RelayCommand<Window>)SaveCommand).NotifyCanExecuteChanged();
             ValidateAllProperties();
         }
+
+        public LocationViewModel LocationVM { get; set; } = new LocationViewModel();
+
+        public IGeocodingService.ResponseResult LocationValid = IGeocodingService.ResponseResult.Uninitialized;
+
+        public string LocationError { get; set; } = "Location has not been verified.";
+
+        [ObservableProperty]
+        public partial string LocationFullName { get; set; } = string.Empty;
 
         #region New Job Properties
         [Required]
@@ -48,9 +61,8 @@ namespace MainApp.ViewModels
         [ObservableProperty]
         public partial JobArrangement JobArrangement { get; set; }
 
-        [Required]
-        [NotifyDataErrorInfo]
         [ObservableProperty]
+        [CustomValidation(typeof(NewPostingWindowViewModel), nameof(ValidateLocation))]
         public partial string Location { get; set; } = string.Empty;
 
         [Required]
@@ -66,6 +78,8 @@ namespace MainApp.ViewModels
         [ObservableProperty]
         public partial JobStatus JobStatus { get; set; } = JobStatus.Applied;
         #endregion
+
+        public ICommand ValidateLocationCommand { get; }
 
         public ICommand SaveCommand { get; }
 
@@ -84,6 +98,47 @@ namespace MainApp.ViewModels
                 JobDescription = JobDescription,
                 JobStatus = JobStatus
             };
+        }
+
+        private void ValidateLocation() => ValidateProperty(Location, nameof(Location));
+
+        partial void OnLocationChanged(string value)
+        {
+            ValidateLocation();
+        }
+
+        private void OnValidateLocationCommand()
+        {
+            if(string.IsNullOrWhiteSpace(Location))
+            {
+                LocationError = "Required";
+                LocationValid = IGeocodingService.ResponseResult.Uninitialized;
+                ValidateLocation();
+                return;
+            }
+
+            IGeocodingService.GeoCodingResponse result = LocationVM.GetLocationCoords(Location);
+            LocationValid = result.Result;
+
+            if (result.Result == IGeocodingService.ResponseResult.OK)
+            {
+                LocationFullName = result.DisplayName;
+                LocationError = string.Empty;
+            }
+            else
+            {
+                LocationError = result.Result switch
+                {
+                    IGeocodingService.ResponseResult.Uninitialized => "Required",
+                    IGeocodingService.ResponseResult.ServerError => "Unexpected Server output",
+                    IGeocodingService.ResponseResult.NetworkError => "Client-side network error",
+                    IGeocodingService.ResponseResult.JSONError => "Error decoding server JSON response",
+                    IGeocodingService.ResponseResult.NoResult => "No location found",
+                    _ => "Unknown Error"
+                };
+            }
+
+            ValidateLocation();
         }
 
         private void OnSaveCommand(Window? view)
@@ -124,6 +179,19 @@ namespace MainApp.ViewModels
             {
                 return new("Not a valid HTTP/S URL!");
             }
+        }
+
+        public static ValidationResult ValidateLocation(string location, ValidationContext context)
+        {
+            // Reset error state to uninitialized/unverified
+
+            NewPostingWindowViewModel vm = (NewPostingWindowViewModel)context.ObjectInstance;
+            if(vm.LocationValid == IGeocodingService.ResponseResult.OK)
+            {
+                return ValidationResult.Success!;
+            }
+
+            return new(vm.LocationError);
         }
     }
 }

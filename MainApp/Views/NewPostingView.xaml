@@ -85,8 +85,13 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0" Width="auto" Height="25" Margin="10" Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button Grid.Column="1" Content="Verify" Margin="5" Width="75" Height="25"/>
+                    <TextBox Grid.Column="0" 
+                             Width="auto" Height="25" 
+                             Margin="10" 
+                             Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Grid.Column="1" Content="Verify" 
+                            Margin="5" Width="75" Height="25"
+                            Command="{Binding ValidateLocationCommand}"/>
                 </Grid>
 
 
