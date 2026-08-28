@@ -71,6 +71,8 @@ namespace MainApp.ViewModels
         [CustomValidation(typeof(NewPostingWindowViewModel), nameof(ValidateLocation))]
         public partial string Location { get; set; } = string.Empty;
 
+        public float Distance { get; set; }
+
         [Required]
         [NotifyDataErrorInfo]
         [ObservableProperty]
@@ -101,6 +103,7 @@ namespace MainApp.ViewModels
                 JobType = JobType,
                 JobArrangement = JobArrangement,
                 JobLocation = Location,
+                JobDistance = Distance,
                 JobDescription = JobDescription,
                 JobStatus = JobStatus
             };
@@ -153,6 +156,19 @@ namespace MainApp.ViewModels
             if(view != null)
             {
                 view.DialogResult = true;
+
+                var curLocationResponse = LocationVM.GetLocationCoords(Settings.Default.CurrentLocation);
+                var jobLocationResponse = LocationVM.GetLocationCoords(Location);
+
+                if (curLocationResponse.Result == IGeocodingService.ResponseResult.OK && jobLocationResponse.Result == IGeocodingService.ResponseResult.OK)
+                {
+                    Distance = (float)curLocationResponse.Coords.GetDistanceTo(jobLocationResponse.Coords) / 1609.344f; // We get it in meters, convert to miles.
+                }
+                else
+                {
+                    Distance = -1;
+                }
+
                 view.Close();
             }
 
