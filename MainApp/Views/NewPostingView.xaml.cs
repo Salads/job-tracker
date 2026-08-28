@@ -25,12 +25,41 @@ namespace MainApp
         {
             InitializeComponent();
 
-            Loaded += (_, _) => { MaxHeight = MinHeight = ActualHeight; };
+            LocationAdorner = new LocationAdorner(locationTextBox)
+            {
+                Trimming = TextTrimming.CharacterEllipsis,
+                TypeFace = "Arial",
+                TextColor = Brushes.DarkSlateGray
+            };
+
+            Binding visibilityBinding = new Binding(nameof(NewPostingWindowViewModel.ShowLocationFullName))
+            {
+                Source = DataContext,
+                Converter = new BooleanToVisibilityConverter()
+            };
+            BindingOperations.SetBinding(LocationAdorner, UIElement.VisibilityProperty, visibilityBinding);
+
+            Binding textBinding = new Binding(nameof(NewPostingWindowViewModel.LocationFullName))
+            {
+                Source = DataContext
+            };
+            BindingOperations.SetBinding(LocationAdorner, LocationAdorner.TextProperty, textBinding);
+
+            Loaded += (_, _) => 
+            {
+                MaxHeight = MinHeight = ActualHeight; 
+
+                // Setup the Adorner
+                AdornerLayer locationLayer = AdornerLayer.GetAdornerLayer(locationTextBox);
+                locationLayer.Add(LocationAdorner);
+            };
 
             jobTypeCombo.ItemsSource = Enum.GetValues<JobType>();
             jobArrangementCombo.ItemsSource = Enum.GetValues<JobArrangement>();
             jobStatusCombo.ItemsSource = Enum.GetValues<JobStatus>();
         }
+
+        private LocationAdorner LocationAdorner { get; set; }
 
         private void descButton_Click(object sender, RoutedEventArgs e)
         {

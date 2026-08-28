@@ -1,6 +1,7 @@
 ﻿using MainApp.Services;
 using MainApp.ViewModels;
 using MainApp.Views;
+using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;

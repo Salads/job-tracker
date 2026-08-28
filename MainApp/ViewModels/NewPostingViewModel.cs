@@ -27,12 +27,18 @@ namespace MainApp.ViewModels
 
         public LocationViewModel LocationVM { get; set; } = new LocationViewModel();
 
-        public IGeocodingService.ResponseResult LocationValid = IGeocodingService.ResponseResult.Uninitialized;
+        [ObservableProperty]
+        public partial IGeocodingService.ResponseResult LocationValid { get; set; } = IGeocodingService.ResponseResult.Uninitialized;
 
         public string LocationError { get; set; } = "Location has not been verified.";
 
         [ObservableProperty]
         public partial string LocationFullName { get; set; } = string.Empty;
+
+        public bool ShowLocationFullName => LocationValid == IGeocodingService.ResponseResult.OK;
+
+        partial void OnLocationValidChanged(IGeocodingService.ResponseResult value)
+            => OnPropertyChanged(nameof(ShowLocationFullName));
 
         #region New Job Properties
         [Required]
@@ -104,6 +110,7 @@ namespace MainApp.ViewModels
 
         partial void OnLocationChanged(string value)
         {
+            LocationFullName = string.Empty;
             ValidateLocation();
         }
 
