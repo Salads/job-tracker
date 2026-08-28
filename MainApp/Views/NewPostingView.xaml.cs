@@ -47,7 +47,7 @@ namespace MainApp
 
             Loaded += (_, _) => 
             {
-                MaxHeight = MinHeight = ActualHeight; 
+                MaxHeight = MinHeight = ActualHeight;
 
                 // Setup the Adorner
                 AdornerLayer locationLayer = AdornerLayer.GetAdornerLayer(locationTextBox);
@@ -57,6 +57,8 @@ namespace MainApp
             jobTypeCombo.ItemsSource = Enum.GetValues<JobType>();
             jobArrangementCombo.ItemsSource = Enum.GetValues<JobArrangement>();
             jobStatusCombo.ItemsSource = Enum.GetValues<JobStatus>();
+
+            UpdateLayout();
         }
 
         private LocationAdorner LocationAdorner { get; set; }

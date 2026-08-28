@@ -23,7 +23,38 @@ namespace MainApp.Views
         public SettingsView()
         {
             InitializeComponent();
+
+            LocationAdorner = new LocationAdorner(locationTextBox)
+            {
+                Trimming = TextTrimming.CharacterEllipsis,
+                TypeFace = "Arial",
+                TextColor = Brushes.DarkSlateGray
+            };
+
+            Binding visibilityBinding = new Binding(nameof(SettingsViewModel.ShowLocationFullName))
+            {
+                Source = DataContext,
+                Converter = new BooleanToVisibilityConverter()
+            };
+            BindingOperations.SetBinding(LocationAdorner, UIElement.VisibilityProperty, visibilityBinding);
+
+            Binding textBinding = new Binding(nameof(SettingsViewModel.LocationFullName))
+            {
+                Source = DataContext
+            };
+            BindingOperations.SetBinding(LocationAdorner, LocationAdorner.TextProperty, textBinding);
+
+            Loaded += (_, _) =>
+            {
+                // Setup the Adorner
+                AdornerLayer locationLayer = AdornerLayer.GetAdornerLayer(locationTextBox);
+                locationLayer.Add(LocationAdorner);
+            };
+
+            UpdateLayout();
         }
+
+        private LocationAdorner LocationAdorner { get; set; }
 
         private void browseButton_Click(object sender, RoutedEventArgs e)
         {
@@ -51,6 +82,7 @@ namespace MainApp.Views
         private void saveButton_Click(object sender, RoutedEventArgs e)
         {
             Settings.Default.SaveLocation = ((SettingsViewModel)DataContext).SaveLocation;
+            Settings.Default.CurrentLocation = ((SettingsViewModel)DataContext).Location;
             Settings.Default.Save();
             DialogResult = true;
             Close();

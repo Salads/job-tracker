@@ -57,7 +57,7 @@ namespace MainApp
             formattedText.MaxLineCount = 1;
             formattedText.Trimming = Trimming;
 
-            drawingContext.DrawText(formattedText, new Point(0, adornedElementRect.Height + topMargin));
+            drawingContext.DrawText(formattedText, new Point(0, AdornedElement.RenderSize.Height + topMargin));
         }
     }
 }

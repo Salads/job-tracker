@@ -34,5 +34,17 @@ namespace MainApp {
                 this["SaveLocation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CurrentLocation {
+            get {
+                return ((string)(this["CurrentLocation"]));
+            }
+            set {
+                this["CurrentLocation"] = value;
+            }
+        }
     }
 }

@@ -5,5 +5,8 @@
     <Setting Name="SaveLocation" Type="System.String" Scope="User">
       <Value Profile="(Default)">save.db</Value>
     </Setting>
+    <Setting Name="CurrentLocation" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>
