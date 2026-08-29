@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MainApp.Services;
 using MainApp.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MainApp.ViewModels
 {
@@ -27,24 +28,24 @@ namespace MainApp.ViewModels
         [ObservableProperty]
         public partial JobPosting SelectedPosting { get; set; } = new JobPosting();
 
-        private SQLiteService databaseService = new SQLiteService();
-
         private void HandleJobPostingPropertyChangedEx(object? sender, PropertyChangedEventArgs e)
         {
+            IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
             JobPosting posting = (JobPosting)sender!;
-            databaseService.UpdateJobPosting(posting);
+            db.UpdateJobPosting(posting);
         }
 
         public void AddNewJob(JobPosting posting)
         {
-            posting.RowID = databaseService.AddNewJob(posting);
+            IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
+            posting.RowID = db.AddNewJob(posting);
             JobPostings.Add(posting);
         }
 
         public void RefreshJobPostings()
         {
-            databaseService.EnsureTablesExist();
-            databaseService.RefreshJobPostings(JobPostings);
+            IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
+            db.RefreshJobPostings(JobPostings);
         }
     }
 }
