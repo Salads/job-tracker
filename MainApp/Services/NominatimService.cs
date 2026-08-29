@@ -21,7 +21,7 @@ using System.Windows.Media;
 
 namespace MainApp.Services
 {
-    public class GeocodingService : IGeocodingService
+    public class NominatimService : IGeocodingService
     {
         const string APISearchURL = "https://nominatim.openstreetmap.org/search";
         const string APIStatusURL = "https://nominatim.openstreetmap.org/status";
