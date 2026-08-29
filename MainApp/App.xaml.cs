@@ -24,7 +24,7 @@ namespace MainApp
         {
             var services = new ServiceCollection();
 
-            services.AddSingleton<IDatabaseService, DatabaseService>();
+            services.AddSingleton<IDatabaseService, SQLiteService>();
             services.AddSingleton<IGeocodingService, NominatimService>();
 
             return services.BuildServiceProvider();

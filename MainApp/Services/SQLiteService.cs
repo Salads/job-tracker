@@ -11,7 +11,7 @@ using System.Text;
 
 namespace MainApp.Services
 {
-    public class DatabaseService : IDatabaseService
+    public class SQLiteService : IDatabaseService
     {
         private const int DB_JOBS_VERSION = 1;
 
@@ -21,7 +21,7 @@ namespace MainApp.Services
         private const string TABLENAME_CACHE_LOCATIONCOORDS = "Locations";
         private const string TABLENAME_CACHE_LOCATIONNAMES = "LocationNames";
 
-        public DatabaseService()
+        public SQLiteService()
         {
             EnsureTablesExist();
         }

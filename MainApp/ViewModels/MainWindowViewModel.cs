@@ -27,7 +27,7 @@ namespace MainApp.ViewModels
         [ObservableProperty]
         public partial JobPosting SelectedPosting { get; set; } = new JobPosting();
 
-        private DatabaseService databaseService = new DatabaseService();
+        private SQLiteService databaseService = new SQLiteService();
 
         private void HandleJobPostingPropertyChangedEx(object? sender, PropertyChangedEventArgs e)
         {
