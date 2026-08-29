@@ -18,7 +18,7 @@ namespace MainApp
             JobType = JobType.FullTime;
             JobArrangement = JobArrangement.OnSite;
             JobLocation = string.Empty;
-            JobDistance = 0.0f;
+            JobDistance = 0;
             JobDescription = string.Empty;
             JobStatus = JobStatus.Applied;
         }
@@ -45,7 +45,7 @@ namespace MainApp
         public partial string JobLocation { get; set; }
 
         [ObservableProperty]
-        public partial float JobDistance { get; set; }
+        public partial int JobDistance { get; set; }
 
         [ObservableProperty]
         public partial string JobDescription { get; set; }

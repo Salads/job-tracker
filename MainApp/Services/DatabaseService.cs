@@ -49,7 +49,7 @@ namespace MainApp.Services
                     Type INTEGER,
                     Arrangement INTEGER,
                     Location TEXT,
-                    Distance REAL,
+                    Distance INTEGER,
                     Description TEXT,
                     Status INTEGER
                 );
@@ -312,7 +312,7 @@ namespace MainApp.Services
             command.Parameters.AddWithValue("@type", (int)newJobPosting.JobType);
             command.Parameters.AddWithValue("@arrangement", (int)newJobPosting.JobArrangement);
             command.Parameters.AddWithValue("@location", newJobPosting.JobLocation);
-            command.Parameters.AddWithValue("@distance", (double)newJobPosting.JobDistance);
+            command.Parameters.AddWithValue("@distance", (int)newJobPosting.JobDistance);
             command.Parameters.AddWithValue("@description", newJobPosting.JobDescription);
             command.Parameters.AddWithValue("@status", (int)newJobPosting.JobStatus);
 
@@ -352,7 +352,7 @@ namespace MainApp.Services
             command.Parameters.AddWithValue("@type", (int)posting.JobType);
             command.Parameters.AddWithValue("@arrangement", (int)posting.JobArrangement);
             command.Parameters.AddWithValue("@location", posting.JobLocation);
-            command.Parameters.AddWithValue("@distance", (double)posting.JobDistance);
+            command.Parameters.AddWithValue("@distance", (int)posting.JobDistance);
             command.Parameters.AddWithValue("@description", posting.JobDescription);
             command.Parameters.AddWithValue("@status", (int)posting.JobStatus);
             command.Parameters.AddWithValue("@rowId", posting.RowID);
@@ -416,7 +416,7 @@ namespace MainApp.Services
                             jobPosting.JobLocation = (string)value;
                             break;
                         case "Distance":
-                            jobPosting.JobDistance = Convert.ToSingle(value);
+                            jobPosting.JobDistance = Convert.ToInt32(value);
                             break;
                         case "Description":
                             jobPosting.JobDescription = (string)value;

@@ -71,7 +71,7 @@ namespace MainApp.ViewModels
         [CustomValidation(typeof(NewPostingWindowViewModel), nameof(ValidateLocation))]
         public partial string Location { get; set; } = string.Empty;
 
-        public float Distance { get; set; }
+        public int Distance { get; set; }
 
         [Required]
         [NotifyDataErrorInfo]
@@ -162,7 +162,8 @@ namespace MainApp.ViewModels
 
                 if (curLocationResponse.Result == IGeocodingService.ResponseResult.OK && jobLocationResponse.Result == IGeocodingService.ResponseResult.OK)
                 {
-                    Distance = (float)curLocationResponse.Coords.GetDistanceTo(jobLocationResponse.Coords) / 1609.344f; // We get it in meters, convert to miles.
+                    float fDistance = (float)curLocationResponse.Coords.GetDistanceTo(jobLocationResponse.Coords) / 1609.344f; // We get it in meters, convert to miles
+                    Distance = (int)fDistance;
                 }
                 else
                 {
