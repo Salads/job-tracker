@@ -17,28 +17,23 @@ namespace MainApp.ViewModels
         {
             JobDescriptionLabel = "(0 chars)";
 
-            ValidateLocationCommand = new RelayCommand(OnValidateLocationCommand);
-            SaveCommand = new RelayCommand<Window>(OnSaveCommand, _ => !HasErrors);
-            CancelCommand = new RelayCommand<Window>(OnCancelCommand);
+            SaveCommand = new RelayCommand(OnSaveCommand, () => !HasErrors && LocationValid);
+            CancelCommand = new RelayCommand(OnCancelCommand);
 
-            ErrorsChanged += (_, _) => ((RelayCommand<Window>)SaveCommand).NotifyCanExecuteChanged();
+            ErrorsChanged += (_, _) => ((RelayCommand)SaveCommand).NotifyCanExecuteChanged();
             ValidateAllProperties();
         }
 
-        public LocationViewModel LocationVM { get; set; } = new LocationViewModel();
+        public event Action? RequestClose;
 
         [ObservableProperty]
-        public partial IGeocodingService.ResponseResult LocationValid { get; set; } = IGeocodingService.ResponseResult.Uninitialized;
-
-        public string LocationError { get; set; } = "Location has not been verified.";
+        public partial string LocationInput { get; set; } = string.Empty;
 
         [ObservableProperty]
-        public partial string LocationFullName { get; set; } = string.Empty;
+        public partial string LocationResult { get; set; } = string.Empty;
 
-        public bool ShowLocationFullName => LocationValid == IGeocodingService.ResponseResult.OK;
-
-        partial void OnLocationValidChanged(IGeocodingService.ResponseResult value)
-            => OnPropertyChanged(nameof(ShowLocationFullName));
+        [ObservableProperty]
+        public partial bool LocationValid { get; set; } = false;
 
         #region New Job Properties
         [Required]
@@ -68,7 +63,6 @@ namespace MainApp.ViewModels
         public partial JobArrangement JobArrangement { get; set; }
 
         [ObservableProperty]
-        [CustomValidation(typeof(NewPostingWindowViewModel), nameof(ValidateLocation))]
         public partial string Location { get; set; } = string.Empty;
 
         public int Distance { get; set; }
@@ -86,8 +80,6 @@ namespace MainApp.ViewModels
         [ObservableProperty]
         public partial JobStatus JobStatus { get; set; } = JobStatus.Applied;
         #endregion
-
-        public ICommand ValidateLocationCommand { get; }
 
         public ICommand SaveCommand { get; }
 
@@ -108,81 +100,37 @@ namespace MainApp.ViewModels
                 JobStatus = JobStatus
             };
         }
-
-        private void ValidateLocation() => ValidateProperty(Location, nameof(Location));
-
-        partial void OnLocationChanged(string value)
+        private void OnSaveCommand()
         {
-            LocationFullName = string.Empty;
-            ValidateLocation();
-        }
-
-        private void OnValidateLocationCommand()
-        {
-            if(string.IsNullOrWhiteSpace(Location))
+            if(!LocationValid)
             {
-                LocationError = "Required";
-                LocationValid = IGeocodingService.ResponseResult.Uninitialized;
-                ValidateLocation();
-                return;
+                throw new Exception("OnSaveCommand called when !LocationValid - SHOULD NOT HAPPEN");
             }
 
-            IGeocodingService.GeoCodingResponse result = LocationVM.GetLocationCoords(Location);
-            LocationValid = result.Result;
+            IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
+            IGeocodingService gc = App.Current.Services.GetService<IGeocodingService>()!;
 
-            if (result.Result == IGeocodingService.ResponseResult.OK)
+            var curLocationResponse = gc.GetLocationCoordinates(Settings.Default.CurrentLocation);
+            var jobLocationResponse = gc.GetLocationCoordinates(Location);
+
+            if (curLocationResponse.Result == IGeocodingService.ResponseResult.OK && jobLocationResponse.Result == IGeocodingService.ResponseResult.OK)
             {
-                LocationFullName = result.DisplayName;
-                LocationError = string.Empty;
+                float fDistance = (float)curLocationResponse.Coords.GetDistanceTo(jobLocationResponse.Coords) / 1609.344f; // We get it in meters, convert to miles
+                Distance = (int)fDistance;
             }
             else
             {
-                LocationError = result.Result switch
-                {
-                    IGeocodingService.ResponseResult.Uninitialized => "Required",
-                    IGeocodingService.ResponseResult.ServerError => "Unexpected Server output",
-                    IGeocodingService.ResponseResult.NetworkError => "Client-side network error",
-                    IGeocodingService.ResponseResult.JSONError => "Error decoding server JSON response",
-                    IGeocodingService.ResponseResult.NoResult => "No location found",
-                    _ => "Unknown Error"
-                };
+                Distance = -1;
             }
 
-            ValidateLocation();
+            db.AddNewJob(GetJobPosting());
+
+            RequestClose?.Invoke();
         }
 
-        private void OnSaveCommand(Window? view)
+        private void OnCancelCommand()
         {
-            if(view != null)
-            {
-                view.DialogResult = true;
-
-                var curLocationResponse = LocationVM.GetLocationCoords(Settings.Default.CurrentLocation);
-                var jobLocationResponse = LocationVM.GetLocationCoords(Location);
-
-                if (curLocationResponse.Result == IGeocodingService.ResponseResult.OK && jobLocationResponse.Result == IGeocodingService.ResponseResult.OK)
-                {
-                    float fDistance = (float)curLocationResponse.Coords.GetDistanceTo(jobLocationResponse.Coords) / 1609.344f; // We get it in meters, convert to miles
-                    Distance = (int)fDistance;
-                }
-                else
-                {
-                    Distance = -1;
-                }
-
-                view.Close();
-            }
-
-            Trace.WriteLine(GetJobPosting().ToString());
-        }
-
-        private void OnCancelCommand(Window? view)
-        {
-            if (view != null)
-            {
-                view.DialogResult = false;
-                view.Close();
-            }
+            RequestClose?.Invoke();
         }
 
         public static ValidationResult ValidatePostingURL(string postingURL, ValidationContext context)
@@ -203,19 +151,6 @@ namespace MainApp.ViewModels
             {
                 return new("Not a valid HTTP/S URL!");
             }
-        }
-
-        public static ValidationResult ValidateLocation(string location, ValidationContext context)
-        {
-            // Reset error state to uninitialized/unverified
-
-            NewPostingWindowViewModel vm = (NewPostingWindowViewModel)context.ObjectInstance;
-            if(vm.LocationValid == IGeocodingService.ResponseResult.OK)
-            {
-                return ValidationResult.Success!;
-            }
-
-            return new(vm.LocationError);
         }
     }
 }

@@ -18,80 +18,84 @@ namespace MainApp.Views
     /// <summary>
     /// Interaction logic for SetupWindow.xaml
     /// </summary>
-    public partial class SettingsView : Window
+    public partial class SettingsView : Window, IDisposable
     {
         public SettingsView()
         {
             InitializeComponent();
 
-            LocationAdorner = new LocationAdorner(locationTextBox)
-            {
-                Trimming = TextTrimming.CharacterEllipsis,
-                TypeFace = "Arial",
-                TextColor = Brushes.DarkSlateGray
-            };
+            SettingsViewModel vm = (SettingsViewModel)DataContext;
+            vm.RequestClose += OnRequestClose;
 
-            Binding visibilityBinding = new Binding(nameof(SettingsViewModel.ShowLocationFullName))
-            {
-                Source = DataContext,
-                Converter = new BooleanToVisibilityConverter()
-            };
-            BindingOperations.SetBinding(LocationAdorner, UIElement.VisibilityProperty, visibilityBinding);
+            OriginalDatabaseLocation = vm.SaveLocation;
+            OriginalCurrentLocation = vm.LocationInput;
 
-            Binding textBinding = new Binding(nameof(SettingsViewModel.LocationFullName))
-            {
-                Source = DataContext
-            };
-            BindingOperations.SetBinding(LocationAdorner, LocationAdorner.TextProperty, textBinding);
-
-            Loaded += (_, _) =>
-            {
-                // Setup the Adorner
-                AdornerLayer locationLayer = AdornerLayer.GetAdornerLayer(locationTextBox);
-                locationLayer.Add(LocationAdorner);
-            };
+            locationControl.InitializeAndVerify(Settings.Default.CurrentLocation);
 
             UpdateLayout();
         }
 
-        private LocationAdorner LocationAdorner { get; set; }
+        private string OriginalDatabaseLocation { get; set; }
+
+        private string OriginalCurrentLocation { get; set; }
+
+        public bool DatabaseChanged { get;  private set; }
+
+        public bool CurrentLocationChanged { get; private set; }
+
+        private void OnRequestClose(object? sender, EventArgs e)
+        {
+            SettingsViewModel vm = (SettingsViewModel)DataContext;
+            if (OriginalDatabaseLocation != vm.SaveLocation)
+            {
+                DatabaseChanged = true;
+            }
+
+            if (OriginalCurrentLocation != vm.LocationInput)
+            {
+                CurrentLocationChanged = true;
+            }
+
+            Close();
+        }
 
         private void browseButton_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.FileName = Settings.Default.SaveLocation;
-            dialog.DefaultExt = ".db";
-            dialog.Filter = "SQLite Database (.db)|*.db";
-            dialog.OverwritePrompt = false;
-            dialog.Title = "Choose / Create Save File";
+            SaveFileDialog dialog = new SaveFileDialog
+            {
+                FileName = Settings.Default.SaveLocation,
+                DefaultExt = ".db",
+                Filter = "SQLite Database (.db)|*.db",
+                OverwritePrompt = false,
+                Title = "Choose / Create Save File"
+            };
 
             bool? result = dialog.ShowDialog();
 
             // Process save file dialog box results
             if (result == true)
             {
-                ((SettingsViewModel)DataContext).SaveLocation = dialog.FileName;
+                SettingsViewModel vm = (SettingsViewModel)DataContext;
+
+                if(vm.SaveLocation != dialog.FileName)
+                {
+                    DatabaseChanged = true;
+                }
+
+                vm.SaveLocation = dialog.FileName;
             }
         }
 
         private void saveLocationResetButton_Click(object sender, RoutedEventArgs e)
         {
-            ((SettingsViewModel)DataContext).SaveLocation = (string)Settings.Default.Properties["SaveLocation"].DefaultValue;
+            SettingsViewModel vm = (SettingsViewModel)DataContext;
+            vm.SaveLocation = (string)Settings.Default.Properties["SaveLocation"].DefaultValue;
         }
 
-        private void saveButton_Click(object sender, RoutedEventArgs e)
+        public void Dispose()
         {
-            Settings.Default.SaveLocation = ((SettingsViewModel)DataContext).SaveLocation;
-            Settings.Default.CurrentLocation = ((SettingsViewModel)DataContext).Location;
-            Settings.Default.Save();
-            DialogResult = true;
-            Close();
-        }
-
-        private void cancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false;
-            Close();
+            SettingsViewModel vm = (SettingsViewModel)DataContext;
+            vm.RequestClose -= OnRequestClose;
         }
     }
 }

@@ -18,14 +18,18 @@
                     <AdornedElementPlaceholder/>
                 </Border>
                 <TextBlock Text="{Binding [0].ErrorContent}"
-               Foreground="Red"
-               FontSize="11"
-               TextWrapping="Wrap"/>
+                           Foreground="Red"
+                           FontSize="11"
+                           TextWrapping="Wrap"/>
             </StackPanel>
         </ControlTemplate>
 
         <Style TargetType="TextBox">
-            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTextBelow}"/>
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTextBelow}"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </Window.Resources>
     <Grid>
@@ -41,12 +45,13 @@
             </GroupBox.Header>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Location:"
-                           VerticalAlignment="Center"/>
+                           VerticalAlignment="Center"
+                           Margin="10"/>
                 <TextBox Name="saveLocationTextbox"
                          Width="450" Height="25"
                          Margin="10"
                          VerticalContentAlignment="Center"
-                         Text="{Binding SaveLocation}"/>
+                         Text="{Binding SaveLocation, Mode=TwoWay}"/>
                 <Button Name="browseButton"
                         Content="Browse" 
                         Width="75" Height="25"
@@ -68,20 +73,17 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="Location: " VerticalAlignment="Center"/>
-                <TextBox Grid.Column="1" 
-                         x:Name="locationTextBox" 
-                         Width="auto" Height="25"
-                         Margin="10"
-                         VerticalContentAlignment="Center"
-                         Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}"/>
-                <Button Grid.Column="2" 
-                        Content="Verify"
-                        Margin="5" 
-                        Width="75" Height="25" 
-                        Command="{Binding ValidateLocationCommand}"/>
+                <TextBlock Grid.Column="0" 
+                           Text="Location: " 
+                           VerticalAlignment="Center" 
+                           Margin="10"/>
+                <local:LocationControl Grid.Column="1"
+                                       x:Name="locationControl"
+                                       Validation.ErrorTemplate="{x:Null}"
+                                       LocationInput="{Binding DataContext.LocationInput, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=Window}}"
+                                       LocationResult="{Binding DataContext.LocationFullName, Mode=OneWayToSource, RelativeSource={RelativeSource AncestorType=Window}}"
+                                       IsValid="{Binding DataContext.LocationValid, Mode=OneWayToSource, RelativeSource={RelativeSource AncestorType=Window}}"/>
             </Grid>
         </GroupBox>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
@@ -89,12 +91,12 @@
                     Content="Save"
                     Width="75"
                     Margin="5"
-                    Click="saveButton_Click"/>
+                    Command="{Binding SaveCommand}"/>
             <Button Name="cancelButton"
                     Content="Cancel"
                     Width="75"
                     Margin="5"
-                    Click="cancelButton_Click"/>
+                    Command="{Binding CancelCommand}"/>
         </StackPanel>
     </Grid>
 </Window>

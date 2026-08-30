@@ -80,36 +80,34 @@
                 <ComboBox Name="jobArrangementCombo" Grid.Row="4" Grid.Column="1" Width="auto" Height="25" Margin="10" SelectedItem="{Binding JobArrangement}"/>
 
                 <TextBlock FontSize="12" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Location</TextBlock>
-                <Grid Grid.Row="5" Grid.Column="1" Margin="10" >
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBox x:Name="locationTextBox" Grid.Column="0" Width="auto" Height="25"
-                                 VerticalContentAlignment="Center"
-                                 Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Button Grid.Column="1" Content="Verify"
-                                Margin="5" Width="75" Height="25" 
-                                Command="{Binding ValidateLocationCommand}"/>
-                    </Grid>
-                </Grid>
-                
+                <local:LocationControl Grid.Row="5" Grid.Column="1"
+                                       x:Name="locationControl"
+                                       Margin="0"
+                                       LocationInput="{Binding DataContext.LocationInput, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=Window}}"
+                                       LocationResult="{Binding DataContext.LocationResult, Mode=OneWayToSource, RelativeSource={RelativeSource AncestorType=Window}}"
+                                       IsValid="{Binding DataContext.LocationValid, Mode=OneWayToSource, RelativeSource={RelativeSource AncestorType=Window}}"/>
+
                 <TextBlock FontSize="12" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Description</TextBlock>
                 <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="1">
                     <Button Name="descButton" Content="Edit Description" Width="150" Height="25" Margin="10" Click="descButton_Click"/>
                     <TextBlock Name="descTextBlock" VerticalAlignment="Center" Padding="5" Text="{Binding JobDescriptionLabel}"/>
                 </StackPanel>
 
-                <TextBlock FontSize="12" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Status</TextBlock>
+                <TextBlock Grid.Row="7" Grid.Column="0"
+                           FontSize="12"
+                           VerticalAlignment="Center" 
+                           Padding="5"
+                           HorizontalAlignment="Right">Status</TextBlock>
                 <ComboBox Name="jobStatusCombo" Grid.Row="7" Grid.Column="1" Width="auto" Height="25" Margin="10" SelectedItem="{Binding JobStatus}"/>
             </Grid>
         </Border>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" DockPanel.Dock="Top" MinHeight="45">
-            <Button Name="saveButton" Content="Save" MinWidth="75" Width="75" Height="25" Margin="10"
-                    Command="{Binding SaveCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
-            <Button Name="cancelButton" Content="Cancel" Width="75" Height="25" Margin="10"
-                    Command="{Binding CancelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <Button Name="saveButton" Content="Save" 
+                    MinWidth="75" Width="75" Height="25" Margin="10"
+                    Command="{Binding SaveCommand}"/>
+            <Button Name="cancelButton" Content="Cancel" 
+                    Width="75" Height="25" Margin="10"
+                    Command="{Binding CancelCommand}"/>
         </StackPanel>
     </DockPanel>
 </Window>
