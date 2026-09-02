@@ -9,6 +9,7 @@ using System.Device.Location;
 using static MainApp.Services.IGeocodingService;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Windows.Media;
+using System.Drawing.Text;
 
 /*
  * TODO(Salads)
@@ -28,6 +29,8 @@ namespace MainApp.Services
 
         private DateTime lastRequestTime = DateTime.Now;
 
+        private const float REQUEST_COOLDOWN = 1.5f;
+
         public GeoCodingStatus GetGeoCodingStatus()
         {
             using HttpClient httpClient = new HttpClient();
@@ -41,6 +44,15 @@ namespace MainApp.Services
 
         public GeoCodingResponse GetLocationCoordinates(string query)
         {
+            DateTime checkTime = DateTime.Now;
+            if((checkTime - lastRequestTime).TotalSeconds < REQUEST_COOLDOWN)
+            {
+                TimeSpan timeDiff = checkTime - lastRequestTime;
+                Thread.Sleep((int)(timeDiff.TotalMilliseconds));
+            }
+
+            lastRequestTime = DateTime.Now;
+
             HttpClient httpClient = new()
             {
                 BaseAddress = new Uri(APISearchURL),
