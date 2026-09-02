@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MainApp"
+        xmlns:views="clr-namespace:MainApp.Views"
         xmlns:viewModels="clr-namespace:MainApp.ViewModels"
         mc:Ignorable="d"
         Title="Settings" Height="450" Width="800"
@@ -78,7 +79,7 @@
                            Text="Location: " 
                            VerticalAlignment="Center" 
                            Margin="10"/>
-                <local:LocationControl Grid.Column="1"
+                <views:LocationControl Grid.Column="1"
                                        x:Name="locationControl"
                                        Validation.ErrorTemplate="{x:Null}"
                                        LocationInput="{Binding DataContext.LocationInput, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=Window}}"

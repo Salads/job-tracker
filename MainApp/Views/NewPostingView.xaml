@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MainApp"
+        xmlns:views="clr-namespace:MainApp.Views"
         xmlns:viewModels="clr-namespace:MainApp.ViewModels"
         mc:Ignorable="d"
         Title="New Job Posting"
@@ -80,7 +81,7 @@
                 <ComboBox Name="jobArrangementCombo" Grid.Row="4" Grid.Column="1" Width="auto" Height="25" Margin="10" SelectedItem="{Binding JobArrangement}"/>
 
                 <TextBlock FontSize="12" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Location</TextBlock>
-                <local:LocationControl Grid.Row="5" Grid.Column="1"
+                <views:LocationControl Grid.Row="5" Grid.Column="1"
                                        x:Name="locationControl"
                                        Margin="0"
                                        LocationInput="{Binding DataContext.LocationInput, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=Window}}"

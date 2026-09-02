@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MainApp
+namespace MainApp.Views
 {
     /// <summary>
     /// Interaction logic for LocationControl.xaml

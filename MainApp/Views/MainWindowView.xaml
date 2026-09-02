@@ -63,11 +63,14 @@
                     Click="settingsButton_Click"/>
         </StackPanel>
         <DataGrid Grid.Row="1"
+                  Name="jobsDataGrid"
                   EnableRowVirtualization="True"
                   HeadersVisibility="Column"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False"
+                  MouseDoubleClick="jobsDataGrid_MouseDoubleClick"
+                  CellEditEnding="DataGrid_CellEditEnding"
                   SelectedItem="{Binding SelectedPosting}"
                   ItemsSource="{Binding JobPostings}"
                   RowStyle="{StaticResource DynamicRowBackground}">
@@ -116,6 +119,7 @@
                                         ItemsSource="{Binding Source={StaticResource JobArrangementValues}}"/>
                 <DataGridTextColumn Header="Location"
                                     Width="auto"
+                                    IsReadOnly="True"
                                     ElementStyle="{StaticResource CenterTextElementStyle}"
                                     HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                     Binding="{Binding JobLocation, Mode=TwoWay}"/>
