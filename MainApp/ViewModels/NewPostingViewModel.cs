@@ -115,7 +115,8 @@ namespace MainApp.ViewModels
 
             if (curLocationResponse.Result == IGeocodingService.ResponseResult.OK && jobLocationResponse.Result == IGeocodingService.ResponseResult.OK)
             {
-                float fDistance = (float)curLocationResponse.Coords.GetDistanceTo(jobLocationResponse.Coords) / 1609.344f; // We get it in meters, convert to miles
+                IDistanceCalculatorService distCalcService = App.Current.Services.GetService<IDistanceCalculatorService>()!;
+                float fDistance = distCalcService.GetDistanceBetween(curLocationResponse.Coords, jobLocationResponse.Coords);
                 Distance = (int)fDistance;
             }
             else

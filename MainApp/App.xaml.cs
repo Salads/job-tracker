@@ -26,6 +26,7 @@ namespace MainApp
 
             services.AddSingleton<IDatabaseService, SQLiteService>();
             services.AddSingleton<IGeocodingService, NominatimService>();
+            services.AddSingleton<IDistanceCalculatorService, HaversineDistanceCalculator>();
 
             return services.BuildServiceProvider();
         }

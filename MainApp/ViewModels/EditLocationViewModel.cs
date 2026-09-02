@@ -40,6 +40,17 @@ namespace MainApp.ViewModels
             if (JobPosting != null)
             {
                 JobPosting.JobLocation = LocationInput;
+
+                // Make sure to update the distance to the new location
+                IGeocodingService gService = App.Current.Services.GetService<IGeocodingService>()!;
+                IGeocodingService.GeoCodingResponse curLocationResponse = gService.GetLocationCoordinates(Settings.Default.CurrentLocation);
+                IGeocodingService.GeoCodingResponse jobLocationResponse = gService.GetLocationCoordinates(LocationInput);
+                if(curLocationResponse.Result == IGeocodingService.ResponseResult.OK && jobLocationResponse.Result == IGeocodingService.ResponseResult.OK)
+                {
+                    IDistanceCalculatorService distService = App.Current.Services.GetService<IDistanceCalculatorService>()!;
+                    JobPosting.JobDistance = (int)distService.GetDistanceBetween(curLocationResponse.Coords, jobLocationResponse.Coords);
+                }
+
                 IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
                 db.UpdateJobPosting(JobPosting);
             }

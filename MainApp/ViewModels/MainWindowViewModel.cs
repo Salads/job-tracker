@@ -47,5 +47,40 @@ namespace MainApp.ViewModels
             IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
             db.RefreshJobPostings(JobPostings);
         }
+
+        public void RecalculateAllJobPostingDistances()
+        {
+            IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
+            IGeocodingService gc = App.Current.Services.GetService<IGeocodingService>()!;
+
+            string curLocationInput = Settings.Default.CurrentLocation;
+            IGeocodingService.GeoCodingResponse curLocationResponse = gc.GetLocationCoordinates(curLocationInput);
+            if(curLocationResponse.Result != IGeocodingService.ResponseResult.OK)
+            {
+                return; // TODO(Salads): User Feedback on error
+            }
+
+            foreach(JobPosting posting in JobPostings)
+            {
+                IGeocodingService.GeoCodingResponse jobLocationResponse = gc.GetLocationCoordinates(posting.JobLocation);
+                if(jobLocationResponse.Result != IGeocodingService.ResponseResult.OK)
+                {
+                    continue;
+                }
+
+                if (curLocationResponse.Result == IGeocodingService.ResponseResult.OK && jobLocationResponse.Result == IGeocodingService.ResponseResult.OK)
+                {
+                    IDistanceCalculatorService distanceCalculatorService = App.Current.Services.GetService<IDistanceCalculatorService>()!;
+                    float fDistance = distanceCalculatorService.GetDistanceBetween(curLocationResponse.Coords, jobLocationResponse.Coords);
+                    posting.JobDistance = (int)fDistance;
+                }
+                else
+                {
+                    posting.JobDistance = -1;
+                }
+
+                db.UpdateJobPosting(posting);
+            }
+        }
     }
 }
