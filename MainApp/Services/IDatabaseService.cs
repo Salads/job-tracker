@@ -23,5 +23,7 @@ namespace MainApp.Services
         public void UpdateJobPosting(JobPosting posting);
 
         public void RefreshJobPostings(ObservableCollection<JobPosting> jobPostings);
+
+        public void RemoveJobPosting(JobPosting posting);
     }
 }

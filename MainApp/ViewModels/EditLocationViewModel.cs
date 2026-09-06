@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MainApp.Services;
 using Microsoft.Extensions.DependencyInjection;
+using MainApp.Models;
 
 namespace MainApp.ViewModels
 {
@@ -35,7 +36,7 @@ namespace MainApp.ViewModels
 
         public JobPosting? JobPosting { get; set; } = null;
 
-        private void OnSaveCommand()
+        private async void OnSaveCommand()
         {
             if (JobPosting != null)
             {
@@ -43,9 +44,9 @@ namespace MainApp.ViewModels
 
                 // Make sure to update the distance to the new location
                 IGeocodingService gService = App.Current.Services.GetService<IGeocodingService>()!;
-                IGeocodingService.GeoCodingResponse curLocationResponse = gService.GetLocationCoordinates(Settings.Default.CurrentLocation);
-                IGeocodingService.GeoCodingResponse jobLocationResponse = gService.GetLocationCoordinates(LocationInput);
-                if(curLocationResponse.Result == IGeocodingService.ResponseResult.OK && jobLocationResponse.Result == IGeocodingService.ResponseResult.OK)
+                GeoCodingResponse curLocationResponse = await gService.GetLocationCoordinatesAsync(Settings.Default.CurrentLocation);
+                GeoCodingResponse jobLocationResponse = await gService.GetLocationCoordinatesAsync(LocationInput);
+                if(curLocationResponse.Result == ResponseResult.OK && jobLocationResponse.Result == ResponseResult.OK)
                 {
                     IDistanceCalculatorService distService = App.Current.Services.GetService<IDistanceCalculatorService>()!;
                     JobPosting.JobDistance = (int)distService.GetDistanceBetween(curLocationResponse.Coords, jobLocationResponse.Coords);

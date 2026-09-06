@@ -1,4 +1,5 @@
-﻿using MainApp.Models;
+﻿using CommunityToolkit.Mvvm.Input;
+using MainApp.Models;
 using MainApp.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -21,50 +22,62 @@ namespace MainApp
     public partial class NewPostingView : Window
     {
 
-        public NewPostingView()
+        public NewPostingView(JobPosting? posting)
         {
             InitializeComponent();
+
+            ViewModel.RequestClose += OnRequestClose;
 
             Loaded += (_, _) => 
             {
                 MaxHeight = MinHeight = ActualHeight;
+                locationControl.InitializeAndVerify(posting != null ? posting.JobLocation : string.Empty);
             };
 
-            NewPostingWindowViewModel vm = (NewPostingWindowViewModel)DataContext;
-            vm.RequestClose += OnRequestClose;
+            if (posting != null)
+            {
+                ViewModel.SetEditPosting(posting);
+                Title = "Edit Job Posting";
+                descTextBlock.Text = $"({ViewModel.JobPosting.JobDescription.Length} chars)";
+            }
 
             jobTypeCombo.ItemsSource = Enum.GetValues<JobType>();
             jobArrangementCombo.ItemsSource = Enum.GetValues<JobArrangement>();
             jobStatusCombo.ItemsSource = Enum.GetValues<JobStatus>();
 
-            locationControl.InitializeAndVerify(string.Empty);
-
             UpdateLayout();
         }
 
-        private void OnRequestClose()
+        public bool EditMode { get; set; }
+
+        public JobPosting GetJobPosting()
         {
+            return ViewModel.JobPosting;
+        }
+
+        private void OnRequestClose(bool saved, bool editMode)
+        {
+            DialogResult = saved;
+            EditMode = editMode;
             Close();
         }
 
         private void descButton_Click(object sender, RoutedEventArgs e)
         {
-            NewPostingWindowViewModel thisVM = (NewPostingWindowViewModel)DataContext;
             EditDescriptionView editDescWindow = new EditDescriptionView()
             {
                 Owner = this
             };
 
-            EditDescriptionViewModel descVM = (EditDescriptionViewModel)editDescWindow.DataContext;
-            descVM.JobDescription = thisVM.JobDescription;
+            editDescWindow.ViewModel.JobDescription = ViewModel.JobPosting.JobDescription;
 
             editDescWindow.ShowDialog();
 
             int newCharCount = 0;
             if (editDescWindow.DialogResult == true)
             {
-                newCharCount = descVM.JobDescription.Length;
-                thisVM.JobDescription = descVM.JobDescription;
+                newCharCount = editDescWindow.ViewModel.JobDescription.Length;
+                ViewModel.JobPosting.JobDescription = editDescWindow.ViewModel.JobDescription;
             }
 
             descTextBlock.Text = $"({newCharCount} chars)";

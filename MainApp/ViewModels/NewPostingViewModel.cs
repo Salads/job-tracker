@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel.DataAnnotations;
 using System.Device.Location;
 using System.Diagnostics;
+using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Input;
 
@@ -17,14 +18,15 @@ namespace MainApp.ViewModels
         {
             JobDescriptionLabel = "(0 chars)";
 
-            SaveCommand = new RelayCommand(OnSaveCommand, () => !HasErrors && LocationValid);
+            SaveCommand = new RelayCommand(OnSaveCommand, () => !JobPosting.HasErrors && LocationValid);
             CancelCommand = new RelayCommand(OnCancelCommand);
 
-            ErrorsChanged += (_, _) => ((RelayCommand)SaveCommand).NotifyCanExecuteChanged();
+            JobPosting.ErrorsChanged += (_, _) => ((RelayCommand)SaveCommand).NotifyCanExecuteChanged();
+
             ValidateAllProperties();
         }
 
-        public event Action? RequestClose;
+        public event Action<bool, bool>? RequestClose;
 
         [ObservableProperty]
         public partial string LocationInput { get; set; } = string.Empty;
@@ -33,74 +35,30 @@ namespace MainApp.ViewModels
         public partial string LocationResult { get; set; } = string.Empty;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
         public partial bool LocationValid { get; set; } = false;
-
-        #region New Job Properties
-        [Required]
-        [NotifyDataErrorInfo]
-        [ObservableProperty]
-        public partial string JobTitle { get; set; } = string.Empty;
-
-        [Required]
-        [NotifyDataErrorInfo]
-        [ObservableProperty]
-        public partial string CompanyName { get; set; } = string.Empty;
-
-        [Required]
-        [NotifyDataErrorInfo]
-        [ObservableProperty]
-        [CustomValidation(typeof(NewPostingWindowViewModel), nameof(ValidatePostingURL))]
-        public partial string PostingURL { get; set; } = string.Empty;
-
-        [Required]
-        [NotifyDataErrorInfo]
-        [ObservableProperty]
-        public partial JobType JobType { get; set; }
-
-        [Required]
-        [NotifyDataErrorInfo]
-        [ObservableProperty]
-        public partial JobArrangement JobArrangement { get; set; }
-
-        [ObservableProperty]
-        public partial string Location { get; set; } = string.Empty;
-
-        public int Distance { get; set; }
-
-        [Required]
-        [NotifyDataErrorInfo]
-        [ObservableProperty]
-        public partial string JobDescription { get; set; } = string.Empty;
 
         [ObservableProperty]
         public partial string JobDescriptionLabel { get; set; }
 
-        [Required]
-        [NotifyDataErrorInfo]
         [ObservableProperty]
-        public partial JobStatus JobStatus { get; set; } = JobStatus.Applied;
-        #endregion
+        public partial JobPosting JobPosting { get; private set; } = new JobPosting();
 
-        public ICommand SaveCommand { get; }
+        [ObservableProperty]
+        public partial bool EditMode { get; set; }
 
-        public ICommand CancelCommand { get; }
+        public IRelayCommand SaveCommand { get; }
 
-        public JobPosting GetJobPosting()
+        public IRelayCommand CancelCommand { get; }
+
+        public void SetEditPosting(JobPosting posting)
         {
-            return new JobPosting()
-            {
-                JobTitle = JobTitle,
-                JobCompanyName = CompanyName,
-                JobPostingURL = PostingURL,
-                JobType = JobType,
-                JobArrangement = JobArrangement,
-                JobLocation = Location,
-                JobDistance = Distance,
-                JobDescription = JobDescription,
-                JobStatus = JobStatus
-            };
+            JobPosting.SetFrom(posting);
+            EditMode = true;
+            JobPosting.ValidateAllPropertiesManually();
         }
-        private void OnSaveCommand()
+
+        private async void OnSaveCommand()
         {
             if(!LocationValid)
             {
@@ -110,48 +68,26 @@ namespace MainApp.ViewModels
             IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
             IGeocodingService gc = App.Current.Services.GetService<IGeocodingService>()!;
 
-            var curLocationResponse = gc.GetLocationCoordinates(Settings.Default.CurrentLocation);
-            var jobLocationResponse = gc.GetLocationCoordinates(Location);
+            var curLocationResponse = await gc.GetLocationCoordinatesAsync(Settings.Default.CurrentLocation);
+            var jobLocationResponse = await gc.GetLocationCoordinatesAsync(JobPosting.JobLocation);
 
-            if (curLocationResponse.Result == IGeocodingService.ResponseResult.OK && jobLocationResponse.Result == IGeocodingService.ResponseResult.OK)
+            if (curLocationResponse.Result == ResponseResult.OK && jobLocationResponse.Result == ResponseResult.OK)
             {
                 IDistanceCalculatorService distCalcService = App.Current.Services.GetService<IDistanceCalculatorService>()!;
                 float fDistance = distCalcService.GetDistanceBetween(curLocationResponse.Coords, jobLocationResponse.Coords);
-                Distance = (int)fDistance;
+                JobPosting.JobDistance = (int)fDistance;
             }
             else
             {
-                Distance = -1;
+                JobPosting.JobDistance = -1;
             }
 
-            db.AddNewJob(GetJobPosting());
-
-            RequestClose?.Invoke();
+            RequestClose?.Invoke(true, EditMode);
         }
 
         private void OnCancelCommand()
         {
-            RequestClose?.Invoke();
-        }
-
-        public static ValidationResult ValidatePostingURL(string postingURL, ValidationContext context)
-        {
-            bool result = Uri.TryCreate(postingURL, UriKind.Absolute, out _);
-
-            if (!result)
-            {
-                // TODO(Salads): Try to deconstruct it to see if we can correct it for the user.
-                //               Ideally, shouldn't happen since URLs are usually copy-pasted.
-            }
-
-            if (result)
-            {
-                return ValidationResult.Success!;
-            }
-            else
-            {
-                return new("Not a valid HTTP/S URL!");
-            }
+            RequestClose?.Invoke(false, EditMode);
         }
     }
 }

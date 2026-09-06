@@ -9,7 +9,7 @@
         xmlns:models="clr-namespace:MainApp.Models"
         mc:Ignorable="d"
         Title="Job Tracker"
-        Height="600" Width="900"
+        Height="600" Width="955"
         MinWidth="720"
         WindowStartupLocation="CenterScreen">
     <Window.DataContext>
@@ -31,16 +31,6 @@
                 <x:Type TypeName="models:JobStatus"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
-        <Style x:Key="CenterGridHeaderStyle" TargetType="DataGridColumnHeader">
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        </Style>
-        <Style x:Key="CenterTextElementStyle" TargetType="TextBlock">
-            <Setter Property="TextAlignment" Value="Center"/>
-            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-        </Style>
-        <Style x:Key="CenterComboBoxStyle" TargetType="ComboBox">
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        </Style>
         <local:URLConverter x:Key="URLConverter" />
         <local:RowBackgroundConverter x:Key="DynamicBackroundConverter"/>
         <Style x:Key="DynamicRowBackground" TargetType="DataGridRow">
@@ -52,16 +42,27 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
-            <Button Name="addNewButton"
-                    Content="Add New" 
-                    Width="75" Margin="5"
-                    Click="addNewButton_Click"/>
-            <Button Name="settingsButton"
-                    Content="Settings"
-                    Width="75" Margin="5"
-                    Click="settingsButton_Click"/>
-        </StackPanel>
+        <ToolBarTray>
+            <ToolBar Band="1" BandIndex="1">
+                <Button Name="addNewButton"
+                        Width="{StaticResource Toolbar.ButtonSize}" Margin="5"
+                        Click="addNewButton_Click"
+                        Content="{StaticResource NewPostingIcon}"/>
+                <Button Name="editButton"
+                        Width="{StaticResource Toolbar.ButtonSize}" Margin="5"
+                        Content="{StaticResource EditPostingIcon}"
+                        Click="editButton_Click"/>
+                <Button Name="deleteButton"
+                        Width="{StaticResource Toolbar.ButtonSize}" Margin="5"
+                        Content="{StaticResource DeletePostingIcon}"
+                        Command="{Binding DeletePostingCommand}"
+                        CommandParameter="{Binding SelectedItem, ElementName=jobsDataGrid}"/>
+                <Button Name="settingsButton"
+                        Content="{StaticResource SettingsIcon}"
+                        Width="{StaticResource Toolbar.ButtonSize}" Margin="5"
+                        Click="settingsButton_Click"/>
+            </ToolBar>
+        </ToolBarTray>
         <DataGrid Grid.Row="1"
                   Name="jobsDataGrid"
                   EnableRowVirtualization="True"
@@ -69,37 +70,34 @@
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False"
-                  MouseDoubleClick="jobsDataGrid_MouseDoubleClick"
-                  CellEditEnding="DataGrid_CellEditEnding"
+                  IsReadOnly="True"
                   SelectedItem="{Binding SelectedPosting}"
                   ItemsSource="{Binding JobPostings}"
                   RowStyle="{StaticResource DynamicRowBackground}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Row ID"
-                                    IsReadOnly="True"
                                     Width="auto"
-                                    ElementStyle="{StaticResource CenterTextElementStyle}"
-                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}"
+                                    HeaderStyle="{StaticResource JobsDataGridHeaderSyle}"
+                                    ElementStyle="{StaticResource JobsDataGridTextBlockElementStyle}"
                                     Binding="{Binding RowID, Mode=TwoWay}"/>
                 <DataGridTextColumn Header="Title"
                                     Width="*"
-                                    ElementStyle="{StaticResource CenterTextElementStyle}"
-                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}"
+                                    HeaderStyle="{StaticResource JobsDataGridHeaderSyle}"
+                                    ElementStyle="{StaticResource JobsDataGridTextBlockElementStyle}"
                                     Binding="{Binding JobTitle, Mode=TwoWay}"/>
                 <DataGridTextColumn Header="Company"
                                     Width="auto"
-                                    ElementStyle="{StaticResource CenterTextElementStyle}"
-                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}"
+                                    HeaderStyle="{StaticResource JobsDataGridHeaderSyle}"
+                                    ElementStyle="{StaticResource JobsDataGridTextBlockElementStyle}"
                                     Binding="{Binding JobCompanyName, Mode=TwoWay}"/>
                 <DataGridHyperlinkColumn Header="URL"
-                                         IsReadOnly="True"
                                          Width="auto"
                                          MinWidth="60"
+                                         HeaderStyle="{StaticResource JobsDataGridHeaderSyle}"
                                          ContentBinding="{Binding JobPostingURL, Converter={StaticResource URLConverter}}"
-                                         HeaderStyle="{StaticResource CenterGridHeaderStyle}"
                                          Binding="{Binding JobPostingURL, Mode=TwoWay}">
                     <DataGridHyperlinkColumn.ElementStyle>
-                        <Style TargetType="TextBlock" BasedOn="{StaticResource CenterTextElementStyle}">
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource JobsDataGridTextBlockElementStyle}">
                             <EventSetter Event="Hyperlink.Click" Handler="URL_Click"/>
                         </Style>
                     </DataGridHyperlinkColumn.ElementStyle>
@@ -107,37 +105,34 @@
                 <DataGridComboBoxColumn Header="Type"
                                         Width="auto"
                                         MinWidth="80"
-                                        ElementStyle="{StaticResource CenterComboBoxStyle}"
-                                        HeaderStyle="{StaticResource CenterGridHeaderStyle}"
+                                        HeaderStyle="{StaticResource JobsDataGridHeaderSyle}"
+                                        ElementStyle="{StaticResource JobsDataGridComboBoxElementStyle}"
                                         SelectedItemBinding="{Binding JobType, Mode=TwoWay}"
                                         ItemsSource="{Binding Source={StaticResource JobTypeValues}}"/>
                 <DataGridComboBoxColumn Header="Arrangement"
                                         Width="auto"
-                                        ElementStyle="{StaticResource CenterComboBoxStyle}"
-                                        HeaderStyle="{StaticResource CenterGridHeaderStyle}"
+                                        HeaderStyle="{StaticResource JobsDataGridHeaderSyle}"
+                                        ElementStyle="{StaticResource JobsDataGridComboBoxElementStyle}"
                                         SelectedItemBinding="{Binding JobArrangement, Mode=TwoWay}"
                                         ItemsSource="{Binding Source={StaticResource JobArrangementValues}}"/>
                 <DataGridTextColumn Header="Location"
                                     Width="auto"
-                                    IsReadOnly="True"
-                                    ElementStyle="{StaticResource CenterTextElementStyle}"
-                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}"
+                                    HeaderStyle="{StaticResource JobsDataGridHeaderSyle}"
+                                    ElementStyle="{StaticResource JobsDataGridTextBlockElementStyle}"
                                     Binding="{Binding JobLocation, Mode=TwoWay}"/>
                 <DataGridTextColumn Header="Distance"
-                                    IsReadOnly="True"
                                     Width="auto"
-                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}"
-                                    ElementStyle="{StaticResource CenterTextElementStyle}"
+                                    HeaderStyle="{StaticResource JobsDataGridHeaderSyle}"
+                                    ElementStyle="{StaticResource JobsDataGridTextBlockElementStyle}"
                                     Binding="{Binding JobDistance, Mode=TwoWay}"/>
                 <DataGridTemplateColumn Header="Description"
                                         Width="auto"
-                                        HeaderStyle="{StaticResource CenterGridHeaderStyle}">
+                                        HeaderStyle="{StaticResource JobsDataGridHeaderSyle}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Name="descButton"
-                                    Content="View / Edit"
-                                    Width="125"
-                                    HorizontalAlignment="Center"
+                                    Content="View"
+                                    Style="{StaticResource TextButtonStyle}"
                                     Click="descButton_Click"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -145,8 +140,8 @@
                 <DataGridComboBoxColumn Header="Status"
                                         Width="auto"
                                         MinWidth="100"
-                                        ElementStyle="{StaticResource CenterComboBoxStyle}"
-                                        HeaderStyle="{StaticResource CenterGridHeaderStyle}"
+                                        HeaderStyle="{StaticResource JobsDataGridHeaderSyle}"
+                                        ElementStyle="{StaticResource JobsDataGridComboBoxElementStyle}"
                                         SelectedItemBinding="{Binding JobStatus, Mode=TwoWay}"
                                         ItemsSource="{Binding Source={StaticResource JobStatusValues}}"/>
             </DataGrid.Columns>

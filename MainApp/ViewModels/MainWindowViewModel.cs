@@ -28,6 +28,19 @@ namespace MainApp.ViewModels
         [ObservableProperty]
         public partial JobPosting SelectedPosting { get; set; } = new JobPosting();
 
+        [RelayCommand]
+        private void DeletePosting(JobPosting? jobPosting)
+        {
+            if(jobPosting == null)
+            {
+                return;
+            }
+
+            IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
+            db.RemoveJobPosting(jobPosting);
+            JobPostings.Remove(jobPosting);
+        }
+
         private void HandleJobPostingPropertyChangedEx(object? sender, PropertyChangedEventArgs e)
         {
             IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
@@ -48,27 +61,27 @@ namespace MainApp.ViewModels
             db.RefreshJobPostings(JobPostings);
         }
 
-        public void RecalculateAllJobPostingDistances()
+        public async void RecalculateAllJobPostingDistances()
         {
             IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
             IGeocodingService gc = App.Current.Services.GetService<IGeocodingService>()!;
 
             string curLocationInput = Settings.Default.CurrentLocation;
-            IGeocodingService.GeoCodingResponse curLocationResponse = gc.GetLocationCoordinates(curLocationInput);
-            if(curLocationResponse.Result != IGeocodingService.ResponseResult.OK)
+            GeoCodingResponse curLocationResponse = await gc.GetLocationCoordinatesAsync(curLocationInput);
+            if(curLocationResponse.Result != ResponseResult.OK)
             {
                 return; // TODO(Salads): User Feedback on error
             }
 
             foreach(JobPosting posting in JobPostings)
             {
-                IGeocodingService.GeoCodingResponse jobLocationResponse = gc.GetLocationCoordinates(posting.JobLocation);
-                if(jobLocationResponse.Result != IGeocodingService.ResponseResult.OK)
+                GeoCodingResponse jobLocationResponse = await gc.GetLocationCoordinatesAsync(posting.JobLocation);
+                if(jobLocationResponse.Result != ResponseResult.OK)
                 {
                     continue;
                 }
 
-                if (curLocationResponse.Result == IGeocodingService.ResponseResult.OK && jobLocationResponse.Result == IGeocodingService.ResponseResult.OK)
+                if (curLocationResponse.Result == ResponseResult.OK && jobLocationResponse.Result == ResponseResult.OK)
                 {
                     IDistanceCalculatorService distanceCalculatorService = App.Current.Services.GetService<IDistanceCalculatorService>()!;
                     float fDistance = distanceCalculatorService.GetDistanceBetween(curLocationResponse.Coords, jobLocationResponse.Coords);

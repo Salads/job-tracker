@@ -79,7 +79,7 @@
                            Text="Location: " 
                            VerticalAlignment="Center" 
                            Margin="10"/>
-                <views:LocationControl Grid.Column="1"
+                <views:LocationView Grid.Column="1"
                                        x:Name="locationControl"
                                        Validation.ErrorTemplate="{x:Null}"
                                        LocationInput="{Binding DataContext.LocationInput, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=Window}}"

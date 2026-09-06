@@ -1,4 +1,5 @@
-﻿using MainApp.Models;
+﻿using CommunityToolkit.Mvvm.Input;
+using MainApp.Models;
 using MainApp.Services;
 using MainApp.ViewModels;
 using MainApp.Views;
@@ -51,20 +52,25 @@ namespace MainApp
             editDescriptionViewModel.JobDescription = jobPosting.JobDescription;
 
             descView.ShowDialog();
-
-            if (descView.DialogResult == true)
-            {
-                jobPosting.JobDescription = editDescriptionViewModel.JobDescription;
-            }
         }
 
         private void addNewButton_Click(object sender, RoutedEventArgs e)
         {
-            NewPostingView addnewWindow = new NewPostingView()
+            NewPostingView addnewWindow = new NewPostingView(null)
             {
                 Owner = this
             };
             addnewWindow.ShowDialog();
+
+            if (addnewWindow.DialogResult == true)
+            {
+                IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
+
+                long rowid = db.AddNewJob(addnewWindow.GetJobPosting());
+                addnewWindow.GetJobPosting().RowID = rowid;
+
+                ViewModel.JobPostings.Add(addnewWindow.ViewModel.JobPosting);
+            }
         }
 
         private void settingsButton_Click(object sender, RoutedEventArgs e)
@@ -85,79 +91,27 @@ namespace MainApp
             }
         }
 
-        private void DataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        private void editButton_Click(object sender, RoutedEventArgs e)
         {
-            Trace.WriteLine("DataGrid_CellEditEnding");
-
-            JobPosting rowPosting = (JobPosting)e.Row.Item;
-            if(e.EditingElement is TextBox)
+            JobPosting? selected = (JobPosting?)jobsDataGrid.SelectedItem;
+            if(selected == null)
             {
-                TextBox element = (TextBox)e.EditingElement;
-                string newValue = element.Text;
-                UpdateJobPostingByColumnHeader(rowPosting, (string)e.Column.Header, newValue);
-            }
-            else if(e.EditingElement is ComboBox)
-            {
-                ComboBox element = (ComboBox)e.EditingElement;
-                int newValue = Convert.ToInt32(element.SelectedItem);
-                UpdateJobPostingByColumnHeader(rowPosting, (string)e.Column.Header, newValue);
-            }
-        }
-
-        private void UpdateJobPostingByColumnHeader(JobPosting posting, string columnHeaderName, string value)
-        {
-            switch (columnHeaderName)
-            {
-                case "Title":
-                    posting.JobTitle = value; break;
-                case "CompanyName":
-                    posting.JobCompanyName = value; break;
-                case "PostingURL":
-                    posting.JobPostingURL = value; break;
-                case "Location":
-                    posting.JobLocation = value; break;
-                case "Description":
-                    posting.JobDescription = value; break;
-                default:
-                    break;
+                return;
             }
 
-            IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
-            db.UpdateJobPosting(posting);
-        }
-
-        private void UpdateJobPostingByColumnHeader(JobPosting posting, string columnHeaderName, int value)
-        {
-            switch (columnHeaderName)
+            NewPostingView editPostingWindow = new NewPostingView(selected)
             {
-                case "Type":
-                    posting.JobType = (JobType)value; break;
-                case "Arrangement":
-                    posting.JobArrangement = (JobArrangement)value; break;
-                case "Status":
-                    posting.JobStatus = (JobStatus)value; break;
-                default:
-                    break;
-            }
+                Owner = this
+            };
+            editPostingWindow.ShowDialog();
 
-            IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
-            db.UpdateJobPosting(posting);
-        }
-
-        private void jobsDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            JobPosting? selectedPosting = (JobPosting)jobsDataGrid.SelectedItem;
-            DataGridCellInfo focusedCell = jobsDataGrid.CurrentCell;
-            if(selectedPosting != null && jobsDataGrid.SelectedCells.Count > 6 && (string)focusedCell.Column.Header == "Location")
+            if (editPostingWindow.DialogResult == true && editPostingWindow.EditMode)
             {
-                EditLocationView dialog = new EditLocationView(selectedPosting)
-                {
-                    Owner = this
-                };
-                dialog.ShowDialog();
-                jobsDataGrid.CommitEdit();
+                IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
+                
+                db.UpdateJobPosting(editPostingWindow.GetJobPosting());
+                selected.SetFrom(editPostingWindow.GetJobPosting());
             }
-            
         }
     }
 }

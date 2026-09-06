@@ -18,9 +18,9 @@ namespace MainApp.Views
     /// <summary>
     /// Interaction logic for LocationControl.xaml
     /// </summary>
-    public partial class LocationControl : UserControl
+    public partial class LocationView : UserControl
     {
-        public LocationControl()
+        public LocationView()
         {
             InitializeComponent();
 
@@ -84,13 +84,13 @@ namespace MainApp.Views
         public static readonly DependencyProperty LocationInputProperty = DependencyProperty.Register(
             name: "LocationInput", 
             propertyType: typeof(string),
-            ownerType: typeof(LocationControl),
+            ownerType: typeof(LocationView),
             typeMetadata: new PropertyMetadata(defaultValue: string.Empty, OnLocationInputPropertyChanged)
         );
 
         private static void OnLocationInputPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is not LocationControl control || control.DataContext is not LocationViewModel vm)
+            if (d is not LocationView control || control.DataContext is not LocationViewModel vm)
             {
                 return;
             }
@@ -109,7 +109,7 @@ namespace MainApp.Views
         public static readonly DependencyProperty LocationResultProperty = DependencyProperty.Register(
             name: "LocationResult",
             propertyType: typeof(string),
-            ownerType: typeof(LocationControl),
+            ownerType: typeof(LocationView),
             typeMetadata: new PropertyMetadata(defaultValue: string.Empty)
         );
 
@@ -124,7 +124,7 @@ namespace MainApp.Views
         public static readonly DependencyProperty IsValidProperty = DependencyProperty.Register(
             name: "IsValid",
             propertyType: typeof(bool),
-            ownerType: typeof(LocationControl),
+            ownerType: typeof(LocationView),
             typeMetadata: new PropertyMetadata(defaultValue: false)
         );
 

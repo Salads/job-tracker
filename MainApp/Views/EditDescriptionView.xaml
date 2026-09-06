@@ -11,7 +11,7 @@
         Width="450" Height="350"
         WindowStartupLocation="CenterOwner">
     <Window.DataContext>
-        <viewModels:EditDescriptionViewModel/>
+        <viewModels:EditDescriptionViewModel x:Name="ViewModel"/>
     </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>

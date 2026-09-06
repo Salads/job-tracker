@@ -1,24 +1,19 @@
 ﻿using MainApp.Models;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Device.Location;
 using System.Diagnostics;
+using System.Drawing.Text;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Device.Location;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using static MainApp.Services.IGeocodingService;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Windows.Media;
-using System.Drawing.Text;
 
-/*
- * TODO(Salads)
- * 
- * Use "Nominatim" free geocoding service (1 request per second)
- * https://nominatim.openstreetmap.org/search?<params>
- * 
- * Then use haversine distance since we don't really care about travelling directions, just "relative distance".
- */
 
 namespace MainApp.Services
 {
@@ -42,13 +37,29 @@ namespace MainApp.Services
             return new GeoCodingStatus(response.IsSuccessStatusCode, responseContent);
         }
 
-        public GeoCodingResponse GetLocationCoordinates(string query)
+        public async Task<GeoCodingResponse> GetLocationCoordinatesAsync(string query)
         {
+            IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
+            string? fullName = db.GetLocationMappingFromCache(query);
+            if (fullName != null)
+            {
+                GeoCodingResponse cacheResult = new GeoCodingResponse(ResponseResult.OK)
+                {
+                    Coords = db.GetLocationCoordsFromCache(fullName)!,
+                    DisplayName = fullName
+                };
+
+                Trace.WriteLine("IGeocodingService - CACHE HIT!");
+                return cacheResult;
+            }
+
+            Trace.WriteLine("IGeocodingService - CACHE MISS!");
+
             DateTime checkTime = DateTime.Now;
             if((checkTime - lastRequestTime).TotalSeconds < REQUEST_COOLDOWN)
             {
                 TimeSpan timeDiff = checkTime - lastRequestTime;
-                Thread.Sleep((int)(timeDiff.TotalMilliseconds));
+                await Task.Delay((int)(timeDiff.TotalMilliseconds));
             }
 
             lastRequestTime = DateTime.Now;
@@ -66,8 +77,9 @@ namespace MainApp.Services
                 using HttpResponseMessage response = httpClient.GetAsync($"?q={query}&format=jsonv2").Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    string jsonResponse = response.Content.ReadAsStringAsync().Result;
-                    List<JSONGeoCoordinates>? geoCoordinates = JsonSerializer.Deserialize<List<JSONGeoCoordinates>>(jsonResponse);
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonResponse);
+                    List<JSONGeoCoordinates>? geoCoordinates = await JsonSerializer.DeserializeAsync<List<JSONGeoCoordinates>>(new MemoryStream(jsonBytes));
 
                     if (geoCoordinates == null)
                     {
@@ -84,6 +96,11 @@ namespace MainApp.Services
                         result.Coords.Latitude = coords.lat;
                         result.DisplayName = coords.display_name;
                         result.Result = ResponseResult.OK;
+
+                        // Update cache with our new data.
+                        db.EnsureLocationMappingExists(query, coords.display_name);
+                        db.EnsureLocationCoordsExists(coords.display_name, result.Coords);
+
                         Trace.WriteLine($"Latitude: {coords.lat} Longitude: {coords.lon}\n");
                     }
 

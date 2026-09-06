@@ -36,7 +36,7 @@
         </Style>
     </Window.Resources>
     <DockPanel>
-        <views:LocationControl DockPanel.Dock="Top"
+        <views:LocationView DockPanel.Dock="Top"
                                x:Name="locationControl"
                                LocationInput="{Binding DataContext.LocationInput, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=Window}}"
                                LocationResult="{Binding DataContext.LocationResult, Mode=OneWayToSource, RelativeSource={RelativeSource AncestorType=Window}}"

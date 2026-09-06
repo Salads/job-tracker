@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Device.Location;
 using System.Diagnostics;
 using System.Text;
+using System.Windows.Media;
 
 namespace MainApp.Services
 {
@@ -434,6 +435,21 @@ namespace MainApp.Services
                 // Posting construction complete
                 jobPostings.Add(jobPosting);
             }
+        }
+
+        public void RemoveJobPosting(JobPosting posting)
+        {
+            using SqliteConnection connection = new SqliteConnection($"Data Source={Settings.Default.SaveLocation}");
+            connection.Open();
+
+            using SqliteCommand command = connection.CreateCommand();
+            command.CommandText = $"""
+                DELETE FROM {TABLENAME_JOBS}
+                WHERE rowid = @rowID
+            """;
+
+            command.Parameters.AddWithValue("@rowID", posting.RowID);
+            command.ExecuteNonQuery();
         }
     }
 }

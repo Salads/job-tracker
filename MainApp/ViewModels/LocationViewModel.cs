@@ -12,6 +12,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using MainApp.Models;
 
 namespace MainApp.ViewModels
 {
@@ -25,10 +26,13 @@ namespace MainApp.ViewModels
         public ICommand ValidateLocationCommand { get; }
 
         [ObservableProperty]
+        public partial bool IsNotValidating { get; set; }
+
+        [ObservableProperty]
         [CustomValidation(typeof(LocationViewModel), nameof(UpdateValidationError))]
         public partial string LocationInput { get; set; } = string.Empty;
 
-        public IGeocodingService.ResponseResult LastResult = IGeocodingService.ResponseResult.Uninitialized;
+        public ResponseResult LastResult = ResponseResult.Uninitialized;
 
         [ObservableProperty]
         public partial bool IsValid { get; set; } = true;
@@ -43,7 +47,7 @@ namespace MainApp.ViewModels
         partial void OnLocationInputChanged(string value)
         {
             LocationResult = string.Empty;
-            LastResult = IGeocodingService.ResponseResult.Uninitialized;
+            LastResult = ResponseResult.Uninitialized;
             IsValid = false;
             Error = "Location not verified";
             ValidateInputLocation();
@@ -67,23 +71,26 @@ namespace MainApp.ViewModels
             return new ValidationResult(string.IsNullOrEmpty(vm.Error) ? "Location not verified" : vm.Error);
         }
 
-        private void OnValidateLocationCommand()
+        private async void OnValidateLocationCommand()
         {
             Trace.WriteLine("LocationViewMode:OnValidateLocationCommand()");
+
+            IsNotValidating = false;
 
             if (string.IsNullOrWhiteSpace(LocationInput))
             {
                 Error = "Required";
                 LocationResult = string.Empty;
-                LastResult = IGeocodingService.ResponseResult.Uninitialized;
-                IsValid = LastResult == IGeocodingService.ResponseResult.OK;
+                LastResult = ResponseResult.Uninitialized;
+                IsValid = LastResult == ResponseResult.OK;
                 ValidateInputLocation();
+                IsNotValidating = true;
                 return;
             }
 
-            IGeocodingService.GeoCodingResponse result = GetLocationCoords(LocationInput);
+            GeoCodingResponse result = await GetLocationCoords(LocationInput);
             LastResult = result.Result;
-            IsValid = result.Result == IGeocodingService.ResponseResult.OK;
+            IsValid = result.Result == ResponseResult.OK;
 
             if (IsValid)
             {
@@ -95,44 +102,23 @@ namespace MainApp.ViewModels
             {
                 Error = result.Result switch
                 {
-                    IGeocodingService.ResponseResult.Uninitialized => "Required",
-                    IGeocodingService.ResponseResult.ServerError => "Unexpected Server output",
-                    IGeocodingService.ResponseResult.NetworkError => "Client-side network error",
-                    IGeocodingService.ResponseResult.JSONError => "Error decoding server JSON response",
-                    IGeocodingService.ResponseResult.NoResult => "No location found",
+                    ResponseResult.Uninitialized => "Required",
+                    ResponseResult.ServerError => "Unexpected Server output",
+                    ResponseResult.NetworkError => "Client-side network error",
+                    ResponseResult.JSONError => "Error decoding server JSON response",
+                    ResponseResult.NoResult => "No location found",
                     _ => "Unknown Error"
                 };
             }
 
             ValidateInputLocation();
+            IsNotValidating = true;
         }
 
-        public IGeocodingService.GeoCodingResponse GetLocationCoords(string location)
+        public async Task<GeoCodingResponse> GetLocationCoords(string location)
         {
-            // Check database for cached results.
-            IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
-            string? fullName = db.GetLocationMappingFromCache(location);
-            if (fullName != null)
-            {
-                IGeocodingService.GeoCodingResponse result = new IGeocodingService.GeoCodingResponse(IGeocodingService.ResponseResult.OK)
-                {
-                    Coords = db.GetLocationCoordsFromCache(fullName)!,
-                    DisplayName = fullName
-                };
-
-                return result;
-            }
-
-            // Could not get name mapping, so we need to make a geocoding request.
             IGeocodingService gc = App.Current.Services.GetService<IGeocodingService>()!;
-            IGeocodingService.GeoCodingResponse response = gc.GetLocationCoordinates(location);
-            if(response.Result == IGeocodingService.ResponseResult.OK)
-            {
-                // Update cache with our new data.
-                db.EnsureLocationMappingExists(location, response.DisplayName);
-                db.EnsureLocationCoordsExists(response.DisplayName, response.Coords);
-            }
-
+            GeoCodingResponse response = await gc.GetLocationCoordinatesAsync(location);
             return response;
         }
     }
