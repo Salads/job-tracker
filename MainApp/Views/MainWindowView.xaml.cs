@@ -43,13 +43,13 @@ namespace MainApp
         {
             Button senderButton = (Button)sender;
             JobPosting jobPosting = (JobPosting)senderButton.DataContext;
-            EditDescriptionView descView = new EditDescriptionView()
+            DescriptionView descView = new DescriptionView()
             {
                 Owner = this
             };
 
-            EditDescriptionViewModel editDescriptionViewModel = (descView.DataContext as EditDescriptionViewModel)!;
-            editDescriptionViewModel.JobDescription = jobPosting.JobDescription;
+            DescriptionViewModel descViewModel = descView.ViewModel;
+            descViewModel.Description = jobPosting.JobDescription;
 
             descView.ShowDialog();
         }
