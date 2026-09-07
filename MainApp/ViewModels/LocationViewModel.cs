@@ -88,6 +88,17 @@ namespace MainApp.ViewModels
                 return;
             }
 
+            string trimmedLocation = LocationInput.Trim().ToLower();
+            if(trimmedLocation == "remote")
+            {
+                LocationResult = "Remote";
+                LastResult = ResponseResult.OK;
+                IsValid = LastResult == ResponseResult.OK;
+                ValidateInputLocation();
+                IsNotValidating = true;
+                return;
+            }
+
             GeoCodingResponse result = await GetLocationCoords(LocationInput);
             LastResult = result.Result;
             IsValid = result.Result == ResponseResult.OK;

@@ -76,29 +76,13 @@ namespace MainApp.ViewModels
 
             string curLocationInput = Settings.Default.CurrentLocation;
             GeoCodingResponse curLocationResponse = await gc.GetLocationCoordinatesAsync(curLocationInput);
-            if(curLocationResponse.Result != ResponseResult.OK)
-            {
-                return; // TODO(Salads): User Feedback on error
-            }
 
             foreach(JobPosting posting in JobPostings)
             {
                 GeoCodingResponse jobLocationResponse = await gc.GetLocationCoordinatesAsync(posting.JobLocation);
-                if(jobLocationResponse.Result != ResponseResult.OK)
-                {
-                    continue;
-                }
-
-                if (curLocationResponse.Result == ResponseResult.OK && jobLocationResponse.Result == ResponseResult.OK)
-                {
-                    IDistanceCalculatorService distanceCalculatorService = App.Current.Services.GetService<IDistanceCalculatorService>()!;
-                    float fDistance = distanceCalculatorService.GetDistanceBetween(curLocationResponse.Coords, jobLocationResponse.Coords);
-                    posting.JobDistance = (int)fDistance;
-                }
-                else
-                {
-                    posting.JobDistance = -1;
-                }
+                IDistanceCalculatorService distanceCalculatorService = App.Current.Services.GetService<IDistanceCalculatorService>()!;
+                float fDistance = distanceCalculatorService.GetDistanceBetween(curLocationResponse, jobLocationResponse);
+                posting.JobDistance = (int)fDistance;
 
                 db.UpdateJobPosting(posting);
             }

@@ -46,13 +46,11 @@ namespace MainApp.ViewModels
                 IGeocodingService gService = App.Current.Services.GetService<IGeocodingService>()!;
                 GeoCodingResponse curLocationResponse = await gService.GetLocationCoordinatesAsync(Settings.Default.CurrentLocation);
                 GeoCodingResponse jobLocationResponse = await gService.GetLocationCoordinatesAsync(LocationInput);
-                if(curLocationResponse.Result == ResponseResult.OK && jobLocationResponse.Result == ResponseResult.OK)
-                {
-                    IDistanceCalculatorService distService = App.Current.Services.GetService<IDistanceCalculatorService>()!;
-                    JobPosting.JobDistance = (int)distService.GetDistanceBetween(curLocationResponse.Coords, jobLocationResponse.Coords);
-                }
 
+                IDistanceCalculatorService distService = App.Current.Services.GetService<IDistanceCalculatorService>()!;
                 IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
+
+                JobPosting.JobDistance = (int)distService.GetDistanceBetween(curLocationResponse, jobLocationResponse);
                 db.UpdateJobPosting(JobPosting);
             }
 

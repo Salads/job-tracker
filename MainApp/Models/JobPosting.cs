@@ -109,21 +109,16 @@ namespace MainApp
 
         public static ValidationResult ValidatePostingURL(string postingURL, ValidationContext context)
         {
-            Uri uri;
-            bool result = Uri.TryCreate(postingURL, UriKind.Absolute, out uri);
+            Uri? uri;
+            bool createdSuccessfully = Uri.TryCreate(postingURL, UriKind.Absolute, out uri);
 
-            if (!result)
-            {
-                // TODO(Salads): Try to deconstruct it to see if we can correct it for the user.
-                //               Ideally, shouldn't happen since URLs are usually copy-pasted.
-            }
-
-            if (result && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+            if (createdSuccessfully && (uri!.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
             {
                 return ValidationResult.Success!;
             }
             else
             {
+                // TODO(Salads): URL validation lenience
                 return new("Not a valid HTTP/S URL!");
             }
         }

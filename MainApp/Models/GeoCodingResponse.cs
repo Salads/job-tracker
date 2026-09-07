@@ -34,6 +34,8 @@ namespace MainApp.Models
 
         public ResponseResult Result;
 
+        public bool IsRemote { get; set; } = false;
+
         public GeoCoordinate Coords { get; set; }
 
         public string DisplayName { get; set; }

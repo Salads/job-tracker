@@ -71,16 +71,9 @@ namespace MainApp.ViewModels
             var curLocationResponse = await gc.GetLocationCoordinatesAsync(Settings.Default.CurrentLocation);
             var jobLocationResponse = await gc.GetLocationCoordinatesAsync(JobPosting.JobLocation);
 
-            if (curLocationResponse.Result == ResponseResult.OK && jobLocationResponse.Result == ResponseResult.OK)
-            {
-                IDistanceCalculatorService distCalcService = App.Current.Services.GetService<IDistanceCalculatorService>()!;
-                float fDistance = distCalcService.GetDistanceBetween(curLocationResponse.Coords, jobLocationResponse.Coords);
-                JobPosting.JobDistance = (int)fDistance;
-            }
-            else
-            {
-                JobPosting.JobDistance = -1;
-            }
+            IDistanceCalculatorService distCalcService = App.Current.Services.GetService<IDistanceCalculatorService>()!;
+            float fDistance = distCalcService.GetDistanceBetween(curLocationResponse, jobLocationResponse);
+            JobPosting.JobDistance = (int)fDistance;
 
             RequestClose?.Invoke(true, EditMode);
         }

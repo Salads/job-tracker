@@ -39,6 +39,24 @@ namespace MainApp.Services
 
         public async Task<GeoCodingResponse> GetLocationCoordinatesAsync(string query)
         {
+            string trimmedQuery = query.Trim().ToLower();
+            if(trimmedQuery == "remote")
+            {
+                GeoCodingResponse remoteResult = new GeoCodingResponse(ResponseResult.OK)
+                {
+                    Coords = new GeoCoordinate()
+                    {
+                        Latitude = 0,
+                        Longitude = 0,
+                    },
+                    DisplayName = "Remote",
+                    IsRemote = true
+                };
+
+                return remoteResult;
+
+            }
+
             IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
             string? fullName = db.GetLocationMappingFromCache(query);
             if (fullName != null)
