@@ -20,6 +20,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Assets/ComboBoxValues.xaml"/>
+                <ResourceDictionary Source="/Assets/TextButtonStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <ControlTemplate x:Key="ErrorTextBelow">
@@ -104,7 +105,9 @@
 
                 <TextBlock FontSize="12" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Description</TextBlock>
                 <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="1">
-                    <Button Name="descButton" Content="Edit Description" Width="150" Height="25" Margin="10" Click="descButton_Click"/>
+                    <Button Name="descButton" Content="Edit Description"
+                            Click="descButton_Click"
+                            Style="{StaticResource TextButtonStyle}"/>
                     <TextBlock Name="descTextBlock" VerticalAlignment="Center" Padding="5" Text="{Binding JobDescriptionLabel}"/>
                 </StackPanel>
 
@@ -120,10 +123,10 @@
         </Border>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" DockPanel.Dock="Top" MinHeight="45">
             <Button Name="saveButton" Content="Save" 
-                    MinWidth="75" Width="75" Height="25" Margin="10"
+                    Style="{StaticResource TextButtonStyle}"
                     Command="{Binding SaveCommand}"/>
             <Button Name="cancelButton" Content="Cancel" 
-                    Width="75" Height="25" Margin="10"
+                    Style="{StaticResource TextButtonStyle}"
                     Command="{Binding CancelCommand}"/>
         </StackPanel>
     </DockPanel>
