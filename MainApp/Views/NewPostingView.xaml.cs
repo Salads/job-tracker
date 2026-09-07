@@ -41,6 +41,8 @@ namespace MainApp
                 descTextBlock.Text = $"({ViewModel.JobPosting.JobDescription.Length} chars)";
             }
 
+            locationControl.ViewModel.RemoteAllowed = true;
+
             UpdateLayout();
         }
 

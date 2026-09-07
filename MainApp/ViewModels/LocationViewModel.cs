@@ -25,6 +25,8 @@ namespace MainApp.ViewModels
 
         public ICommand ValidateLocationCommand { get; }
 
+        public bool RemoteAllowed { get; set; } = false;
+
         [ObservableProperty]
         public partial bool IsNotValidating { get; set; }
 
@@ -89,14 +91,27 @@ namespace MainApp.ViewModels
             }
 
             string trimmedLocation = LocationInput.Trim().ToLower();
-            if(trimmedLocation == "remote")
+            if (trimmedLocation == "remote")
             {
-                LocationResult = "Remote";
-                LastResult = ResponseResult.OK;
-                IsValid = LastResult == ResponseResult.OK;
-                ValidateInputLocation();
-                IsNotValidating = true;
-                return;
+                if (RemoteAllowed)
+                {
+                    LocationResult = "Remote";
+                    LastResult = ResponseResult.OK;
+                    IsValid = LastResult == ResponseResult.OK;
+                    ValidateInputLocation();
+                    IsNotValidating = true;
+                    return;
+                }
+                else
+                {
+                    Error = "Location cannot be remote!";
+                    LocationResult = string.Empty;
+                    LastResult = ResponseResult.Uninitialized;
+                    IsValid = LastResult == ResponseResult.OK;
+                    ValidateInputLocation();
+                    IsNotValidating = true;
+                    return;
+                }
             }
 
             GeoCodingResponse result = await GetLocationCoords(LocationInput);

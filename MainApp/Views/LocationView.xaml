@@ -18,7 +18,7 @@
     </UserControl.Resources>
     
     <UserControl.DataContext>
-        <viewModels:LocationViewModel/>
+        <viewModels:LocationViewModel x:Name="ViewModel"/>
     </UserControl.DataContext>
     
     <Grid>
