@@ -10,23 +10,23 @@ namespace MainApp.Services
     {
         public float GetDistanceBetween(GeoCodingResponse a, GeoCodingResponse b)
         {
-            if (a.Result == ResponseResult.OK && b.Result == ResponseResult.OK)
+            if (a.IsRemote || b.IsRemote)
             {
-                if(a.IsRemote || b.IsRemote)
-                {
-                    return 0;
-                }
-                else
+                return 0;
+            }
+            else
+            {
+                if (a.Result == ResponseResult.OK && b.Result == ResponseResult.OK)
                 {
                     float metersToMiles = 1609.344f;
                     float fDistance = (float)a.Coords.GetDistanceTo(b.Coords) / metersToMiles;
 
                     return fDistance;
                 }
-            }
-            else
-            {
-                return -1;
+                else
+                {
+                    return -1;
+                }
             }
         }
     }
