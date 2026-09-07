@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="Edit Description" 
         SizeToContent="Manual" 
-        Width="450" Height="350"
+        Width="450" Height="270"
         WindowStartupLocation="CenterOwner">
     <Window.DataContext>
         <viewModels:EditDescriptionViewModel x:Name="ViewModel"/>
@@ -19,18 +19,23 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition />
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <TextBox Name="descTextBox" Grid.Row="0" MinHeight="200" Padding="5" 
                  TextWrapping="Wrap"
                  AcceptsReturn="True"
                  VerticalScrollBarVisibility="Auto"
+                 Style="{StaticResource DescriptionTextBoxStyle}"
                  Text="{Binding JobDescription, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
+        <StackPanel Orientation="Horizontal" 
+                    Grid.Row="1" 
+                    HorizontalAlignment="Right">
             <Button Name="descSaveButton" Content="Save" Width="75" Margin="5" 
-                    Command="{Binding SaveCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                    Command="{Binding SaveCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                    Style="{StaticResource TextButtonStyle}"/>
             <Button Name="descCancelButton" Content="Cancel" Width="72" Margin="5"
-                    Command="{Binding CancelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                    Command="{Binding CancelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                    Style="{StaticResource TextButtonStyle}"/>
         </StackPanel>
     </Grid>
 </Window>
