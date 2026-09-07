@@ -77,9 +77,11 @@ namespace MainApp.ViewModels
         {
             Trace.WriteLine("LocationViewMode:OnValidateLocationCommand()");
 
+            string trimmedAndLoweredInput = LocationInput.Trim().ToLower();
+
             IsNotValidating = false;
 
-            if (string.IsNullOrWhiteSpace(LocationInput))
+            if (string.IsNullOrWhiteSpace(trimmedAndLoweredInput))
             {
                 Error = "Required";
                 LocationResult = string.Empty;
@@ -90,8 +92,7 @@ namespace MainApp.ViewModels
                 return;
             }
 
-            string trimmedLocation = LocationInput.Trim().ToLower();
-            if (trimmedLocation == "remote")
+            if (trimmedAndLoweredInput == "remote")
             {
                 if (RemoteAllowed)
                 {
@@ -114,7 +115,7 @@ namespace MainApp.ViewModels
                 }
             }
 
-            GeoCodingResponse result = await GetLocationCoords(LocationInput);
+            GeoCodingResponse result = await GetLocationCoords(trimmedAndLoweredInput);
             LastResult = result.Result;
             IsValid = result.Result == ResponseResult.OK;
 
