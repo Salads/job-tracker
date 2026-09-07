@@ -117,7 +117,7 @@
                                         SelectedItemBinding="{Binding JobArrangement, Mode=TwoWay}"
                                         ItemsSource="{Binding Source={StaticResource JobArrangementValues}}"/>
                 <DataGridTextColumn Header="Location"
-                                    Width="auto"
+                                    Width="*"
                                     HeaderStyle="{StaticResource JobsDataGridHeaderSyle}"
                                     ElementStyle="{StaticResource JobsDataGridTextBlockElementStyle}"
                                     Binding="{Binding JobLocation, Mode=TwoWay}"/>
