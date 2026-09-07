@@ -15,42 +15,28 @@
         <viewmodels:EditLocationViewModel/>
     </Window.DataContext>
     <Window.Resources>
-        <ControlTemplate x:Key="ErrorTextBelow">
-            <StackPanel Focusable="False" IsHitTestVisible="False">
-                <Border BorderBrush="Red" BorderThickness="1">
-                    <AdornedElementPlaceholder/>
-                </Border>
-                <TextBlock Text="{Binding [0].ErrorContent}"
-                       Foreground="Red"
-                       FontSize="11"
-                       TextWrapping="Wrap"/>
-            </StackPanel>
-        </ControlTemplate>
 
-        <Style TargetType="TextBox">
-            <Style.Triggers>
-                <Trigger Property="Validation.HasError" Value="True">
-                    <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTextBelow}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Assets/TextButtonStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
     </Window.Resources>
     <DockPanel>
         <views:LocationView DockPanel.Dock="Top"
-                               x:Name="locationControl"
-                               LocationInput="{Binding DataContext.LocationInput, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=Window}}"
-                               LocationResult="{Binding DataContext.LocationResult, Mode=OneWayToSource, RelativeSource={RelativeSource AncestorType=Window}}"
-                               IsValid="{Binding DataContext.LocationValid, Mode=OneWayToSource, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                            x:Name="locationControl"
+                            LocationInput="{Binding DataContext.LocationInput, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=Window}}"
+                            LocationResult="{Binding DataContext.LocationResult, Mode=OneWayToSource, RelativeSource={RelativeSource AncestorType=Window}}"
+                            IsValid="{Binding DataContext.LocationValid, Mode=OneWayToSource, RelativeSource={RelativeSource AncestorType=Window}}"/>
         <StackPanel Orientation="Horizontal" 
                     DockPanel.Dock="Bottom" 
                     HorizontalAlignment="Right">
             <Button Content="Save"
-                    Margin="10"
-                    Width="75" Height="25"
+                    Style="{StaticResource TextButtonStyle}"
                     Command="{Binding SaveCommand}"/>
             <Button Content="Cancel"
-                    Margin="10"
-                    Width="75" Height="25"
+                    Style="{StaticResource TextButtonStyle}"
                     Command="{Binding CancelCommand}"/>
         </StackPanel>
     </DockPanel>
