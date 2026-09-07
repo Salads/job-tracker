@@ -31,6 +31,7 @@
         <TextBox x:Name="textbox"
                  Grid.Row="0"
                  DockPanel.Dock="Top"
+                 IsReadOnly="True"
                  Style="{StaticResource DescriptionTextBoxStyle}"
                  Text="{Binding Description, Mode=OneWay}"/>
         <StackPanel Orientation="Horizontal" 
