@@ -14,6 +14,7 @@
                 <ResourceDictionary Source="Assets/SettingsIcon.xaml"/>
                 <ResourceDictionary Source="Assets/TextButtonStyle.xaml"/>
                 <ResourceDictionary Source="Assets/JobsDataGridStyle.xaml"/>
+                <ResourceDictionary Source="/Assets/DescriptionTextboxStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
         </ResourceDictionary>
