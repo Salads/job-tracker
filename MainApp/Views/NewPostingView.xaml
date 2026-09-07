@@ -17,29 +17,35 @@
         <viewModels:NewPostingWindowViewModel x:Name="ViewModel"/>
     </Window.DataContext>
     <Window.Resources>
-        <ControlTemplate x:Key="ErrorTextBelow">
-            <StackPanel Focusable="False" IsHitTestVisible="False">
-                <Border BorderBrush="Red" BorderThickness="1">
-                    <AdornedElementPlaceholder/>
-                </Border>
-                <TextBlock Text="{Binding [0].ErrorContent}"
-                       Foreground="Red"
-                       FontSize="11"
-                       TextWrapping="Wrap"/>
-            </StackPanel>
-        </ControlTemplate>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Assets/ComboBoxValues.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
 
-        <Style TargetType="TextBox">
-            <Style.Triggers>
-                <Trigger Property="Validation.HasError" Value="True">
-                    <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTextBelow}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+            <ControlTemplate x:Key="ErrorTextBelow">
+                <StackPanel Focusable="False" IsHitTestVisible="False">
+                    <Border BorderBrush="Red" BorderThickness="1">
+                        <AdornedElementPlaceholder/>
+                    </Border>
+                    <TextBlock Text="{Binding [0].ErrorContent}"
+               Foreground="Red"
+               FontSize="11"
+               TextWrapping="Wrap"/>
+                </StackPanel>
+            </ControlTemplate>
 
-        <Style TargetType="ComboBox">
-            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTextBelow}"/>
-        </Style>
+            <Style TargetType="TextBox">
+                <Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value="True">
+                        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTextBelow}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style TargetType="ComboBox">
+                <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTextBelow}"/>
+            </Style>
+        </ResourceDictionary>
     </Window.Resources>
     <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="auto">
         <Border BorderBrush="Black" BorderThickness="0" DockPanel.Dock="Top">
@@ -79,10 +85,14 @@
                 <TextBox Grid.Row="2" Grid.Column="1" Width="auto" Height="25" Margin="10" Text="{Binding JobPosting.JobPostingURL, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <TextBlock FontSize="12" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Job Type</TextBlock>
-                <ComboBox Name="jobTypeCombo" Grid.Row="3" Grid.Column="1" Width="auto" Height="25" Margin="10" SelectedItem="{Binding JobPosting.JobType}"/>
+                <ComboBox Name="jobTypeCombo" Grid.Row="3" Grid.Column="1" Width="auto" Height="25" Margin="10" 
+                          SelectedItem="{Binding JobPosting.JobType}"
+                          ItemsSource="{Binding Source={StaticResource JobTypeValues}}"/>
 
                 <TextBlock FontSize="12" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Job Arrangement</TextBlock>
-                <ComboBox Name="jobArrangementCombo" Grid.Row="4" Grid.Column="1" Width="auto" Height="25" Margin="10" SelectedItem="{Binding JobPosting.JobArrangement}"/>
+                <ComboBox Name="jobArrangementCombo" Grid.Row="4" Grid.Column="1" Width="auto" Height="25" Margin="10" 
+                          SelectedItem="{Binding JobPosting.JobArrangement}"
+                          ItemsSource="{Binding Source={StaticResource JobArrangementValues}}"/>
 
                 <TextBlock FontSize="12" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Location</TextBlock>
                 <views:LocationView Grid.Row="5" Grid.Column="1"
@@ -103,7 +113,9 @@
                            VerticalAlignment="Center" 
                            Padding="5"
                            HorizontalAlignment="Right">Status</TextBlock>
-                <ComboBox Name="jobStatusCombo" Grid.Row="7" Grid.Column="1" Width="auto" Height="25" Margin="10" SelectedItem="{Binding JobPosting.JobStatus}"/>
+                <ComboBox Name="jobStatusCombo" Grid.Row="7" Grid.Column="1" Width="auto" Height="25" Margin="10" 
+                          SelectedItem="{Binding JobPosting.JobStatus}"
+                          ItemsSource="{Binding Source={StaticResource JobStatusValues}}"/>
             </Grid>
         </Border>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" DockPanel.Dock="Top" MinHeight="45">

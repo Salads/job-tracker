@@ -41,10 +41,6 @@ namespace MainApp
                 descTextBlock.Text = $"({ViewModel.JobPosting.JobDescription.Length} chars)";
             }
 
-            jobTypeCombo.ItemsSource = Enum.GetValues<JobType>();
-            jobArrangementCombo.ItemsSource = Enum.GetValues<JobArrangement>();
-            jobStatusCombo.ItemsSource = Enum.GetValues<JobStatus>();
-
             UpdateLayout();
         }
 

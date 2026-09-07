@@ -16,26 +16,19 @@
         <viewModels:MainWindowViewModel x:Name="ViewModel"/>
     </Window.DataContext>
     <Window.Resources>
-        <ObjectDataProvider x:Key="JobTypeValues" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
-            <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="models:JobType"/>
-            </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
-        <ObjectDataProvider x:Key="JobArrangementValues" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
-            <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="models:JobArrangement"/>
-            </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
-        <ObjectDataProvider x:Key="JobStatusValues" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
-            <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="models:JobStatus"/>
-            </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
-        <local:URLConverter x:Key="URLConverter" />
-        <local:RowBackgroundConverter x:Key="DynamicBackroundConverter"/>
-        <Style x:Key="DynamicRowBackground" TargetType="DataGridRow">
-            <Setter Property="Background" Value="{Binding JobStatus, Converter={StaticResource DynamicBackroundConverter}}"/>
-        </Style>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Assets/ComboBoxValues.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <local:URLConverter x:Key="URLConverter" />
+            <local:RowBackgroundConverter x:Key="DynamicBackroundConverter"/>
+            <Style x:Key="DynamicRowBackground" TargetType="DataGridRow">
+                <Setter Property="Background" Value="{Binding JobStatus, Converter={StaticResource DynamicBackroundConverter}}"/>
+            </Style>
+
+        </ResourceDictionary>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
