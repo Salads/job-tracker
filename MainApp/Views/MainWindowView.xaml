@@ -24,8 +24,23 @@
 
             <local:URLConverter x:Key="URLConverter" />
             <local:RowBackgroundConverter x:Key="DynamicBackroundConverter"/>
-            <Style x:Key="DynamicRowBackground" TargetType="DataGridRow">
+
+            <ContextMenu x:Key="JobsDataGridRowContextMenu" 
+                         DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}">
+                <MenuItem Header="Edit" 
+                          Icon="{DynamicResource EditPostingIcon}"
+                          x:Name="ContextMenuItemEdit"
+                          Click="ContextMenuItemEdit_Click"/>
+                <MenuItem Header="Delete" 
+                          Icon="{DynamicResource DeletePostingIcon}"
+                          x:Name="ContextMenuItemDelete"
+                          Command="{Binding DeletePostingCommand}"
+                          CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+            </ContextMenu>
+            
+            <Style x:Key="JobsDataGridRowStyle" TargetType="DataGridRow">
                 <Setter Property="Background" Value="{Binding JobStatus, Converter={StaticResource DynamicBackroundConverter}}"/>
+                <Setter Property="ContextMenu" Value="{StaticResource JobsDataGridRowContextMenu}" />
             </Style>
 
         </ResourceDictionary>
@@ -67,7 +82,8 @@
                   IsReadOnly="True"
                   SelectedItem="{Binding SelectedPosting}"
                   ItemsSource="{Binding JobPostings}"
-                  RowStyle="{StaticResource DynamicRowBackground}">
+                  RowStyle="{StaticResource JobsDataGridRowStyle}">
+
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Row ID"
                                     Width="auto"

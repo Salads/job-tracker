@@ -41,6 +41,14 @@ namespace MainApp.ViewModels
             JobPostings.Remove(jobPosting);
         }
 
+        public void UpdatePosting(JobPosting postingToUpdate, JobPosting sourcePosting)
+        {
+            IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
+
+            postingToUpdate.SetFrom(sourcePosting);
+            db.UpdateJobPosting(postingToUpdate);
+        }
+
         private void HandleJobPostingPropertyChangedEx(object? sender, PropertyChangedEventArgs e)
         {
             IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;

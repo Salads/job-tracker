@@ -12,6 +12,7 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -64,12 +65,7 @@ namespace MainApp
 
             if (addnewWindow.DialogResult == true)
             {
-                IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
-
-                long rowid = db.AddNewJob(addnewWindow.GetJobPosting());
-                addnewWindow.GetJobPosting().RowID = rowid;
-
-                ViewModel.JobPostings.Add(addnewWindow.ViewModel.JobPosting);
+                ViewModel.AddNewJob(addnewWindow.GetJobPosting());
             }
         }
 
@@ -80,14 +76,12 @@ namespace MainApp
 
             if (settingsView.DatabaseChanged)
             {
-                MainWindowViewModel vm = (MainWindowViewModel)DataContext;
-                vm.RefreshJobPostings();
+                ViewModel.RefreshJobPostings();
             }
 
             if(settingsView.CurrentLocationChanged)
             {
-                MainWindowViewModel vm = (MainWindowViewModel)DataContext;
-                vm.RecalculateAllJobPostingDistances();
+                ViewModel.RecalculateAllJobPostingDistances();
             }
         }
 
@@ -99,7 +93,22 @@ namespace MainApp
                 return;
             }
 
-            NewPostingView editPostingWindow = new NewPostingView(selected)
+            OpenEditViewForPosting(selected);
+        }
+
+        private void ContextMenuItemEdit_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem menuItem = (MenuItem)sender;
+            ContextMenu contextMenu = (ContextMenu)menuItem.Parent;
+            DataGridRow row = (DataGridRow)contextMenu.PlacementTarget;
+            JobPosting selected = (JobPosting)row.DataContext;
+
+            OpenEditViewForPosting(selected);
+        }
+
+        private void OpenEditViewForPosting(JobPosting posting)
+        {
+            NewPostingView editPostingWindow = new NewPostingView(posting)
             {
                 Owner = this
             };
@@ -107,10 +116,7 @@ namespace MainApp
 
             if (editPostingWindow.DialogResult == true && editPostingWindow.EditMode)
             {
-                IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
-                
-                db.UpdateJobPosting(editPostingWindow.GetJobPosting());
-                selected.SetFrom(editPostingWindow.GetJobPosting());
+                ViewModel.UpdatePosting(posting, editPostingWindow.GetJobPosting());
             }
         }
     }
