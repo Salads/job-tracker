@@ -53,8 +53,8 @@ namespace MainApp.Services
                     IsRemote = true
                 };
 
+                Trace.WriteLine($"NominatimService - REMOTE");
                 return remoteResult;
-
             }
 
             IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
@@ -67,11 +67,9 @@ namespace MainApp.Services
                     DisplayName = fullName
                 };
 
-                Trace.WriteLine("IGeocodingService - CACHE HIT!");
+                Trace.WriteLine($"NominatimService - CACHE HIT! - Lat:{cacheResult.Coords.Latitude}, Lon:{cacheResult.Coords.Longitude}");
                 return cacheResult;
             }
-
-            Trace.WriteLine("IGeocodingService - CACHE MISS!");
 
             DateTime checkTime = DateTime.Now;
             if((checkTime - lastRequestTime).TotalSeconds < REQUEST_COOLDOWN)
@@ -102,10 +100,12 @@ namespace MainApp.Services
                     if (geoCoordinates == null)
                     {
                         result.Result = ResponseResult.ServerError;
+                        Trace.WriteLine($"NominatimService - CACHE MISS! - Server Error");
                     }
                     else if (geoCoordinates.Count <= 0)
                     {
                         result.Result = ResponseResult.NoResult;
+                        Trace.WriteLine($"NominatimService - CACHE MISS! - No Result");
                     }
                     else
                     {
@@ -119,25 +119,25 @@ namespace MainApp.Services
                         db.EnsureLocationMappingExists(query, coords.display_name);
                         db.EnsureLocationCoordsExists(coords.display_name, result.Coords);
 
-                        Trace.WriteLine($"Latitude: {coords.lat} Longitude: {coords.lon}\n");
+                        Trace.WriteLine($"NominatimService - CACHE HIT! - Lat:{result.Coords.Latitude}, Lon:{result.Coords.Longitude}");
                     }
 
                     return result;
                 }
                 else
                 {
-                    Trace.WriteLine($"Request Failed: {response.ReasonPhrase}");
+                    Trace.WriteLine($"NominatimService - CACHE MISS! - Request Failed: {response.ReasonPhrase}");
                     return new GeoCodingResponse(ResponseResult.ServerError);
                 }
             }
             catch (JsonException e)
             {
-                Trace.WriteLine($"Invalid JSON from Geocoding Service: {e.Message}");
+                Trace.WriteLine($"NominatimService - CACHE MISS! - Invalid JSON from Geocoding Service: {e.Message}");
                 result.Result = ResponseResult.JSONError;
             }
             catch (Exception e)
             {
-                Trace.WriteLine($"Request Failed: {e.Message}");
+                Trace.WriteLine($"NominatimService - CACHE MISS! - Request Failed: {e.Message}");
                 result.Result = ResponseResult.NetworkError;
             }
 
