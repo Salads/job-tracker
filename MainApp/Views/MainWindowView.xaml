@@ -70,6 +70,7 @@
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False"
+                  SelectionMode="Single"
                   IsReadOnly="True"
                   SelectedItem="{Binding SelectedPosting}"
                   ItemsSource="{Binding JobPostings}"
