@@ -11,9 +11,11 @@
         MinWidth="300"
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterOwner">
+    
     <Window.DataContext>
-        <viewmodels:EditLocationViewModel/>
+        <viewmodels:EditLocationViewModel x:Name="ViewModel"/>
     </Window.DataContext>
+    
     <Window.Resources>
 
         <ResourceDictionary>
@@ -23,6 +25,7 @@
         </ResourceDictionary>
 
     </Window.Resources>
+    
     <DockPanel>
         <views:LocationView DockPanel.Dock="Top"
                             x:Name="locationControl"

@@ -22,8 +22,7 @@ namespace MainApp.Views
         {
             InitializeComponent();
 
-            EditLocationViewModel vm = (EditLocationViewModel)DataContext;
-            vm.RequestClose += OnRequestClose;
+            ViewModel.RequestClose += OnRequestClose;
 
             Loaded += (_, _) =>
             {
@@ -37,9 +36,8 @@ namespace MainApp.Views
         {
             locationControl.InitializeAndVerify(posting.JobLocation);
 
-            EditLocationViewModel vm = (EditLocationViewModel)DataContext;
-            vm.JobPosting = posting;
-            vm.LocationInput = posting.JobLocation;
+            ViewModel.JobPosting = posting;
+            ViewModel.LocationInput = posting.JobLocation;
 
             UpdateLayout();
         }
@@ -52,8 +50,7 @@ namespace MainApp.Views
 
         public void Dispose()
         {
-            EditLocationViewModel vm = (EditLocationViewModel)DataContext;
-            vm.RequestClose -= OnRequestClose;
+            ViewModel.RequestClose -= OnRequestClose;
         }
     }
 }
