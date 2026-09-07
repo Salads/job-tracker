@@ -9,6 +9,7 @@
         <Setter Property="Height" Value="25"/>
         <Setter Property="Width" Value="auto"/>
         <Setter Property="Margin" Value="{StaticResource Globals.Margin}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
         
         <Style.Triggers>
             <Trigger Property="Validation.HasError" Value="True">

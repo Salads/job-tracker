@@ -7,9 +7,20 @@
              xmlns:local="clr-namespace:MainApp"
              xmlns:viewModels="clr-namespace:MainApp.ViewModels"
              d:DesignWidth="450">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Assets/TextBoxStyle.xaml"/>
+                <ResourceDictionary Source="/Assets/TextButtonStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
     <UserControl.DataContext>
         <viewModels:LocationViewModel/>
     </UserControl.DataContext>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -21,17 +32,13 @@
 
         <TextBox Name="locationTextBox" 
                  Grid.Row="0" Grid.Column="0"
-                 Height="25" 
-                 Margin="10"
-                 VerticalContentAlignment="Center"
+                 Style="{StaticResource ErrorTextBoxStyle}"
                  Text="{Binding LocationInput, UpdateSourceTrigger=PropertyChanged}"/>
         <Button Name="verifyLocationButton" 
                 Grid.Row="0" Grid.Column="1" 
                 Content="Verify"
-                Width="75" Height="25"
-                Margin="10"
+                Style="{StaticResource TextButtonStyle}"
                 IsEnabled="{Binding IsNotValidating}"
                 Command="{Binding ValidateLocationCommand}"/>
-
     </Grid>
 </UserControl>
