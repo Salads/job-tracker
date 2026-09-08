@@ -30,7 +30,8 @@
                 <MenuItem Header="Edit" 
                           Icon="{DynamicResource EditPostingIcon}"
                           x:Name="ContextMenuItemEdit"
-                          Click="ContextMenuItemEdit_Click"/>
+                          Command="{Binding EditPostingCommand}"
+                          CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                 <MenuItem Header="Delete" 
                           Icon="{DynamicResource DeletePostingIcon}"
                           x:Name="ContextMenuItemDelete"
@@ -54,12 +55,13 @@
             <ToolBar Band="1" BandIndex="1">
                 <Button Name="addNewButton"
                         Width="{StaticResource Toolbar.ButtonSize}" Margin="5"
-                        Click="addNewButton_Click"
-                        Content="{StaticResource NewPostingIcon}"/>
+                        Content="{StaticResource NewPostingIcon}"
+                        Command="{Binding AddPostingCommand}"/>
                 <Button Name="editButton"
                         Width="{StaticResource Toolbar.ButtonSize}" Margin="5"
                         Content="{StaticResource EditPostingIcon}"
-                        Click="editButton_Click"/>
+                        Command="{Binding EditPostingCommand}"
+                        CommandParameter="{Binding SelectedItem, ElementName=jobsDataGrid}"/>
                 <Button Name="deleteButton"
                         Width="{StaticResource Toolbar.ButtonSize}" Margin="5"
                         Content="{StaticResource DeletePostingIcon}"
@@ -68,7 +70,7 @@
                 <Button Name="settingsButton"
                         Content="{StaticResource SettingsIcon}"
                         Width="{StaticResource Toolbar.ButtonSize}" Margin="5"
-                        Click="settingsButton_Click"/>
+                        Command="{Binding ChangeSettingsCommand}"/>
             </ToolBar>
         </ToolBarTray>
         <DataGrid Grid.Row="1"
@@ -143,7 +145,8 @@
                             <Button Name="descButton"
                                     Content="View"
                                     Style="{StaticResource TextButtonStyle}"
-                                    Click="descButton_Click"/>
+                                    Command="{Binding DataContext.ViewDescriptionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding JobDescription}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

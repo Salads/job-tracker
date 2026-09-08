@@ -18,9 +18,10 @@ namespace MainApp
     /// </summary>
     public partial class EditDescriptionView : Window
     {
-        public EditDescriptionView()
+        public EditDescriptionView(string description)
         {
             InitializeComponent();
+            ViewModel.JobDescription = description;
         }
 
         private void descSaveButton_Click(object sender, RoutedEventArgs e)

@@ -17,11 +17,12 @@ namespace MainApp.Views
     /// </summary>
     public partial class DescriptionView : Window
     {
-        public DescriptionView()
+        public DescriptionView(string description)
         {
             InitializeComponent();
 
             ViewModel.CloseRequest += OnRequestClose;
+            ViewModel.Description = description;
         }
 
         private void OnRequestClose()

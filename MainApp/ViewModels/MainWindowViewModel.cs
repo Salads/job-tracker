@@ -29,6 +29,34 @@ namespace MainApp.ViewModels
         public partial JobPosting SelectedPosting { get; set; } = new JobPosting();
 
         [RelayCommand]
+        private void AddPosting()
+        {
+            IDialogService dialogService = App.Current.Services.GetService<IDialogService>()!;
+            JobPosting? newJobPosting = dialogService.ShowNewJobPostingDialog();
+
+            if(newJobPosting != null)
+            {
+                IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
+                newJobPosting.RowID = db.AddNewJob(newJobPosting);
+                JobPostings.Add(newJobPosting);
+            }
+        }
+
+        [RelayCommand]
+        private void EditPosting(JobPosting editPosting)
+        {
+            IDialogService dialogService = App.Current.Services.GetService<IDialogService>()!;
+            JobPosting? editedJobPosting = dialogService.ShowEditJobPostingDialog(editPosting);
+            if(editedJobPosting != null)
+            {
+                IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
+
+                editPosting.SetFrom(editedJobPosting);
+                db.UpdateJobPosting(editPosting);
+            }
+        }
+
+        [RelayCommand]
         private void DeletePosting(JobPosting? jobPosting)
         {
             if(jobPosting == null)
@@ -41,12 +69,32 @@ namespace MainApp.ViewModels
             JobPostings.Remove(jobPosting);
         }
 
-        public void UpdatePosting(JobPosting postingToUpdate, JobPosting sourcePosting)
+        [RelayCommand]
+        private void ChangeSettings()
         {
-            IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
+            IDialogService dialogService = App.Current.Services.GetService<IDialogService>()!;
+            SettingsDialogResult dialogResult = dialogService.ShowSettingsDialog();
 
-            postingToUpdate.SetFrom(sourcePosting);
-            db.UpdateJobPosting(postingToUpdate);
+            if(dialogResult.NewSaveLocation != null)
+            {
+                Settings.Default.SaveLocation = dialogResult.NewSaveLocation;
+                RefreshJobPostings();
+            }
+
+            if(dialogResult.NewCurrentLocation != null)
+            {
+                Settings.Default.CurrentLocation = dialogResult.NewCurrentLocation;
+                RecalculateAllJobPostingDistances();
+            }
+
+            Settings.Default.Save();
+        }
+
+        [RelayCommand]
+        private void ViewDescription(string description)
+        {
+            IDialogService dialogService = App.Current.Services.GetService<IDialogService>()!;
+            dialogService.ShowViewDescriptionDialog(description);
         }
 
         private void HandleJobPostingPropertyChangedEx(object? sender, PropertyChangedEventArgs e)
@@ -56,20 +104,13 @@ namespace MainApp.ViewModels
             db.UpdateJobPosting(posting);
         }
 
-        public void AddNewJob(JobPosting posting)
-        {
-            IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
-            posting.RowID = db.AddNewJob(posting);
-            JobPostings.Add(posting);
-        }
-
-        public void RefreshJobPostings()
+        private void RefreshJobPostings()
         {
             IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
             db.RefreshJobPostings(JobPostings);
         }
 
-        public async void RecalculateAllJobPostingDistances()
+        private async void RecalculateAllJobPostingDistances()
         {
             IDatabaseService db = App.Current.Services.GetService<IDatabaseService>()!;
             IGeocodingService gc = App.Current.Services.GetService<IGeocodingService>()!;

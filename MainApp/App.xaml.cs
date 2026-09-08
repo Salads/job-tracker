@@ -24,6 +24,7 @@ namespace MainApp
         {
             var services = new ServiceCollection();
 
+            services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<IDatabaseService, SQLiteService>();
             services.AddSingleton<IGeocodingService, NominatimService>();
             services.AddSingleton<IDistanceCalculatorService, HaversineDistanceCalculator>();

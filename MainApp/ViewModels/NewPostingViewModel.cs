@@ -54,8 +54,21 @@ namespace MainApp.ViewModels
         public void SetEditPosting(JobPosting posting)
         {
             JobPosting.SetFrom(posting);
+            JobDescriptionLabel = $"({JobPosting.JobDescription.Length} chars)";
             EditMode = true;
             JobPosting.ValidateAllPropertiesManually();
+        }
+
+        [RelayCommand]
+        private void EditDescription()
+        {
+            IDialogService dialogService = App.Current.Services.GetService<IDialogService>()!;
+            string? newDescription = dialogService.ShowEditDescriptionDialog(JobPosting.JobDescription);
+            if(newDescription != null)
+            {
+                JobPosting.JobDescription = newDescription;
+                JobDescriptionLabel = $"({JobPosting.JobDescription.Length} chars)";
+            }
         }
 
         private async void OnSaveCommand()

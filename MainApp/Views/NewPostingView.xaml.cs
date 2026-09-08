@@ -21,7 +21,6 @@ namespace MainApp
     /// </summary>
     public partial class NewPostingView : Window
     {
-
         public NewPostingView(JobPosting? posting)
         {
             InitializeComponent();
@@ -38,7 +37,6 @@ namespace MainApp
             {
                 ViewModel.SetEditPosting(posting);
                 Title = "Edit Job Posting";
-                descTextBlock.Text = $"({ViewModel.JobPosting.JobDescription.Length} chars)";
             }
 
             locationControl.ViewModel.RemoteAllowed = true;
@@ -58,27 +56,6 @@ namespace MainApp
             DialogResult = saved;
             EditMode = editMode;
             Close();
-        }
-
-        private void descButton_Click(object sender, RoutedEventArgs e)
-        {
-            EditDescriptionView editDescWindow = new EditDescriptionView()
-            {
-                Owner = this
-            };
-
-            editDescWindow.ViewModel.JobDescription = ViewModel.JobPosting.JobDescription;
-
-            editDescWindow.ShowDialog();
-
-            int newCharCount = 0;
-            if (editDescWindow.DialogResult == true)
-            {
-                newCharCount = editDescWindow.ViewModel.JobDescription.Length;
-                ViewModel.JobPosting.JobDescription = editDescWindow.ViewModel.JobDescription;
-            }
-
-            descTextBlock.Text = $"({newCharCount} chars)";
         }
     }
 }

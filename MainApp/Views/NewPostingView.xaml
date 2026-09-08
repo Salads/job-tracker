@@ -96,8 +96,8 @@
                 <TextBlock FontSize="12" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Padding="5" HorizontalAlignment="Right">Description</TextBlock>
                 <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="1">
                     <Button Name="descButton" Content="Edit Description"
-                            Click="descButton_Click"
-                            Style="{StaticResource TextButtonStyle}"/>
+                            Style="{StaticResource TextButtonStyle}"
+                            Command="{Binding EditDescriptionCommand}"/>
                     <TextBlock Name="descTextBlock" VerticalAlignment="Center" Padding="5" Text="{Binding JobDescriptionLabel}"/>
                 </StackPanel>
 
