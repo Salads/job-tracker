@@ -17,5 +17,5 @@ Simple application to keep track of job applications
 - C# (Events, Properties, DependencyProperties, etc.)
 - SQLite Language/Syntax, Parameter Isolation
 - WPF XAML (UI, Resource Dictionaries, Namespaces, Binding, Styles, etc.)
-- MVVM (View/ViewModel/Model Seperation, Binding, Commands, Validators, etc.)
+- MVVM (View/ViewModel/Model Seperation, Binding, Commands, Converters, Validators, etc.)
 - Caching - Geocoding requests are stored in a cache database to increase performance and lessen requests to Nominatim.
