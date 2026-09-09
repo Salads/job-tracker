@@ -11,15 +11,6 @@
         Width="450" Height="270"
         WindowStartupLocation="CenterOwner">
 
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Assets/DescriptionTextboxStyle.xaml"/>
-                <ResourceDictionary Source="/Assets/TextButtonStyle.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
-    
     <Window.DataContext>
         <viewModels:EditDescriptionViewModel x:Name="ViewModel"/>
     </Window.DataContext>
@@ -39,7 +30,7 @@
                  TextWrapping="Wrap"
                  AcceptsReturn="True"
                  VerticalScrollBarVisibility="Auto"
-                 Style="{StaticResource DescriptionTextBoxStyle}"
+                 Style="{StaticResource ErrorDescriptionTextBoxStyle}"
                  Text="{Binding JobDescription, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
         <StackPanel Orientation="Horizontal" 
                     Grid.Row="1" 

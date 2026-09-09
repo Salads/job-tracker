@@ -10,22 +10,11 @@
         Title="Settings" 
         Width="800" Height="450" 
         WindowStartupLocation="CenterOwner">
-    
+
     <Window.DataContext>
         <viewModels:SettingsViewModel x:Name="ViewModel"/>
     </Window.DataContext>
 
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Assets/TextBoxStyle.xaml"/>
-                <ResourceDictionary Source="/Assets/TextButtonStyle.xaml"/>
-                <ResourceDictionary Source="/Assets/IconButtonStyle.xaml"/>
-                <ResourceDictionary Source="/Assets/ResetIcon.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
-    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>

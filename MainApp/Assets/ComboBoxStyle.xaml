@@ -1,10 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Assets/Globals.xaml"/>
-    </ResourceDictionary.MergedDictionaries>
-    
     <Style TargetType="ComboBox" x:Key="ComboBoxStyle">
         <Setter Property="Margin" Value="{StaticResource Globals.Margin}"/>
         <Setter Property="Width" Value="auto"/>
@@ -12,4 +8,5 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
+    
 </ResourceDictionary>

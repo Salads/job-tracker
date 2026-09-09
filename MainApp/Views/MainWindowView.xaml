@@ -13,21 +13,13 @@
         Height="600" Width="955"
         MinWidth="720"
         WindowStartupLocation="CenterScreen">
+    
     <Window.DataContext>
         <viewModels:MainWindowViewModel x:Name="ViewModel"/>
     </Window.DataContext>
-    <Window.Resources>
 
+    <Window.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Assets/ComboBoxValues.xaml"/>
-                <ResourceDictionary Source="/Assets/EditDocumentIcon.xaml"/>
-                <ResourceDictionary Source="/Assets/DeleteDocumentIcon.xaml"/>
-                <ResourceDictionary Source="/Assets/AddDocumentIcon.xaml"/>
-                <ResourceDictionary Source="/Assets/SettingsIcon.xaml"/>
-                <ResourceDictionary Source="/Assets/JobsDataGridStyle.xaml"/>
-                <ResourceDictionary Source="/Assets/TextButtonStyle.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
 
             <converters:URLConverter x:Key="URLConverter" />
             <converters:RowBackgroundConverter x:Key="DynamicBackroundConverter"/>
@@ -62,7 +54,7 @@
             <ToolBar Band="1" BandIndex="1">
                 <Button Name="addNewButton"
                         Width="{StaticResource Toolbar.ButtonSize}" Margin="5"
-                        Content="{StaticResource NewPostingIcon}"
+                        Content="{StaticResource AddPostingIcon}"
                         Command="{Binding AddPostingCommand}"/>
                 <Button Name="editButton"
                         Width="{StaticResource Toolbar.ButtonSize}" Margin="5"

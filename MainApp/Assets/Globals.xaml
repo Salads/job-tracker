@@ -4,9 +4,9 @@
     
     <Thickness x:Key="Globals.Margin">10</Thickness>
 
+    <Thickness x:Key="Toolbar.ButtonMargin">5</Thickness>
     <sys:Double x:Key="Toolbar.ButtonSize">28</sys:Double>
-    <sys:Double x:Key="FontSize.Small">12</sys:Double>
-    <sys:Double x:Key="FontSize.Medium">20</sys:Double>
-    <sys:Double x:Key="FontSize.Large">26</sys:Double>
+    
+    <sys:Double x:Key="FontSize.Normal">12</sys:Double>
 
 </ResourceDictionary>

@@ -11,19 +11,11 @@
         MinWidth="300"
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterOwner">
-    
+
     <Window.DataContext>
         <viewmodels:EditLocationViewModel x:Name="ViewModel"/>
     </Window.DataContext>
 
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Assets/TextButtonStyle.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
-    
     <DockPanel>
         <views:LocationView DockPanel.Dock="Top"
                             x:Name="locationControl"

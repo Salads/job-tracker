@@ -8,6 +8,15 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Assets/Globals.xaml"/>
+                <ResourceDictionary Source="/Assets/ComboBoxValues.xaml"/>
+                <ResourceDictionary Source="/Assets/Icons.xaml"/>
+
+                <ResourceDictionary Source="/Assets/ErrorControlStyles.xaml"/>
+                <ResourceDictionary Source="/Assets/JobsDataGridStyle.xaml"/>
+                <ResourceDictionary Source="/Assets/ComboBoxStyle.xaml"/>
+                <ResourceDictionary Source="/Assets/TextButtonStyle.xaml"/>
+                <ResourceDictionary Source="/Assets/IconButtonStyle.xaml"/>
+                
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

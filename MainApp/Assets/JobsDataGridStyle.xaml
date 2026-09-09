@@ -1,8 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="Globals.xaml"/>
-    </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="JobsDataGridHeaderSyle" TargetType="DataGridColumnHeader">
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -10,7 +7,7 @@
     </Style>
 
     <Style x:Key="JobsDataGridTextBlockElementStyle" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="{StaticResource FontSize.Small}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSize.Normal}"/>
         <Setter Property="TextAlignment" Value="Center"/>
         <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
         <Setter Property="VerticalAlignment" Value="Center"/>

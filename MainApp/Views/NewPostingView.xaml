@@ -13,22 +13,11 @@
         ResizeMode="CanResize"
         SizeToContent="Height"
         WindowStartupLocation="CenterOwner">
-    
+
     <Window.DataContext>
         <viewModels:NewPostingWindowViewModel x:Name="ViewModel"/>
     </Window.DataContext>
-    
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Assets/ComboBoxValues.xaml"/>
-                <ResourceDictionary Source="/Assets/ComboBoxStyle.xaml"/>
-                <ResourceDictionary Source="/Assets/TextButtonStyle.xaml"/>
-                <ResourceDictionary Source="/Assets/TextBoxStyle.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
-    
+
     <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="auto">
         <Border BorderBrush="Black" BorderThickness="0" DockPanel.Dock="Top">
             <Grid ShowGridLines="False" Height="auto">
