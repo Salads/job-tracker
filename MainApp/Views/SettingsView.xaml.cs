@@ -1,4 +1,5 @@
-﻿using MainApp.ViewModels;
+﻿using MainApp.Services;
+using MainApp.ViewModels;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -20,23 +21,16 @@ namespace MainApp.Views
     /// </summary>
     public partial class SettingsView : Window, IDisposable
     {
-        public SettingsView()
+        internal SettingsView()
         {
             InitializeComponent();
 
             ViewModel.RequestClose += OnRequestClose;
 
-            OriginalDatabaseLocation = ViewModel.SaveLocation;
-            OriginalCurrentLocation = ViewModel.LocationInput;
-
             locationControl.InitializeAndVerify(Settings.Default.CurrentLocation);
 
             UpdateLayout();
         }
-
-        private string OriginalDatabaseLocation { get; set; }
-
-        private string OriginalCurrentLocation { get; set; }
 
         public string? NewDatabaseLocation { get; set; }
 
@@ -44,9 +38,8 @@ namespace MainApp.Views
 
         private void OnRequestClose(object? sender, EventArgs e)
         {
-            NewDatabaseLocation = (OriginalDatabaseLocation != ViewModel.SaveLocation ? ViewModel.SaveLocation : null);
-
-            NewDatabaseLocation = (OriginalCurrentLocation != ViewModel.LocationInput ? ViewModel.LocationInput : null);
+            NewDatabaseLocation = ViewModel.SaveLocation;
+            NewCurrentLocation = ViewModel.LocationInput;
 
             Close();
         }

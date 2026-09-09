@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Text;
 using System.Windows.Input;
 
@@ -26,7 +27,7 @@ namespace MainApp.ViewModels
         public partial string LocationInput { get; set; } = string.Empty;
 
         [ObservableProperty]
-        public partial string LocationFullName { get; set; } = string.Empty;
+        public partial string? LocationFullName { get; set; } = string.Empty;
 
         [AllowedValues(true)]
         [NotifyDataErrorInfo]
@@ -37,7 +38,36 @@ namespace MainApp.ViewModels
         [Required]
         [NotifyDataErrorInfo]
         [ObservableProperty]
-        public partial string SaveLocation { get; set; } = string.Empty;
+        public partial string? SaveLocation { get; set; } = string.Empty;
+
+        public static bool IsValidPath(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return false;
+            }
+
+            try
+            {
+                string fullPath = Path.GetFullPath(path);
+                return Path.IsPathRooted(fullPath);
+            }
+            catch (ArgumentException)
+            {
+                // Contains invalid characters or is empty
+                return false;
+            }
+            catch (PathTooLongException)
+            {
+                // Path exceeds system limits
+                return false;
+            }
+            catch (NotSupportedException)
+            {
+                // Contains invalid characters like colons in the middle
+                return false;
+            }
+        }
 
         [RelayCommand]
         private void ResetSaveFilePath()
@@ -60,7 +90,7 @@ namespace MainApp.ViewModels
         private void Save()
         {
             Settings.Default.SaveLocation = SaveLocation;
-            Settings.Default.CurrentLocation = LocationInput;
+            Settings.Default.CurrentLocation = LocationFullName;
             Settings.Default.Save();
 
             RequestClose?.Invoke(this, EventArgs.Empty);
@@ -74,6 +104,9 @@ namespace MainApp.ViewModels
         [RelayCommand]
         private void Cancel()
         {
+            SaveLocation = null;
+            LocationFullName = null;
+
             RequestClose?.Invoke(this, EventArgs.Empty);
         }
     }

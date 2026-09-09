@@ -37,10 +37,10 @@ namespace MainApp.Services
             SettingsView settingsView = new SettingsView() { Owner = App.Current.MainWindow };
             settingsView.ShowDialog();
 
-            return new SettingsDialogResult()
+            return new SettingsDialogResult
             {
                 NewSaveLocation = settingsView.NewDatabaseLocation,
-                NewCurrentLocation = settingsView.NewCurrentLocation
+                NewCurrentLocation = settingsView.NewCurrentLocation,
             };
         }
 

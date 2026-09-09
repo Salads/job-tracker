@@ -21,12 +21,39 @@ namespace MainApp.ViewModels
         {
             JobPostings.PropertyChangedEx += HandleJobPostingPropertyChangedEx;
             RefreshJobPostings();
+
+            if (!GetSettingsValid().Result)
+            {
+                ChangeSettings();
+            }
         }
 
         public ObservableCollectionEx<JobPosting> JobPostings { get; } = new ObservableCollectionEx<JobPosting>();
 
         [ObservableProperty]
         public partial JobPosting SelectedPosting { get; set; } = new JobPosting();
+
+        private async Task<bool> GetSettingsValid()
+        {
+            if (!SettingsViewModel.IsValidPath(Settings.Default.SaveLocation))
+            {
+                return false;
+            }
+
+            IGeocodingService geocodingService = App.Current.Services.GetService<IGeocodingService>()!;
+            if (string.IsNullOrWhiteSpace(Settings.Default.CurrentLocation))
+            {
+                return false;
+            }
+
+            GeoCodingResponse result = await geocodingService.GetLocationCoordinatesAsync(Settings.Default.CurrentLocation);
+            if(result.Result != ResponseResult.OK)
+            {
+                return false;
+            }
+
+            return true;
+        }
 
         [RelayCommand]
         private void AddPosting()
@@ -75,19 +102,15 @@ namespace MainApp.ViewModels
             IDialogService dialogService = App.Current.Services.GetService<IDialogService>()!;
             SettingsDialogResult dialogResult = dialogService.ShowSettingsDialog();
 
-            if(dialogResult.NewSaveLocation != null)
+            if (dialogResult.NewSaveLocation != null)
             {
-                Settings.Default.SaveLocation = dialogResult.NewSaveLocation;
                 RefreshJobPostings();
             }
 
-            if(dialogResult.NewCurrentLocation != null)
+            if (dialogResult.NewCurrentLocation != null)
             {
-                Settings.Default.CurrentLocation = dialogResult.NewCurrentLocation;
                 RecalculateAllJobPostingDistances();
             }
-
-            Settings.Default.Save();
         }
 
         [RelayCommand]
