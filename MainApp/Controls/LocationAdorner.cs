@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace MainApp
+namespace MainApp.Controls
 {
     // Adorners must subclass the abstract base class Adorner.
     public class LocationAdorner : Adorner

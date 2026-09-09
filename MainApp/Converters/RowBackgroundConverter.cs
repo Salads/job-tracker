@@ -6,7 +6,7 @@ using System.Windows.Data;
 using MainApp.Models;
 using System.Windows.Media;
 
-namespace MainApp
+namespace MainApp.Converters
 {
     class RowBackgroundConverter : IValueConverter
     {

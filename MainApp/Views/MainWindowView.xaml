@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:MainApp"
         xmlns:viewModels="clr-namespace:MainApp.ViewModels"
         xmlns:models="clr-namespace:MainApp.Models"
+        xmlns:converters="clr-namespace:MainApp.Converters"
         mc:Ignorable="d"
         Title="Job Tracker"
         Height="600" Width="955"
@@ -28,8 +29,8 @@
                 <ResourceDictionary Source="/Assets/TextButtonStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-            <local:URLConverter x:Key="URLConverter" />
-            <local:RowBackgroundConverter x:Key="DynamicBackroundConverter"/>
+            <converters:URLConverter x:Key="URLConverter" />
+            <converters:RowBackgroundConverter x:Key="DynamicBackroundConverter"/>
 
             <ContextMenu x:Key="JobsDataGridRowContextMenu" 
                          DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}">

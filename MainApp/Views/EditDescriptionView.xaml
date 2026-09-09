@@ -46,11 +46,13 @@
                     HorizontalAlignment="Right">
             <Button Name="descSaveButton" 
                     Content="Save"
-                    Command="{Binding SaveCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                    Command="{Binding SaveCommand}" 
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
                     Style="{StaticResource TextButtonStyle}"/>
             <Button Name="descCancelButton" 
                     Content="Cancel"
-                    Command="{Binding CancelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                    Command="{Binding CancelCommand}" 
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
                     Style="{StaticResource TextButtonStyle}"/>
         </StackPanel>
     </Grid>
