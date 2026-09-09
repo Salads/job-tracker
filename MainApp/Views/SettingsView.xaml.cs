@@ -24,11 +24,10 @@ namespace MainApp.Views
         {
             InitializeComponent();
 
-            SettingsViewModel vm = (SettingsViewModel)DataContext;
-            vm.RequestClose += OnRequestClose;
+            ViewModel.RequestClose += OnRequestClose;
 
-            OriginalDatabaseLocation = vm.SaveLocation;
-            OriginalCurrentLocation = vm.LocationInput;
+            OriginalDatabaseLocation = ViewModel.SaveLocation;
+            OriginalCurrentLocation = ViewModel.LocationInput;
 
             locationControl.InitializeAndVerify(Settings.Default.CurrentLocation);
 
@@ -39,57 +38,17 @@ namespace MainApp.Views
 
         private string OriginalCurrentLocation { get; set; }
 
-        public bool DatabaseChanged { get;  private set; }
+        public string? NewDatabaseLocation { get; set; }
 
-        public bool CurrentLocationChanged { get; private set; }
+        public string? NewCurrentLocation { get; set; }
 
         private void OnRequestClose(object? sender, EventArgs e)
         {
-            SettingsViewModel vm = (SettingsViewModel)DataContext;
-            if (OriginalDatabaseLocation != vm.SaveLocation)
-            {
-                DatabaseChanged = true;
-            }
+            NewDatabaseLocation = (OriginalDatabaseLocation != ViewModel.SaveLocation ? ViewModel.SaveLocation : null);
 
-            if (OriginalCurrentLocation != vm.LocationInput)
-            {
-                CurrentLocationChanged = true;
-            }
+            NewDatabaseLocation = (OriginalCurrentLocation != ViewModel.LocationInput ? ViewModel.LocationInput : null);
 
             Close();
-        }
-
-        private void browseButton_Click(object sender, RoutedEventArgs e)
-        {
-            SaveFileDialog dialog = new SaveFileDialog
-            {
-                FileName = Settings.Default.SaveLocation,
-                DefaultExt = ".db",
-                Filter = "SQLite Database (.db)|*.db",
-                OverwritePrompt = false,
-                Title = "Choose / Create Save File"
-            };
-
-            bool? result = dialog.ShowDialog();
-
-            // Process save file dialog box results
-            if (result == true)
-            {
-                SettingsViewModel vm = (SettingsViewModel)DataContext;
-
-                if(vm.SaveLocation != dialog.FileName)
-                {
-                    DatabaseChanged = true;
-                }
-
-                vm.SaveLocation = dialog.FileName;
-            }
-        }
-
-        private void saveLocationResetButton_Click(object sender, RoutedEventArgs e)
-        {
-            SettingsViewModel vm = (SettingsViewModel)DataContext;
-            vm.SaveLocation = (string)Settings.Default.Properties["SaveLocation"].DefaultValue;
         }
 
         public void Dispose()

@@ -7,96 +7,84 @@
         xmlns:views="clr-namespace:MainApp.Views"
         xmlns:viewModels="clr-namespace:MainApp.ViewModels"
         mc:Ignorable="d"
-        Title="Settings" Height="450" Width="800"
+        Title="Settings" 
+        Width="800" Height="450" 
         WindowStartupLocation="CenterOwner">
+    
     <Window.DataContext>
-        <viewModels:SettingsViewModel/>
+        <viewModels:SettingsViewModel x:Name="ViewModel"/>
     </Window.DataContext>
-    <Window.Resources>
-        <ControlTemplate x:Key="ErrorTextBelow">
-            <StackPanel Focusable="False" IsHitTestVisible="False">
-                <Border BorderBrush="Red" BorderThickness="1">
-                    <AdornedElementPlaceholder/>
-                </Border>
-                <TextBlock Text="{Binding [0].ErrorContent}"
-                           Foreground="Red"
-                           FontSize="11"
-                           TextWrapping="Wrap"/>
-            </StackPanel>
-        </ControlTemplate>
 
-        <Style TargetType="TextBox">
-            <Style.Triggers>
-                <Trigger Property="Validation.HasError" Value="True">
-                    <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTextBelow}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Assets/TextBoxStyle.xaml"/>
+                <ResourceDictionary Source="/Assets/TextButtonStyle.xaml"/>
+                <ResourceDictionary Source="/Assets/IconButtonStyle.xaml"/>
+                <ResourceDictionary Source="/Assets/ResetIcon.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <GroupBox Grid.Row="0" VerticalAlignment="Top" Margin="10" Padding="5" Width="auto" Height="auto">
+        <GroupBox Grid.Row="0" 
+                  VerticalAlignment="Top" 
+                  Margin="10" Padding="5" 
+                  Width="auto" Height="auto">
             <GroupBox.Header>
-                <TextBlock Text="Database Settings" FontSize="12"/>
+                <TextBlock Text="Savefile Location" FontSize="12"/>
             </GroupBox.Header>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Location:"
-                           VerticalAlignment="Center"
-                           Margin="10"/>
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
                 <TextBox Name="saveLocationTextbox"
-                         Width="450" Height="25"
-                         Margin="10"
-                         VerticalContentAlignment="Center"
+                         Grid.Column="0"
+                         Style="{StaticResource ErrorTextBoxStyle}"
                          Text="{Binding SaveLocation, Mode=TwoWay}"/>
                 <Button Name="browseButton"
+                        Grid.Column="1"
                         Content="Browse" 
-                        Width="75" Height="25"
-                        Margin="10"
-                        Click="browseButton_Click"/>
+                        Style="{StaticResource TextButtonStyle}"
+                        Command="{Binding BrowseSaveFilePathCommand}"/>
                 <Button Name="saveLocationResetButton"
-                        Width="25" Height="25" 
-                        Margin="10"
-                        Click="saveLocationResetButton_Click">
-                    <Image Source="/Restart.png" Width="70" Height="16"/>
-                </Button>
-            </StackPanel>
+                        Grid.Column="2"
+                        Content="{StaticResource ResetIcon}"
+                        Style="{StaticResource IconButtonStyle}"
+                        Command="{Binding ResetSaveFilePathCommand}"/>
+            </Grid>
         </GroupBox>
         <GroupBox Grid.Row="1" Margin="10" Padding="5">
             <GroupBox.Header>
                 <TextBlock Text="Current Location (Required for Distance Calculations)"/>
             </GroupBox.Header>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" 
-                           Text="Location: " 
-                           VerticalAlignment="Center" 
-                           Margin="10"/>
-                <views:LocationView Grid.Column="1"
-                                       x:Name="locationControl"
-                                       Validation.ErrorTemplate="{x:Null}"
-                                       LocationInput="{Binding DataContext.LocationInput, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=Window}}"
-                                       LocationResult="{Binding DataContext.LocationFullName, Mode=OneWayToSource, RelativeSource={RelativeSource AncestorType=Window}}"
-                                       IsValid="{Binding DataContext.LocationValid, Mode=OneWayToSource, RelativeSource={RelativeSource AncestorType=Window}}"/>
-            </Grid>
+            <views:LocationView Grid.Column="1"
+                       x:Name="locationControl"
+                       Validation.ErrorTemplate="{x:Null}"
+                       LocationInput="{Binding DataContext.LocationInput, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=Window}}"
+                       LocationResult="{Binding DataContext.LocationFullName, Mode=OneWayToSource, RelativeSource={RelativeSource AncestorType=Window}}"
+                       IsValid="{Binding DataContext.LocationValid, Mode=OneWayToSource, RelativeSource={RelativeSource AncestorType=Window}}"/>
         </GroupBox>
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="3" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right">
             <Button Name="saveButton"
                     Content="Save"
-                    Width="75"
-                    Margin="5"
+                    Style="{StaticResource TextButtonStyle}"
                     Command="{Binding SaveCommand}"/>
             <Button Name="cancelButton"
                     Content="Cancel"
-                    Width="75"
-                    Margin="5"
+                    Style="{StaticResource TextButtonStyle}"
                     Command="{Binding CancelCommand}"/>
         </StackPanel>
     </Grid>

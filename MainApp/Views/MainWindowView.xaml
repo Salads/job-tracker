@@ -20,6 +20,12 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Assets/ComboBoxValues.xaml"/>
+                <ResourceDictionary Source="/Assets/EditDocumentIcon.xaml"/>
+                <ResourceDictionary Source="/Assets/DeleteDocumentIcon.xaml"/>
+                <ResourceDictionary Source="/Assets/AddDocumentIcon.xaml"/>
+                <ResourceDictionary Source="/Assets/SettingsIcon.xaml"/>
+                <ResourceDictionary Source="/Assets/JobsDataGridStyle.xaml"/>
+                <ResourceDictionary Source="/Assets/TextButtonStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <local:URLConverter x:Key="URLConverter" />

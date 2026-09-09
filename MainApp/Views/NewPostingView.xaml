@@ -25,7 +25,6 @@
                 <ResourceDictionary Source="/Assets/ComboBoxStyle.xaml"/>
                 <ResourceDictionary Source="/Assets/TextButtonStyle.xaml"/>
                 <ResourceDictionary Source="/Assets/TextBoxStyle.xaml"/>
-                <ResourceDictionary Source="/Assets/ErrorTextBelowControlTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>

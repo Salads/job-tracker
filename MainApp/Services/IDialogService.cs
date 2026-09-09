@@ -20,6 +20,8 @@ namespace MainApp.Services
 
         SettingsDialogResult ShowSettingsDialog();
 
+        string? GetDatabaseSaveLocation();
+
         void ShowViewDescriptionDialog(string description);
 
         string? ShowEditDescriptionDialog(string description);

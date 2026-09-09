@@ -1,5 +1,6 @@
 ﻿using MainApp.ViewModels;
 using MainApp.Views;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -38,8 +39,8 @@ namespace MainApp.Services
 
             return new SettingsDialogResult()
             {
-                NewSaveLocation = (settingsView.DatabaseChanged ? settingsView.ViewModel.SaveLocation : null),
-                NewCurrentLocation = (settingsView.CurrentLocationChanged ? settingsView.ViewModel.LocationFullName : null),
+                NewSaveLocation = settingsView.NewDatabaseLocation,
+                NewCurrentLocation = settingsView.NewCurrentLocation
             };
         }
 
@@ -62,6 +63,21 @@ namespace MainApp.Services
             editDescWindow.ShowDialog();
 
             return (editDescWindow.DialogResult == true ? editDescWindow.ViewModel.JobDescription : null);
+        }
+
+        public string? GetDatabaseSaveLocation()
+        {
+            SaveFileDialog dialog = new SaveFileDialog
+            {
+                FileName = Settings.Default.SaveLocation,
+                DefaultExt = ".db",
+                Filter = "SQLite Database (.db)|*.db",
+                OverwritePrompt = false,
+                Title = "Choose / Create Save File"
+            };
+
+            bool? result = dialog.ShowDialog();
+            return (result == true ? dialog.FileName : null);
         }
     }
 }

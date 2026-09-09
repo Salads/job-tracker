@@ -7,16 +7,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Assets/Globals.xaml"/>
-                <ResourceDictionary Source="Assets/AddDocumentIcon.xaml"/>
-                <ResourceDictionary Source="Assets/DeleteDocumentIcon.xaml"/>
-                <ResourceDictionary Source="Assets/EditDocumentIcon.xaml"/>
-                <ResourceDictionary Source="Assets/SettingsIcon.xaml"/>
-                <ResourceDictionary Source="Assets/TextButtonStyle.xaml"/>
-                <ResourceDictionary Source="Assets/JobsDataGridStyle.xaml"/>
-                <ResourceDictionary Source="/Assets/DescriptionTextboxStyle.xaml"/>
+                <ResourceDictionary Source="/Assets/Globals.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
         </ResourceDictionary>
     </Application.Resources>
 </Application>

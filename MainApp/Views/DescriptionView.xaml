@@ -9,16 +9,20 @@
         Title="Job Description" 
         Height="450" Width="800"
         WindowStartupLocation="CenterOwner">
+    
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Assets/Globals.xaml"/>
+                <ResourceDictionary Source="/Assets/DescriptionTextboxStyle.xaml"/>
+                <ResourceDictionary Source="/Assets/TextButtonStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
+    
     <Window.DataContext>
         <viewModels:DescriptionViewModel x:Name="ViewModel"/>
     </Window.DataContext>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />

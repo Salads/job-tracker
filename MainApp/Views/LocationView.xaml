@@ -22,10 +22,12 @@
     </UserControl.DataContext>
     
     <Grid>
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
+        
         <Grid.RowDefinitions>
             <RowDefinition />
         </Grid.RowDefinitions>

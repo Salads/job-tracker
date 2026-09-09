@@ -15,15 +15,13 @@
     <Window.DataContext>
         <viewmodels:EditLocationViewModel x:Name="ViewModel"/>
     </Window.DataContext>
-    
-    <Window.Resources>
 
+    <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Assets/TextButtonStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-
     </Window.Resources>
     
     <DockPanel>

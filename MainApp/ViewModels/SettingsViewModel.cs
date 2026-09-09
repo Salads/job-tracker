@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MainApp.Services;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,9 +14,6 @@ namespace MainApp.ViewModels
     {
         public SettingsViewModel()
         {
-            SaveCommand = new RelayCommand(OnSaveCommand, () => !HasErrors && LocationValid);
-            CancelCommand = new RelayCommand(OnCancelCommand);
-
             SaveLocation = Settings.Default.SaveLocation;
             LocationInput = Settings.Default.CurrentLocation;
 
@@ -23,10 +21,6 @@ namespace MainApp.ViewModels
         }
 
         public event EventHandler? RequestClose;
-
-        public IRelayCommand SaveCommand { get; set; }
-
-        public IRelayCommand CancelCommand { get; set; }
 
         [ObservableProperty]
         public partial string LocationInput { get; set; } = string.Empty;
@@ -45,7 +39,25 @@ namespace MainApp.ViewModels
         [ObservableProperty]
         public partial string SaveLocation { get; set; } = string.Empty;
 
-        private void OnSaveCommand()
+        [RelayCommand]
+        private void ResetSaveFilePath()
+        {
+            SaveLocation = (string)Settings.Default.Properties["SaveLocation"].DefaultValue;
+        }
+
+        [RelayCommand]
+        private void BrowseSaveFilePath()
+        {
+            IDialogService dialogService = App.Current.Services.GetService<IDialogService>()!;
+            string? newSaveFilePath = dialogService.GetDatabaseSaveLocation();
+            if(newSaveFilePath != null)
+            {
+                SaveLocation = newSaveFilePath;
+            }
+        }
+
+        [RelayCommand(CanExecute = nameof(SaveCommandCanExecute))]
+        private void Save()
         {
             Settings.Default.SaveLocation = SaveLocation;
             Settings.Default.CurrentLocation = LocationInput;
@@ -54,7 +66,13 @@ namespace MainApp.ViewModels
             RequestClose?.Invoke(this, EventArgs.Empty);
         }
 
-        private void OnCancelCommand()
+        private bool SaveCommandCanExecute()
+        {
+            return !HasErrors && LocationValid;
+        }
+
+        [RelayCommand]
+        private void Cancel()
         {
             RequestClose?.Invoke(this, EventArgs.Empty);
         }
