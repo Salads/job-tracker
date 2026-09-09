@@ -25,7 +25,7 @@ namespace MainApp.Services
                 }
                 else
                 {
-                    return -1;
+                    return Int32.MaxValue;
                 }
             }
         }

@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         xmlns:local="clr-namespace:MainApp"
-        xmlns:viewModels="clr-namespace:MainApp.ViewModels"
         xmlns:models="clr-namespace:MainApp.Models"
+        xmlns:viewModels="clr-namespace:MainApp.ViewModels"
         xmlns:converters="clr-namespace:MainApp.Converters"
         mc:Ignorable="d"
         Title="Job Tracker"
@@ -22,6 +22,7 @@
         <ResourceDictionary>
 
             <converters:URLConverter x:Key="URLConverter" />
+            <converters:DistanceConverter x:Key="DistanceConverter"/>
             <converters:RowBackgroundConverter x:Key="DynamicBackroundConverter"/>
 
             <ContextMenu x:Key="JobsDataGridRowContextMenu" 
@@ -135,7 +136,7 @@
                                     Width="auto"
                                     HeaderStyle="{StaticResource JobsDataGridHeaderSyle}"
                                     ElementStyle="{StaticResource JobsDataGridTextBlockElementStyle}"
-                                    Binding="{Binding JobDistance, Mode=TwoWay}"/>
+                                    Binding="{Binding JobDistance, Mode=TwoWay, Converter={StaticResource DistanceConverter}}"/>
                 <DataGridTemplateColumn Header="Description"
                                         Width="auto"
                                         HeaderStyle="{StaticResource JobsDataGridHeaderSyle}">
