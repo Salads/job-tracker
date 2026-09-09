@@ -76,6 +76,7 @@
         <DataGrid Grid.Row="1"
                   Name="jobsDataGrid"
                   EnableRowVirtualization="True"
+                  Validation.ErrorTemplate="{x:Null}"
                   HeadersVisibility="Column"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
