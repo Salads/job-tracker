@@ -3,9 +3,16 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Assets/Globals.xaml"/>
+        <ResourceDictionary Source="/Assets/ErrorTextBelowControlTemplate.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    
+
     <Style TargetType="TextBox" x:Key="DescriptionTextBoxStyle">
         <Setter Property="Margin" Value="{StaticResource Globals.Margin}"/>
+
+        <Style.Triggers>
+            <Trigger Property="Validation.HasError" Value="True">
+                <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTextBelow}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>
